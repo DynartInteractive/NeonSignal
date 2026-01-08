@@ -1,0 +1,13 @@
+ui_pixel.png
+size:256,128
+repeat:none
+hud_floppy
+bounds:2,2,64,64
+hud_hearth
+bounds:128,66,60,60
+hud_hearth_bar
+bounds:2,98,124,28
+hud_hearth_bar_bg
+bounds:2,68,124,28
+hud_hearth_line
+bounds:190,110,28,16

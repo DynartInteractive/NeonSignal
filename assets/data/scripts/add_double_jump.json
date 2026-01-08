@@ -1,0 +1,5 @@
+{"sequence": [
+    {"add_player_ability": {"ability": "double_jump"}},
+    {"add_player_ability": {"ability": "punch"}},
+    {"add_player_ability": {"ability": "crowbar_punch"}}
+]}

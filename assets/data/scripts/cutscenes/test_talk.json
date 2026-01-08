@@ -1,0 +1,12 @@
+{"sequence": [
+    {"move_camera_to": {"target": "t1"}},
+    {"walk_to": {"entity": "player", "target": "t1"}},
+    {"delay": {"duration": 0.3}},
+    {"say": {"name": "coolfox", "text": "I saw the whole thing...", "start": true}},
+    {"say": {"name": "coolfox", "text": "I know where you can\nfind Mrs. Coolfox.\nThree lines test.", "finish": true}},
+    {"say": {"name": "doc", "text": "She was taken to\nthe mountains.", "start": true, "finish": true}},
+    {"say": {"name": "barman", "text": "Be careful\nwith every being!", "start": true, "finish": true, "left": true}},
+    {"say": {"name": "alien_1", "text": "They use brain control\non them.", "start": true, "finish": true}},
+    {"say": {"name": "alien_2", "text": "Here is an airjump shoe,\nyou will need it.", "start": true, "finish": true, "left": true}},
+    {"move_camera_to": {"target": "player"}}
+]}

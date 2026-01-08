@@ -1,0 +1,23 @@
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['src/resources']
+    }
+}
+
+eclipse.project.name = appName + "-core"
+
+processResources {
+    filesMatching("**/version.properties") {
+        filter {
+            it.replace('%APP_VERSION_TOKEN%', version)
+        }
+    }
+}

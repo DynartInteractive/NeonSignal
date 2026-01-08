@@ -1,0 +1,4 @@
+{"sequence": [
+    {"move_camera_to": {"target": "t1"}},
+    {"set_camera_target": {"target": "player"}}
+]}

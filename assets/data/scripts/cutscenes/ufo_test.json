@@ -1,0 +1,9 @@
+{"sequence": [
+    {"trigger": {"name": "ufo"}},
+    {"delay": {"duration": 2.0}},
+    {"say": {"name": "coolfox", "text": "Fuck you!", "left": true, "start": true, "finish": true}},
+    {"delay": {"duration": 0.3}},
+    {"say": {"name": "alien_1", "text": "You too!", "left": false, "start": true, "finish": true}},
+    {"trigger": {"name": "ufo"}},
+    {"move_camera_to": {"target": "player"}}
+]}

@@ -1,0 +1,8 @@
+{"sequence": [
+    {"set_camera_target": {"target": "t1"}},
+    {"delay": {"duration": 0.05}},
+    {"move_camera_to": {"target": "player"}},
+    {"delay": {"duration": 2.3}},
+    {"say": {"name": "mrs_coolfox", "text": "Before we take place,\ncan you bring me\na cocktail?", "start": true, "finish": true}},
+    {"say": {"name": "coolfox", "text": "Sure thing, Honey!", "start": true, "finish": true, "left": true}}
+]}

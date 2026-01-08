@@ -1,0 +1,222 @@
+{
+    "sounds": {
+        "box_crush": {"path": "data/sounds/crush.mp3"},
+        "crush": {"path": "data/sounds/crush2.mp3"},
+        "punch_whoosh": {"path": "data/sounds/punch_whoosh.mp3"},
+        "falldown": {"path": "data/sounds/falldown.mp3"},
+        "falldown2": {"path": "data/sounds/falldown2.mp3"},
+        "falldown3": {"path": "data/sounds/falldown3.mp3"},
+        "fireball": {"path": "data/sounds/fireball.mp3"},
+        "fireball_explosion": {"path": "data/sounds/fireball_explosion.mp3"},
+        "ouch": {"path": "data/sounds/ouch.mp3"},
+        "die": {"path": "data/sounds/die.mp3"},
+        "pickup": {"path": "data/sounds/pickup.mp3"},
+        "secret_found": {"path": "data/sounds/secret_found.mp3"},
+        "falling_floor": {"path": "data/sounds/falling_floor.mp3"},
+        "button_click": {"path": "data/sounds/button_click.mp3"},
+        "punch1": {"path": "data/sounds/punch1.mp3"},
+        "punch2": {"path": "data/sounds/punch2.mp3"},
+        "punch3": {"path": "data/sounds/punch3.mp3"},
+        "boing1": {"path": "data/sounds/boing1.mp3"},
+        "boing2": {"path": "data/sounds/boing2.mp3"},
+        "swim1": {"path": "data/sounds/swim1.mp3"},
+        "swim2": {"path": "data/sounds/swim2.mp3"},
+        "swim3": {"path": "data/sounds/swim3.mp3"},
+        "oxygen1": {"path": "data/sounds/oxygen1.mp3"},
+        "oxygen2": {"path": "data/sounds/oxygen2.mp3"},
+        "splash1": {"path": "data/sounds/splash1.mp3"},
+        "splash2": {"path": "data/sounds/splash2.mp3"},
+        "splash3": {"path": "data/sounds/splash3.mp3"},
+        "switch": {"path": "data/sounds/big_switch.mp3"},
+        "electric_zap": {"path": "data/sounds/electric_zap.mp3"},
+        "tram": {"path": "data/sounds/tram.mp3"},
+        "tram2": {"path": "data/sounds/tram2.mp3"},
+        "tram_collide": {"path": "data/sounds/tram_collide.mp3"}
+    },
+    "music": {
+        "logo": {"path": "data/music/logo.mp3"},
+        "main": {"path": "data/music/coolfox-main-theme.mp3"},
+        "beach": {"path": "data/music/caribbean-islands.mp3"},
+        "boss_battle": {"path": "data/music/aliens.mp3"},
+        "before_trouble": {"path": "data/music/before-the-trouble.mp3"},
+        "industrial_fox": {"path": "data/music/industrial-fox.mp3"},
+        "ice_castle": {"path": "data/music/ice-castle.mp3"},
+        "complete": {"path": "data/music/complete.mp3"},
+        "final_fight": {"path": "data/music/final-fight.mp3"},
+        "oil_platform": {"path": "data/music/oil-platform.mp3"},
+        "area_67": {"path": "data/music/area-67.mp3"},
+        "crazy_prof": {"path": "data/music/crazy-prof.mp3"},
+        "funky_fox": {"path": "data/music/funky-fox.mp3"},
+        "casino_city_night": {"path": "data/music/casino-city-night.mp3"},
+        "cyber_funk": {"path": "data/music/cyber-funk.mp3"},
+        "mystic_caves": {"path": "data/music/mystic-caves.mp3"},
+    },
+    "levels": {
+        "first": {"path": "data/levels/world1/level1_test.tmx"},
+        "beach2": {"path": "data/levels/world1/test2.tmx"},
+        "beach3": {"path": "data/levels/world1/cika4.tmx"},
+        "beach4": {"path": "data/levels/world1/cika5.tmx"},
+        "beach5": {"path": "data/levels/world1/cika3.tmx"},
+        "industrial1": {"path": "data/levels/world2/test1.tmx"},
+        "industrial2": {"path": "data/levels/world1/test3.tmx"},
+        "industrial3": {"path": "data/levels/world3/test6.tmx"},
+        "industrial4": {"path": "data/levels/world3/test6.tmx"},
+        "industrial5": {"path": "data/levels/world3/test6.tmx"},
+        "industrial6": {"path": "data/levels/world3/test6.tmx"},
+        "industrial7": {"path": "data/levels/world3/test6.tmx"},
+        "mountain1": {"path": "data/levels/world3/test6.tmx"},
+        "mountain2": {"path": "data/levels/world3/test6.tmx"},
+        "mountain3": {"path": "data/levels/world3/test6.tmx"},
+        "mountain4": {"path": "data/levels/world3/test6.tmx"},
+        "mountain5": {"path": "data/levels/world3/test6.tmx"},
+        "mountain6": {"path": "data/levels/world3/test6.tmx"},
+        "mountain7": {"path": "data/levels/world3/test6.tmx"},
+        "mountain8": {"path": "data/levels/world3/test6.tmx"},
+        "mountain9": {"path": "data/levels/world3/test6.tmx"},
+        "base1": {"path": "data/levels/world3/test6.tmx"},
+        "base2": {"path": "data/levels/world3/test6.tmx"},
+        "base3": {"path": "data/levels/world3/test6.tmx"},
+        "base4": {"path": "data/levels/world3/test6.tmx"},
+        "base5": {"path": "data/levels/world3/test6.tmx"},
+        "base6": {"path": "data/levels/world3/test6.tmx"},
+        "base7": {"path": "data/levels/world3/test6.tmx"},
+        "base8": {"path": "data/levels/world3/test6.tmx"},
+        "base9": {"path": "data/levels/world3/test6.tmx"},
+        "base10": {"path": "data/levels/world3/test6.tmx"}
+    },
+    "worlds": {
+        "order": ["beach", "industrial", "mountain", "base"],
+        "beach": {
+            "title": "Beach",
+            "levels": [
+                "first", "beach2", "beach3", "beach4", "beach5"
+            ]
+        },
+        "industrial": {
+            "title": "Industrial Zone",
+            "levels": [
+                "industrial1", "industrial2", "industrial3", "industrial4", 
+                "industrial5", "industrial6", "industrial7"
+            ]
+        },
+        "mountain": {
+            "title": "Mountain",
+            "levels": [
+                "mountain1", "mountain2", "mountain3", "mountain4", "mountain5",
+                "mountain6", "mountain7", "mountain8", "mountain9"
+            ]
+        },
+        "base": {
+            "title": "Alien Base",
+            "levels": [
+                "base1", "base2", "base3", "base4", "base5",
+                "base6", "base7", "base8", "base9", "base10"
+            ]
+        }        
+    },
+    "fonts": {
+        "default": {"path": "data/fonts/riffic_free_medium.fnt"},
+        "secondary": {"path": "data/fonts/forgotten_futurist.fnt", "load_now": true},
+        "text_bubble": {"path": "data/fonts/boldly_missy.fnt"}
+    },
+    "textures": {
+        "bg1_back": {"path": "data/textures/bg1_back.png", "filter": "nearest"},
+        "bg1_front": {"path": "data/textures/bg1_front.png", "filter": "nearest"},
+        "bg2_back": {"path": "data/textures/bg2_back.png", "filter": "nearest"},
+        "bg2_front": {"path": "data/textures/bg2_front.png", "filter": "nearest"},
+        "bg3_back": {"path": "data/textures/bg3_back.png", "filter": "nearest"},
+        "bg3_front": {"path": "data/textures/bg3_front.png", "filter": "nearest"},
+        "black": {"path":  "data/textures/black.png"},
+        "coolfox": {"path": "data/textures/coolfox.png"},
+        "mrs_coolfox": {"path": "data/textures/mrs_coolfox.png"},
+        "barman": {"path": "data/textures/barman.png"},
+        "doc": {"path": "data/textures/doc.png"},
+        "alien_1": {"path": "data/textures/alien_1.png"},
+        "alien_2": {"path": "data/textures/alien_2.png"}
+    },
+    "atlases": {
+        "ui": {"path": "data/textures/ui.atlas", "load_now": true},
+        "ui_pixel": {"path": "data/textures/ui_pixel.atlas", "filter": "nearest"},
+        "sprites": {"path": "data/textures/sprites.atlas", "filter": "nearest"},
+        "logo": {"path": "data/textures/logo.atlas"}
+    },
+    "sprite_animations": {
+
+        "player_idle": {"duration": 0.8, "atlas": "sprites", "region": "player_idle", "mode": "loop"},
+        "player_run": {"duration": 0.5, "atlas": "sprites", "region": "player_run", "mode": "loop"},
+        "player_jump_begin": {"duration": 0.1, "atlas": "sprites", "region": "player_jump_begin", "mode": "normal"},
+        "player_jump_down": {"duration": 0.1, "atlas": "sprites", "region": "player_jump_down", "mode": "normal"},
+        "player_jump_end": {"duration": 0.1, "atlas": "sprites", "region": "player_jump_end", "mode": "normal"},
+        "player_pain": {"duration": 0.1, "atlas": "sprites", "region": "player_pain", "mode": "loop"},
+        "player_attack": {"duration": 0.2, "atlas": "sprites", "region": "player_attack", "mode": "normal"},
+        "player_crouch": {"duration": 0.1, "atlas": "sprites", "region": "player_crouch", "mode": "normal"},
+        "player_crouch_reversed": {"duration": 0.1, "atlas": "sprites", "region": "player_crouch", "mode": "reversed"},
+        "player_crouch_move": {"duration": 0.3, "atlas": "sprites", "region": "player_crouch_move", "mode": "loop"},
+        "player_attack1": {"duration": 0.15, "atlas": "sprites", "region": "player_attack1", "mode": "normal"},
+        "player_swim": {"duration": 0.5, "atlas": "sprites", "region": "player_swim", "mode": "loop"},
+
+        "player_crowbar_idle": {"duration": 0.8, "atlas": "sprites", "region": "player_crowbar_idle", "mode": "loop"},
+        "player_crowbar_run": {"duration": 0.5, "atlas": "sprites", "region": "player_crowbar_run", "mode": "loop"},
+        "player_crowbar_jump_begin": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_jump_begin", "mode": "normal"},
+        "player_crowbar_jump_down": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_jump_down", "mode": "normal"},
+        "player_crowbar_jump_end": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_jump_end", "mode": "normal"},
+        "player_crowbar_pain": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_pain", "mode": "loop"},
+        "player_crowbar_attack": {"duration": 0.2, "atlas": "sprites", "region": "player_crowbar_attack", "mode": "normal"},
+        "player_crowbar_crouch": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_crouch", "mode": "normal"},        
+        "player_crowbar_crouch_reversed": {"duration": 0.1, "atlas": "sprites", "region": "player_crowbar_crouch", "mode": "reversed"},
+        "player_crowbar_crouch_move": {"duration": 0.3, "atlas": "sprites", "region": "player_crowbar_crouch_move", "mode": "loop"},
+        "player_crowbar_attack1": {"duration": 0.15, "atlas": "sprites", "region": "player_crowbar_attack1", "mode": "normal"},
+        "player_crowbar_swim": {"duration": 0.5, "atlas": "sprites", "region": "player_crowbar_swim", "mode": "loop"},
+        
+        "player_bullet1": {"duration": 0.2, "atlas": "sprites", "region": "player_bullet1", "mode": "normal"},
+        "player_bullet2": {"duration": 0.25, "atlas": "sprites", "region": "player_bullet2", "mode": "normal"},
+        
+        "crab": {"duration": 0.4, "atlas": "sprites", "region": "enemy_crab", "mode": "loop"},
+        "blue_crab": {"duration": 0.3, "atlas": "sprites", "region": "enemy_blue_crab", "mode": "loop"},
+        
+        "enemy_hedgehog": {"duration": 0.8, "atlas": "sprites", "region": "enemy_hedgehog", "mode": "loop"},
+        "enemy_hedgehog_rush": {"duration": 0.3, "atlas": "sprites", "region": "enemy_hedgehog_rush", "mode": "normal"},
+        
+        "enemy_beaver_idle": {"duration": 0.5, "atlas": "sprites", "region": "enemy_beaver_idle", "mode": "loop"},    
+        "enemy_beaver_walk": {"duration": 0.8, "atlas": "sprites", "region": "enemy_beaver_walk", "mode": "loop"},
+        
+        "piranha": {"duration": 0.4, "atlas": "sprites", "region": "enemy_piranha", "mode": "loop"},
+        "purple_piranha": {"duration": 0.4, "atlas": "sprites", "region": "enemy_purple_piranha", "mode": "loop"},
+        
+        "fireball": {"duration": 0.1, "atlas": "sprites", "region": "fireball", "mode": "loop"},
+        "fireball_explosion": {"duration": 0.2, "atlas": "sprites", "region": "fireball_explosion", "mode": "normal"},
+        
+        "dust": {"duration": 0.3, "atlas": "sprites", "region": "dust", "mode": "normal"},
+        
+        "water_splash": {"duration": 0.3, "atlas": "sprites", "region": "water_splash", "mode": "normal"},
+        
+        "dplatform_in": {"duration": 0.3, "atlas": "sprites", "region": "dplatform_in", "mode": "normal"},
+        "dplatform_out": {"duration": 0.3, "atlas": "sprites", "region": "dplatform_out", "mode": "normal"},
+        
+        "frog_idle": {"duration": 0.4, "atlas": "sprites", "region": "enemy_frog_idle", "mode": "loop"},
+        "frog_jump_begin": {"duration": 0.5, "atlas": "sprites", "region": "enemy_frog_jump", "mode": "normal"},
+        "frog_jump_end": {"duration": 0.5, "atlas": "sprites", "region": "enemy_frog_jump", "mode": "reversed"},
+
+        "purple_frog_idle": {"duration": 0.4, "atlas": "sprites", "region": "enemy_purple_frog_idle", "mode": "loop"},
+        "purple_frog_jump_begin": {"duration": 0.5, "atlas": "sprites", "region": "enemy_purple_frog_jump", "mode": "normal"},
+        "purple_frog_jump_end": {"duration": 0.5, "atlas": "sprites", "region": "enemy_purple_frog_jump", "mode": "reversed"},
+
+        "springboard_bottom": {"duration": 0.1, "atlas": "sprites", "region": "springboard_bottom", "mode": "normal"},
+
+        "oxygen_grow": {"duration": 0.5, "atlas": "sprites", "region": "oxygen_grow", "mode": "normal"},
+        "oxygen_use": {"duration": 0.25, "atlas": "sprites", "region": "oxygen_grow", "mode": "reversed"},
+        "oxygen_idle": {"duration": 0.6, "atlas": "sprites", "region": "oxygen_idle", "mode": "loop"},
+
+        "switch_blue_on": {"duration": 0.14, "atlas": "sprites", "region": "switch_blue_switch", "mode": "normal"},
+        "switch_blue_off": {"duration": 0.14, "atlas": "sprites", "region": "switch_blue_switch", "mode": "reversed"},
+
+        "circular_saw": {"duration": 0.1, "atlas": "sprites", "region": "circular_saw", "mode": "loop"},
+
+        "electric_spike": {"duration": 0.3, "atlas": "sprites", "region": "electric_spike", "mode": "loop"},
+
+        "ufo": {"duration": 0.4, "atlas": "sprites", "region": "ufo", "mode": "loop"},
+
+        "alien1": {"duration": 1.6, "atlas": "sprites", "region": "alien1", "mode": "loop"},
+        "alien2": {"duration": 1.6, "atlas": "sprites", "region": "alien2", "mode": "loop"}
+    }
+}

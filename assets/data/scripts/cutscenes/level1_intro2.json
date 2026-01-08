@@ -1,0 +1,25 @@
+{"sequence": [
+    {"move_camera_to": {"target": "barman"}},
+    {"set_parent": {"entity": "ufo_beam", "parent": "ufo"}},
+    {"parallel": [
+        {"walk_to": {"entity": "ufo", "target": "t2", "exact": true}},
+        {"sequence": [
+            {"say": {"name": "barman", "text": "What's ya flavor,\nmy man?", "start": true, "finish": true}},
+            {"say": {"name": "coolfox", "text": "I'd like to have a...", "left": true, "start": true}},
+            {"say": {"name": "coolfox", "text": "What the...", "left": true, "finish": true}}
+        ]},
+        {"sequence": [
+            {"delay": {"duration": 2.6}},
+            {"play_music": {"name": "boss_battle"}}
+        ]}
+    ]},
+    {"move_camera_to": {"target": "t2", "speed": 512}},
+    {"set_visible": {"entity": "ufo_beam", "visible": true}},
+    {"set_movement_active": {"entity": "mrs_coolfox", "active": true}},
+    {"say": {"name": "mrs_coolfox", "text": "Aaah... Help me!", "start": true, "finish": true}},
+    {"set_parent": {"entity": "mrs_coolfox", "parent": "ufo"}},
+    {"delay": {"duration": 1}},
+    {"set_visible": {"entity": "ufo_beam", "visible": false}},
+    {"set_movement_active": {"entity": "ufo", "active": true, "finish_on_skip": false}},
+    {"move_camera_to": {"target": "player"}}
+]}
