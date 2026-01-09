@@ -29,18 +29,18 @@ public class Styles {
         defaultButtonStyle.up = skin.getDrawable("button_up");
         defaultButtonStyle.down = skin.getDrawable("button_down");
         defaultButtonStyle.soundName = "button_click";
-        defaultButtonStyle.unpressedOffsetY = 5;
-        defaultButtonStyle.pressedOffsetY = -2;
-        defaultButtonStyle.checkedOffsetY = 5;
+        defaultButtonStyle.unpressedOffsetY = 0;
+        defaultButtonStyle.pressedOffsetY = 0;
+        defaultButtonStyle.checkedOffsetY = 0;
 
         defaultButtonPushedStyle = new MenuButtonStyle();
         defaultButtonPushedStyle.font = fontManager.get("default");
         defaultButtonPushedStyle.up = skin.getDrawable("button_down");
         defaultButtonPushedStyle.down = skin.getDrawable("button_down");
         defaultButtonPushedStyle.soundName = "button_click";
-        defaultButtonPushedStyle.unpressedOffsetY = -2;
-        defaultButtonPushedStyle.pressedOffsetY = -2;
-        defaultButtonPushedStyle.checkedOffsetY = -2;
+        defaultButtonPushedStyle.unpressedOffsetY = 0;
+        defaultButtonPushedStyle.pressedOffsetY = 0;
+        defaultButtonPushedStyle.checkedOffsetY = 0;
 
         secondaryButtonStyle = new MenuButtonStyle();
         secondaryButtonStyle.font = fontManager.get("secondary");

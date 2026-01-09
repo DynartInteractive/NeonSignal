@@ -55,7 +55,7 @@ public class MenuButton extends TextButton {
         if (label.getText().toString().equals("")) {
             icon.setX((int)((table.getWidth() - icon.getWidth()) / 2f));
         } else {
-            icon.setX(15f);
+            icon.setX(25f);
             cell.padLeft(icon.getWidth());
         }
     }

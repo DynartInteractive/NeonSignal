@@ -35,21 +35,7 @@
     },
     "music": {
         "logo": {"path": "data/music/logo.mp3"},
-        "main": {"path": "data/music/coolfox-main-theme.mp3"},
-        "beach": {"path": "data/music/caribbean-islands.mp3"},
-        "boss_battle": {"path": "data/music/aliens.mp3"},
-        "before_trouble": {"path": "data/music/before-the-trouble.mp3"},
-        "industrial_fox": {"path": "data/music/industrial-fox.mp3"},
-        "ice_castle": {"path": "data/music/ice-castle.mp3"},
-        "complete": {"path": "data/music/complete.mp3"},
-        "final_fight": {"path": "data/music/final-fight.mp3"},
-        "oil_platform": {"path": "data/music/oil-platform.mp3"},
-        "area_67": {"path": "data/music/area-67.mp3"},
-        "crazy_prof": {"path": "data/music/crazy-prof.mp3"},
-        "funky_fox": {"path": "data/music/funky-fox.mp3"},
-        "casino_city_night": {"path": "data/music/casino-city-night.mp3"},
-        "cyber_funk": {"path": "data/music/cyber-funk.mp3"},
-        "mystic_caves": {"path": "data/music/mystic-caves.mp3"},
+        "main": {"path": "data/music/main.mp3"}
     },
     "levels": {
         "first": {"path": "data/levels/world1/level1_test.tmx"},
@@ -115,8 +101,8 @@
         }        
     },
     "fonts": {
-        "default": {"path": "data/fonts/riffic_free_medium.fnt"},
-        "secondary": {"path": "data/fonts/forgotten_futurist.fnt", "load_now": true},
+        "default": {"path": "data/fonts/orbitron.fnt"},
+        "secondary": {"path": "data/fonts/orbitron_small.fnt", "load_now": true},
         "text_bubble": {"path": "data/fonts/boldly_missy.fnt"}
     },
     "textures": {

@@ -333,6 +333,7 @@ public class LevelScreen extends MenuScreen {
         // Calculate layout dimensions
         int buttonSpacingX = 140;
         int buttonSpacingY = 165;
+        float buttonWidth = 127; // LevelButton width - need to account for anchor at bottom-left
 
         // Determine row/column layout based on total levels
         int row, col, buttonsInRow1, buttonsInRow2;
@@ -360,8 +361,9 @@ public class LevelScreen extends MenuScreen {
         int buttonsInThisRow = (row == 0) ? buttonsInRow1 : buttonsInRow2;
 
         // Center each row based on its button count
+        // Account for button anchor being at bottom-left by subtracting half width
         float rowOffsetX = -(buttonsInThisRow - 1) * buttonSpacingX / 2f;
-        float x = col * buttonSpacingX + rowOffsetX + offsetX;
+        float x = col * buttonSpacingX + rowOffsetX + offsetX - buttonWidth / 2f;
 
         // Position vertically - weighted toward bottom to balance with title
         float y;
@@ -492,7 +494,10 @@ public class LevelScreen extends MenuScreen {
     }
 
     private void updateArrowPositions() {
-        float centerY = 360;
+        // Calculate center Y of level button area
+        // Level buttons are positioned around -127.5f (single row) or -45 to -210 (two rows)
+        // Use -127.5f as the vertical center for arrow positioning
+        float centerY = -127.5f;
 
         float arrowY = centerY - slideLeftButton.getHeight() / 2f;
         slideLeftButton.setX(getLeftButtonX());
@@ -502,10 +507,12 @@ public class LevelScreen extends MenuScreen {
     }
 
     private float getLeftButtonX() {
+        // Group origin is at screen center, so left edge is at -stage.getWidth()/2f
         return -stage.getWidth()/2f + 20f + getSideBlackBarWidth();
     }
 
     private float getRightButtonX() {
+        // Group origin is at screen center, so right edge is at +stage.getWidth()/2f
         return stage.getWidth()/2f - slideRightButton.getWidth() - 20f - getSideBlackBarWidth();
     }
 

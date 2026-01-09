@@ -18,12 +18,10 @@ import net.dynart.neonsignal.core.Engine;
 
 public class MainMenuScreen extends MenuScreen {
 
-    public static final float LOGO_Y = 140;
-    private static final float GLASSES_Y = 175;
+    public static final float LOGO_Y = 100;
 
     private final SoundManager soundManager;
     private final Image logoImage;
-    private final Image glassesImage;
 
     private MenuButton playButton ;
     private MenuButton settingsButton;
@@ -45,9 +43,6 @@ public class MainMenuScreen extends MenuScreen {
         logoImage.setOrigin(Align.center);
         //logoImage.setScale(4.5f);
         logoImage.setPosition(-logoImage.getWidth()/2f - 0.01f, LOGO_Y);
-        glassesImage = new Image(skin.getDrawable("logo_glasses"));
-        //glassesImage.setScale(4.5f);
-        glassesImage.setPosition(-206, GLASSES_Y);
 
         createActions();
         setUpButtons();
@@ -55,7 +50,6 @@ public class MainMenuScreen extends MenuScreen {
 
         group.addActor(menuCursor.getCursorImage());
         group.addActor(logoImage);
-        group.addActor(glassesImage);
         group.addActor(playButton);
         group.addActor(settingsButton);
         group.addActor(backButton);
@@ -102,7 +96,7 @@ public class MainMenuScreen extends MenuScreen {
         playButton = new MenuButton(engine, "Play!");
         playButton.setWidth(400);
         playButton.setHeight(120);
-        playButton.setY(-30);
+        playButton.setY(-70);
         playButton.setX(-200);
         playButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -114,7 +108,7 @@ public class MainMenuScreen extends MenuScreen {
         settingsButton = new MenuButton(engine, "Settings");
         settingsButton.setWidth(400);
         settingsButton.setHeight(120);
-        settingsButton.setY(-170);
+        settingsButton.setY(-210);
         settingsButton.setX(-200);
         settingsButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
@@ -128,14 +122,14 @@ public class MainMenuScreen extends MenuScreen {
         creditsButton = new MenuButton(engine, "      Credits", styles.getSecondaryButtonStyle(), styles.getSecondaryButtonStyle());
         creditsButton.setWidth(380);
         creditsButton.setHeight(60);
-        creditsButton.setY(-250);
+        creditsButton.setY(-290);
         creditsButton.setX(-190);
         creditsButton.setIcon(new Image(skin.getDrawable("icon_credits")));
 
         privacyPolicyButton = new MenuButton(engine, "      Privacy Policy", styles.getSecondaryButtonStyle(), styles.getSecondaryButtonStyle());
         privacyPolicyButton.setWidth(380);
         privacyPolicyButton.setHeight(60);
-        privacyPolicyButton.setY(-310);
+        privacyPolicyButton.setY(-350);
         privacyPolicyButton.setX(-190);
         privacyPolicyButton.setIcon(new Image(skin.getDrawable("icon_privacy")));
         privacyPolicyButton.setVisible(config.isMobile());
@@ -234,11 +228,6 @@ public class MainMenuScreen extends MenuScreen {
         moving = true;
         logoImage.setPosition(logoImage.getX(), stage.getHeight());
         logoImage.addAction(Actions.moveTo(logoImage.getX(), LOGO_Y, 0.2f, Interpolation.pow2Out));
-        glassesImage.setPosition(glassesImage.getX(), stage.getHeight());
-        glassesImage.addAction(Actions.sequence(
-            Actions.delay(0.2f),
-            Actions.moveTo(glassesImage.getX(), GLASSES_Y, 0.2f, Interpolation.pow2Out)
-        ));
         float left = -group.getX() - playButton.getWidth() - 1f;
         float right = group.getX() + playButton.getWidth() + 1f;
         moveInButton(playButton, left, 0.05f);
@@ -250,7 +239,6 @@ public class MainMenuScreen extends MenuScreen {
         if (isAnimating()) { return; }
         moving = true;
         logoImage.addAction(Actions.moveTo(logoImage.getX(), stage.getHeight(), 0.2f, Interpolation.pow2In));
-        glassesImage.addAction(Actions.moveTo(glassesImage.getX(), stage.getHeight(), 0.2f, Interpolation.pow2In));
         float left = -group.getX() - playButton.getWidth() - 1f;
         float right = group.getX() + playButton.getWidth() + 1f;
         moveOutButton(playButton, right, 0.05f);

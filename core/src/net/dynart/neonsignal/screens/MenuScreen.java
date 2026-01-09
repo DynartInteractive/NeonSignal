@@ -50,7 +50,7 @@ abstract class MenuScreen extends Screen implements DialogListener {
         stage.addActor(group);
 
         backButton = new MenuButton(engine, "");
-        backButton.setWidth(90);
+        backButton.setWidth(110);
         backButton.setHeight(110);
         backButton.setY(230);
         backButton.setIcon(new Image(skin.getDrawable("icon_back")));
@@ -96,7 +96,7 @@ abstract class MenuScreen extends Screen implements DialogListener {
         versionLabel.setY(stage.getHeight() - versionLabel.getHeight() - 5f);
 
         float sideBlackBarWidth = getSideBlackBarWidth();
-        backButton.setX(stage.getWidth() / 2f - 110 - sideBlackBarWidth);
+        backButton.setX(stage.getWidth() / 2f - 120 - sideBlackBarWidth);
 
         group.setX(stage.getWidth() / 2f);
         group.setY(stage.getHeight() / 2f);

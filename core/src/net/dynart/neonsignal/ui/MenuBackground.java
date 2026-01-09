@@ -21,7 +21,7 @@ public class MenuBackground extends Actor {
     public MenuBackground(Engine engine) {
         super();
         this.engine = engine;
-        gridSize = 5; // because of ultra wide monitors (3 would be enough for 16:9)
+        gridSize = 1; // because of ultra wide monitors (3 would be enough for 16:9)
         group = new Group();
         createImages();
     }
@@ -43,6 +43,7 @@ public class MenuBackground extends Actor {
     }
 
     private void move() {
+        /*
         float delta = engine.getDeltaTime();
         float move = delta * 60f;
         offset -= move;
@@ -50,7 +51,7 @@ public class MenuBackground extends Actor {
         if (offset < -imageWidth) {
             offset += imageWidth;
         }
-        group.setPosition(offset, offset);
+         */
     }
 
     @Override
