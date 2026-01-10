@@ -39,11 +39,14 @@
             "scaleInEditor": 1
         },
         "assets/data/levels/test.tmx": {
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 0.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 189,
-                "y": 218
+                "x": 639,
+                "y": 324
             }
         },
         "assets/data/levels/tileset1.tsx": {
@@ -63,9 +66,9 @@
     ],
     "project": "NeonSignal.tiled-project",
     "recentFiles": [
+        "assets/data/levels/test.tmx",
         "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx",
         "assets/data/levels/objects.tsx",
-        "assets/data/levels/test.tmx",
         "assets/data/levels/blocks.tsx",
         "assets/data/levels/tileset1.tsx"
     ],

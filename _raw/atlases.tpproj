@@ -84,7 +84,7 @@ keepInputFileExtensions=false
 
 name=sprites
 filename=sprites.atlas
-output=../../coolfox/assets/data/textures
+output=../assets/data/textures
 
 alias=true
 alphaThreshold=0
@@ -95,8 +95,8 @@ fast=false
 filterMag=Nearest
 filterMin=Nearest
 ignoreBlankImages=true
-maxHeight=1024
-maxWidth=1024
+maxHeight=2048
+maxWidth=2048
 minHeight=16
 minWidth=16
 paddingX=2

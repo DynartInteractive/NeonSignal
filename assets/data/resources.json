@@ -123,7 +123,7 @@
     "atlases": {
         "ui": {"path": "data/textures/ui.atlas", "load_now": true},
         "ui_pixel": {"path": "data/textures/ui_pixel.atlas", "filter": "nearest"},
-        "sprites": {"path": "data/textures/sprites.atlas", "filter": "nearest"},
+        "sprites": {"path": "data/textures/sprites.atlas"},
         "logo": {"path": "data/textures/logo.atlas"}
     },
     "sprite_animations": {
