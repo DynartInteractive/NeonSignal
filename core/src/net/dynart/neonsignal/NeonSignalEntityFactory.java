@@ -53,7 +53,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
         EntityCollisionComponent entityCollision = new EntityCollisionComponent();
         entityCollision.setExcludeComponentClass(EnemyBlockComponent.class);
         result.addComponents(
-            createBody(parameters, 114, 192),
+            createBody(parameters, 94, 190),
             createGravity(config.getDefaultGravity()),
             new GridCollisionComponent(),
             entityCollision,

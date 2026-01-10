@@ -26,6 +26,25 @@ import net.dynart.neonsignal.screens.GameScreen;
 
 public class PlayerComponent extends Component {
 
+    public enum GunPosition {
+
+        UP("up"),
+        DIAGONAL_UP("diagonal_up"),
+        FORWARD(null),
+        DIAGONAL_DOWN("diagonal_down");
+
+        private final String name;
+
+        GunPosition(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+    }
+
     public static final String SCORE_CHANGED = "player_score_changed";
     public static final String FLOPPY_CHANGED = "player_floppy_changed";
     public static final String WANTS_TO_DROP = "player_wants_to_drop";
@@ -91,20 +110,13 @@ public class PlayerComponent extends Component {
     private boolean footUnderWater;
     private boolean lastFootUnderWater;
     private float underWaterTime;
-    private boolean crouching;
-    private boolean lastCrouching;
-    private float standUpTime;
     private boolean oxygenDamage;
     private float poisonedTime;
     private int lastPoisonedSecond;
     private boolean poisonDamage;
-    /*
-    private boolean climbing;
-    private float climbingCheckX;
-     */
     private Entity onSwitch;
 
-    private Set<PlayerAbility> abilities = new HashSet<>();
+    private final Set<PlayerAbility> abilities = new HashSet<>();
 
 
     private static final String[] fallDownSounds = { "falldown", "falldown2", "falldown3" };
@@ -112,6 +124,8 @@ public class PlayerComponent extends Component {
     private static final String[] swimSounds = { "swim1", "swim2", "swim3" }; // avosound.com, Sound ID: 80475, Filename: Water,Churn,Heavy,Underwater,Metallic.wav
 
     private String animPrefix = "";
+
+    private GunPosition gunPosition = GunPosition.FORWARD;
 
     @Override
     public void postConstruct(final Entity entity) {
@@ -287,6 +301,7 @@ public class PlayerComponent extends Component {
         handlePoisonedState(delta);
         if (!inPain) {
             handleHorizontalVelocity();
+            handleGunPosition();
             handleFire();
         }
         adjustUnderWater(delta);
@@ -415,7 +430,6 @@ public class PlayerComponent extends Component {
         wasInPain = inPain;
         lastAttackTime = attackTime;
         lastChangeDown = changeDown;
-        lastCrouching = crouching;
         lastPoisonedSecond = (int)poisonedTime;
 
     }
@@ -488,13 +502,27 @@ public class PlayerComponent extends Component {
         }
     }
 
+    private void handleGunPosition() {
+        if (gameController.getAxisY() > config.getPlayerMinVerticalAxis()
+            && Math.abs(gameController.getAxisX()) <= config.getPlayerMinHorizontalAxis()) {
+            gunPosition = GunPosition.UP;
+        } else if (gameController.getAxisY() > config.getPlayerMinVerticalAxis() / 2
+            && Math.abs(gameController.getAxisX()) > config.getPlayerMinHorizontalAxis()) {
+            gunPosition = GunPosition.DIAGONAL_UP;
+        } else if (gameController.getAxisY() < -config.getPlayerMinVerticalAxis() / 2) {
+            gunPosition = GunPosition.DIAGONAL_DOWN;
+        } else {
+            gunPosition = GunPosition.FORWARD;
+        }
+    }
+
     private void handleFire() {
         if (!hasAbility(PlayerAbility.ANY_PUNCH)) {
             return;
         }
         boolean bDown = gameController.isBDown();
         if (onSwitch == null) {
-            if (bDown && !lastBDown && attackTime <= 0 && !crouching) {
+            if (bDown && !lastBDown && attackTime <= 0) {
                 switch (currentWeaponIndex) {
                     case 0: punch(); break;
                     case 1: break; // TODO: crowbarPunch()
@@ -534,18 +562,16 @@ public class PlayerComponent extends Component {
 
         float divider = sliding ? 5 : (waterCollision.isInWater() ? 3 : 1); // TODO: config
         float vMaxX = config.getPlayerMaxRunningVelocity();
+        float baseAcceleration = acceleration / divider;
         if (footUnderWater) {
             if (body.isInAir()) {
                 velocity.setMaxX(vMaxX / 1.3f);
             } else {
-                velocity.setMaxX(crouching ? vMaxX / 5f : vMaxX / 2f);
+                velocity.setMaxX(vMaxX / 2f);
             }
-        } else if (crouching) {
-            velocity.setMaxX(vMaxX / 5f);
         } else {
             velocity.setMaxX(vMaxX);
         }
-        float baseAcceleration = acceleration / divider;
         boolean horizontalDown = isHorizontalDown();
         if (horizontalDown) {
             float xAxis = gameController.getAxisX();
@@ -610,36 +636,11 @@ public class PlayerComponent extends Component {
         }
 
         if (!inPain) {
-            // set velocity by controller
-            if (!body.isInAir()) {
-                crouching = gameController.getAxisY() < -config.getPlayerMinVerticalAxis();
-                if (crouching && !lastCrouching) {
-                    body.setHeight(CROUCH_HEIGHT); // TODO: constant
-                }
-                if (!crouching && lastCrouching) {
-                    body.setHeight(HEIGHT); // TODO: constant
-                    if (grid.bodyInBlock(body) || body.overlapOther(ColliderComponent.class) != null) {
-                        body.setHeight(CROUCH_HEIGHT);
-                        crouching = true;
-                    } else {
-                        standUpTime = 0.1f; // TODO: constant
-                    }
-                }
-            } else {
-                body.setHeight(HEIGHT); // TODO: constant
-                if (lastCrouching && (grid.bodyInBlock(body) || body.overlapOther(ColliderComponent.class) != null)) {
-                    body.setHeight(CROUCH_HEIGHT);
-                    crouching = true;
-                } else {
-                    crouching = false;
-                }
-            }
-
             if (!gameController.isADown()) {
                 jumpReleased = true;
             }
             int maxJumpCount = hasAbility(PlayerAbility.DOUBLE_JUMP) ? 2 : 1;
-            if (gameController.isADown() && jumpReleased && (jumpCounter < maxJumpCount || headUnderWater) && !crouching) {
+            if (gameController.isADown() && jumpReleased && (jumpCounter < maxJumpCount || headUnderWater)) {
                 float vy = headUnderWater ? config.getPlayerJumpVelocity() / 2.8f : config.getPlayerJumpVelocity();
                 velocity.setY(vy);
                 jumpCounter++;
@@ -699,7 +700,8 @@ public class PlayerComponent extends Component {
 
     private void setAnimation(String animationName) {
         ViewComponent view = entity.getComponent(ViewComponent.class);
-        view.setAnimation(0, "player_" + animPrefix + animationName);
+        String animPostfix = gunPosition.getName() != null ? "_" + gunPosition.getName() : "";
+        view.setAnimation(0, "player_" + animPrefix + animationName + animPostfix);
     }
 
     private void setAnimationTime(float time) {
@@ -730,22 +732,9 @@ public class PlayerComponent extends Component {
 
             } else if (!body.isInAir()) {
 
-                if (crouching) {
-                    if (!lastCrouching) { // started to crouch
-                        setAnimationTime(0);
-                        setAnimation("crouch");
-                    } else {
-                        setAnimation(velocity.getX() == 0 || !lastHorizontalDown ? "crouch" : "crouch_move");
-                    }
-                } else if (standUpTime > 0) {
-                    if (lastCrouching) { // started to stand up
-                        setAnimationTime(0);
-                        setAnimation("crouch_reversed");
-                    }
-                    standUpTime -= delta;
-                } else if (body.wasInAir()) { // if just fallen down
-                    setAnimation("jump_end");
-                    setAnimationTime(0);
+                if (body.wasInAir()) { // if just fallen down
+                    //setAnimation("jump_end");
+                    //setAnimationTime(0);
                     addDust();
                     soundManager.playRandom(fallDownSounds);
                 } else {
@@ -768,7 +757,7 @@ public class PlayerComponent extends Component {
                     setAnimation("jump_begin");
                 } else if (velocity.getY() < 0 && velocity.getLastY() >= 0) {
                     // if started to fall down
-                    setAnimation("jump_down");
+                    setAnimation("jump_end");
                 }
 
             }

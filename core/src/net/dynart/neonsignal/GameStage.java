@@ -155,7 +155,7 @@ public class GameStage extends Stage {
 
         // pause button
         pauseButton = new MenuButton(engine, "");
-        pauseButton.setWidth(90);
+        pauseButton.setWidth(110);
         pauseButton.setHeight(110);
         pauseButton.setIcon(new Image(skin.getDrawable("icon_pause")));
 
