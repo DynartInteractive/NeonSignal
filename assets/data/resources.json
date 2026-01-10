@@ -38,7 +38,7 @@
         "main": {"path": "data/music/main.mp3"}
     },
     "levels": {
-        "first": {"path": "data/levels/world1/level1_test.tmx"},
+        "first": {"path": "data/levels/test.tmx"},
         "beach2": {"path": "data/levels/world1/test2.tmx"},
         "beach3": {"path": "data/levels/world1/cika4.tmx"},
         "beach4": {"path": "data/levels/world1/cika5.tmx"},

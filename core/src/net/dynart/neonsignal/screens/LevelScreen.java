@@ -232,10 +232,13 @@ public class LevelScreen extends MenuScreen {
         if (row == 0 && totalLevels > 3) {
             // On top row with two rows total - go to bottom row
             int targetIndex = levelIndex + buttonsInRow1;
-            if (targetIndex < totalLevels) {
-                String neighbourHash = getLevelHash(worldIndex, targetIndex);
-                item.setNeighbour(MenuCursor.Neighbour.DOWN, levelButtons.get(neighbourHash));
+            // If the target index is out of bounds (bottom row has fewer buttons),
+            // go to the last button in the bottom row instead
+            if (targetIndex >= totalLevels) {
+                targetIndex = totalLevels - 1;
             }
+            String neighbourHash = getLevelHash(worldIndex, targetIndex);
+            item.setNeighbour(MenuCursor.Neighbour.DOWN, levelButtons.get(neighbourHash));
         }
 
         // UP navigation
@@ -496,8 +499,7 @@ public class LevelScreen extends MenuScreen {
     private void updateArrowPositions() {
         // Calculate center Y of level button area
         // Level buttons are positioned around -127.5f (single row) or -45 to -210 (two rows)
-        // Use -127.5f as the vertical center for arrow positioning
-        float centerY = -127.5f;
+        float centerY = -60f;
 
         float arrowY = centerY - slideLeftButton.getHeight() / 2f;
         slideLeftButton.setX(getLeftButtonX());

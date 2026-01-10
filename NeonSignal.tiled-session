@@ -1,0 +1,80 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "assets/data/levels/test.tmx",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/blocks.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/objects.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/tileset1.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx": {
+            "scale": 5.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 477.72727272727275,
+                "y": 176.1818181818182
+            }
+        },
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx#tileset2": {
+            "scaleInDock": 1
+        },
+        "assets/data/levels/blocks.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/data/levels/objects.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets/data/levels/test.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 189,
+                "y": 218
+            }
+        },
+        "assets/data/levels/tileset1.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/gopher/Projects/NeonSignal/assets/data/levels",
+    "map.height": 40,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 48,
+    "map.tileWidth": 48,
+    "map.width": 60,
+    "openFiles": [
+        "assets/data/levels/test.tmx"
+    ],
+    "project": "NeonSignal.tiled-project",
+    "recentFiles": [
+        "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx",
+        "assets/data/levels/objects.tsx",
+        "assets/data/levels/test.tmx",
+        "assets/data/levels/blocks.tsx",
+        "assets/data/levels/tileset1.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 1,
+    "tileset.spacing": 2,
+    "tileset.tileSize": {
+        "height": 48,
+        "width": 48
+    },
+    "tileset.type": 1
+}

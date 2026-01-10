@@ -130,7 +130,12 @@ public class ViewComponent extends Component {
             }
             animations.set(index, animation);
             GameSprite sprite = sprites.get(index);
-            TextureRegion region = (TextureRegion) animation.getKeyFrame(animationTimes.get(index));
+            TextureRegion region;
+            try {
+                region = (TextureRegion) animation.getKeyFrame(animationTimes.get(index));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new RuntimeException("Animation doesn't exist: " + animationName);
+            }
             sprite.setRegion(region);
         }
     }

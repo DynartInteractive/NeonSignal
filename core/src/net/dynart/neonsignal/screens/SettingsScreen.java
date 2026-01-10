@@ -150,7 +150,7 @@ public class SettingsScreen extends MenuScreen {
                 return true;
             }
         };
-        settingsButton.setX(SECOND_COLUMN_X + 249 + controlGroupBg.getWidth());
+        settingsButton.setX(SECOND_COLUMN_X + 259 + controlGroupBg.getWidth());
         settingsButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 moveOut(customizeAction);
@@ -273,7 +273,7 @@ public class SettingsScreen extends MenuScreen {
 
     private MenuButton createButton(String name) {
         MenuButton result = new MenuButton(engine, "");
-        result.setWidth(90);
+        result.setWidth(110);
         result.setHeight(110);
         result.setIcon(new Image(skin.getDrawable("icon_" + name)));
         return result;

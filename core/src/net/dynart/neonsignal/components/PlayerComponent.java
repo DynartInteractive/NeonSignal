@@ -81,6 +81,10 @@ public class PlayerComponent extends Component {
     //private String lastAnimation;
     //private GameSprite weaponSprite;
 
+    private static final float CROUCH_HEIGHT = 128f;
+    private static final float HEIGHT = 190f;
+
+
     private Entity pushedBy = null;
     private boolean headUnderWater;
     private boolean lastHeadUnderWater;
@@ -610,21 +614,21 @@ public class PlayerComponent extends Component {
             if (!body.isInAir()) {
                 crouching = gameController.getAxisY() < -config.getPlayerMinVerticalAxis();
                 if (crouching && !lastCrouching) {
-                    body.setHeight(15.99f); // TODO: constant
+                    body.setHeight(CROUCH_HEIGHT); // TODO: constant
                 }
                 if (!crouching && lastCrouching) {
-                    body.setHeight(22f); // TODO: constant
+                    body.setHeight(HEIGHT); // TODO: constant
                     if (grid.bodyInBlock(body) || body.overlapOther(ColliderComponent.class) != null) {
-                        body.setHeight(15.99f);
+                        body.setHeight(CROUCH_HEIGHT);
                         crouching = true;
                     } else {
                         standUpTime = 0.1f; // TODO: constant
                     }
                 }
             } else {
-                body.setHeight(22f); // TODO: constant
+                body.setHeight(HEIGHT); // TODO: constant
                 if (lastCrouching && (grid.bodyInBlock(body) || body.overlapOther(ColliderComponent.class) != null)) {
-                    body.setHeight(15.99f);
+                    body.setHeight(CROUCH_HEIGHT);
                     crouching = true;
                 } else {
                     crouching = false;

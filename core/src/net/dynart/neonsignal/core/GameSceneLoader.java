@@ -86,7 +86,7 @@ public class GameSceneLoader {
     }
 
     private void loadMusic() {
-        String musicName = "beach"; // default
+        String musicName = "main"; // default
         MapProperties properties = tiledMap.getProperties();
         if (properties.containsKey("music")) {
             musicName = properties.get("music").toString();
@@ -202,7 +202,10 @@ public class GameSceneLoader {
         TiledMapTileSets tileSets = tiledMap.getTileSets();
         TiledMapTileSet objectsTileSet = tileSets.getTileSet("objects");
         if (objectsTileSet == null) {
-            return;
+            objectsTileSet = tileSets.getTileSet("Objects");
+            if (objectsTileSet == null) {
+                throw new RuntimeException("Objects tile set not found");
+            }
         }
         for (TiledMapTile tile : objectsTileSet) {
             MapProperties properties = tile.getProperties();

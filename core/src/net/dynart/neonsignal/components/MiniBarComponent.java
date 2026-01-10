@@ -28,7 +28,7 @@ public class MiniBarComponent extends Component {
         ViewComponent view = entity.getComponent(ViewComponent.class);
 
         viewIndex = view.getLayerCount();
-
+/*
         GameSprite sprite = new GameSprite();
         sprite.setFlipEnabled(false);
         view.addSprite(sprite);
@@ -48,7 +48,7 @@ public class MiniBarComponent extends Component {
         sprite.setFlipEnabled(false);
         view.addSprite(sprite);
         view.setSprite(viewIndex + 2, "mini_hp_bar");
-        sprite.setOffsetY(body.getHalfHeight() * 2f + 5f);
+        sprite.setOffsetY(body.getHalfHeight() * 2f + 5f);*/
     }
 
     public void setVisibleTime(float time) {
@@ -56,6 +56,7 @@ public class MiniBarComponent extends Component {
     }
 
     public void adjustDisplay(float value, float delta) {
+        /*
         if (visibleTime > 0) {
             visibleTime -= delta;
             if (visibleTime < 0) {
@@ -86,6 +87,8 @@ public class MiniBarComponent extends Component {
         c = view.getSprite(viewIndex + 2).getColor();
         c.a = alpha;
         view.getSprite(viewIndex + 2).setColor(c);
+
+         */
     }
 
     public int getViewIndex() {
