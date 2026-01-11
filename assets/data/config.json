@@ -31,8 +31,8 @@
         "touch_button_names": ["b", "c"],
         "touch_button_size": 100,
         "default_touch_positions": {
-           "b": [-220, 230],
-           "c": [-220, 430]
+           "b": [-248, 303],
+           "c": [-75, 513]
         },
         "button_order": ["left", "right", "up", "down", "a", "b", "c", "menu"],
         "button_labels": ["Left", "Right", "Up", "Down", "Jump", "Fire", "Switch", "Menu / Back"],

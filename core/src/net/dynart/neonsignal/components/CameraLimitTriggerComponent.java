@@ -43,7 +43,7 @@ public class CameraLimitTriggerComponent extends Component {
         CameraHandler camHandler = engine.getGameScene().getCameraHandler();
         EntityManager entityManager = engine.getGameScene().getEntityManager();
         for (int i = 0; i < 4; i++) {
-            if (targets[i].isEmpty()) {
+            if (targets[i] == null || targets[i].isEmpty()) {
                 camHandler.setNewLimit(i, -1);
                 continue;
             }

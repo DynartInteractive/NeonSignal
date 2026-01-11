@@ -43,10 +43,10 @@
                 2
             ],
             "scale": 0.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 639,
-                "y": 324
+                "x": 269,
+                "y": 456
             }
         },
         "assets/data/levels/tileset1.tsx": {
