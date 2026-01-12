@@ -179,11 +179,13 @@ public class CameraHandler {
         } else if (x > max) {
             x = max;
         }
+        /*
         // set camera position to the "exact" virtual pixels
         float gw = Gdx.graphics.getWidth();
         float ratioX = gw / (float)viewport.getWorldWidth();
         x = ((int)(x * ratioX)) / ratioX - 0.001f; // that 0.001 is needed for the display fix
         //
+        */
         return x;
     }
 
@@ -200,11 +202,13 @@ public class CameraHandler {
         } else if (y > max) {
             y = max;
         }
+        /*
         // set camera position to the "exact" virtual pixels
         float gh = Gdx.graphics.getHeight();
         float ratioY = gh / (float)viewport.getWorldHeight();
         y = ((int)(y * ratioY)) / ratioY - 0.001f; // that 0.001 is needed for the display fix
         //
+         */
         return y;
     }
 

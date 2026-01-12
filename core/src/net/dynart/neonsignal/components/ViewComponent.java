@@ -237,13 +237,14 @@ public class ViewComponent extends Component {
             }
 
             // set position to the "exact" virtual pixels
+            /*
             float ratioX = (float)Gdx.graphics.getWidth() / (float)viewport.getWorldWidth();
             float x = ((int)((body.getGlobalX()) * ratioX)) / ratioX;
             float ratioY = (float)Gdx.graphics.getHeight() / (float)viewport.getWorldHeight();
             float y = ((int)((body.getGlobalY()) * ratioY)) / ratioY;
-
-            sprite.setX(x + plusX);
-            sprite.setY(y + plusY);
+            */
+            sprite.setX(body.getGlobalX() + plusX);
+            sprite.setY(body.getGlobalY() + plusY);
             sprite.draw(batch, flipX, flipY);
         }
     }
