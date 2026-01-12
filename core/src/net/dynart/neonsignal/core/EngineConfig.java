@@ -357,4 +357,6 @@ public class EngineConfig {
         return mobile;
     }
 
+
+    protected Map<String, Vector2> playerGunBarrelPosition = new HashMap<>();
 }

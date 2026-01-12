@@ -361,16 +361,18 @@ public class GameScene {
                 shapeRenderer.rect(body.getLeft(), body.getTop(), body.getWidth(), 0);
             }
             if (entity.hasComponent(PlayerComponent.class)) {
+                PlayerComponent player = entity.getComponent(PlayerComponent.class);
                 ViewComponent view = entity.getComponent(ViewComponent.class);
 
                 float dir = view.isFlipX() ? -1 : 1;
                 Vector2 a = new Vector2(body.getCenterX(), body.getCenterY());
-                Vector2 b = new Vector2(body.getCenterX() + 80 * dir, body.getCenterY() - 16);
+                Vector2 b = player.getCurrentGunBarrelPosition();
 
                 Vector2 out = new Vector2();
-                Vector2 c = grid.getIntersection(a, b);
-                if (!entityManager.getIntersection(a, c, out, entity)) {
-                    out.set(c);
+                Vector2 gridOut = new Vector2();
+                grid.getIntersection(a, b, gridOut);
+                if (!entityManager.getIntersection(a, gridOut, out, entity)) {
+                    out.set(gridOut);
                 }
 
                 shapeRenderer.setColor(Color.WHITE);

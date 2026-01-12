@@ -150,7 +150,7 @@ public class Grid {
         return false;
     }
 
-    public Vector2 getIntersection(Vector2 a, Vector2 b) {
+    public boolean getIntersection(Vector2 a, Vector2 b, Vector2 out) {
         float tileW = config.getTileWidth();
         float tileH = config.getTileHeight();
 
@@ -159,7 +159,7 @@ public class Grid {
         Vector2 end   = new Vector2(b.x / tileW, b.y / tileH);
         Vector2 rayDir = new Vector2(end.x - start.x, end.y - start.y);
 
-        if (rayDir.len() == 0f) return a;
+        if (rayDir.len() == 0f) return false;
 
         rayDir.nor();
 
@@ -221,7 +221,13 @@ public class Grid {
         }
 
         // If nothing hit within the segment, return b
-        if (!hit) return b;
+        if (!hit) {
+            if (out != null) {
+                out.x = b.x;
+                out.y = b.y;
+            }
+            return false;
+        }
 
         // Compute exact intersection in grid space
         Vector2 intersection = new Vector2(
@@ -232,6 +238,10 @@ public class Grid {
         // Back to world space
         intersection.x *= tileW;
         intersection.y *= tileH;
-        return intersection;
+        if (out != null) {
+            out.x = intersection.x;
+            out.y = intersection.y;
+        }
+        return true;
     }
 }

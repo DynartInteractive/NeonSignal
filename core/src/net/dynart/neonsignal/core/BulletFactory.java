@@ -20,46 +20,42 @@ public class BulletFactory {
         soundManager = engine.getSoundManager();
     }
 
-    public void createFireball(BodyComponent onBody, boolean flipX) {
-        create(onBody, flipX ? -240f : 240f, 0, flipX, false, true, -1, 0, false);
-    }
-
-    public Entity create(BodyComponent onBody, float velocityX, float velocityY, boolean flipX, boolean flipY, boolean collideWithGrid, float lifeTime, float rotation, boolean enemyFire) {
+    public Entity create(BulletOptions o) {
         Entity bulletEntity = bulletPool.obtain();
         bulletEntity.setParent(null);
 
         BodyComponent body = bulletEntity.getComponent(BodyComponent.class);
         body.setAlign(Align.CENTER);
-        body.setX(onBody.getCenterX());
-        body.setY(onBody.getCenterY());
-        body.setSize(16, 16);
+        body.setX(o.positionX != null ? o.positionX : o.ownerBody.getCenterX());
+        body.setY(o.positionY != null ? o.positionY : o.ownerBody.getCenterY());
+        body.setSize(o.sizeX != null ? o.sizeX : 16, o.sizeY != null ? o.sizeY : 16);
 
         GridCollisionComponent gridCollision = bulletEntity.getComponent(GridCollisionComponent.class);
-        gridCollision.setActive(collideWithGrid);
+        gridCollision.setActive(o.collideWithGrid);
 
         VelocityComponent velocity = bulletEntity.getComponent(VelocityComponent.class);
-        velocity.setX(velocityX);
-        velocity.setY(velocityY);
+        velocity.setX(o.velocityX);
+        velocity.setY(o.velocityY);
 
         OverlapAttackComponent overlapAttack = bulletEntity.getComponent(OverlapAttackComponent.class);
         overlapAttack.setActive(true);
-        overlapAttack.setExceptBody(onBody);
-        overlapAttack.setPower(1.0f);
-        overlapAttack.setEnemy(enemyFire);
+        overlapAttack.setExceptBody(o.ownerBody);
+        overlapAttack.setPower(o.power);
+        overlapAttack.setEnemy(o.enemyFire);
 
         ViewComponent view = bulletEntity.getComponent(ViewComponent.class);
         view.setAnimationTime(0, 0);
-        view.setAnimation(0, "fireball");
-        view.flipX(flipX);
-        view.flipY(flipY);
+        view.setAnimation(0, o.sprite != null ? o.sprite : "player_bullet1");
+        view.flipX(o.flipX);
+        view.flipY(o.flipY);
         view.setAlign(0, Align.CENTER);
-        view.setRotation(0, rotation);
+        view.setRotation(0, o.rotation);
         view.setVisible(true);
 
         BulletComponent bullet = bulletEntity.getComponent(BulletComponent.class);
-        bullet.setLifeTime(lifeTime);
+        bullet.setLifeTime(o.lifeTime);
         bullet.setCollisionSound(null);
-        bullet.setExplosive(true);
+        bullet.setExplosive(o.explosive);
 
         bulletEntity.setActive(true);
         entityManager.add(bulletEntity);

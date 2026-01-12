@@ -1,6 +1,7 @@
 package net.dynart.neonsignal.components;
 
 import net.dynart.neonsignal.core.BulletFactory;
+import net.dynart.neonsignal.core.BulletOptions;
 import net.dynart.neonsignal.core.Component;
 import net.dynart.neonsignal.core.Entity;
 
@@ -29,7 +30,7 @@ public class BulletSpawnerComponent extends Component {
             elapsedTime = 0;
             double vx = Math.cos(rotation/180f*3.14f) * 140f;
             double vy = Math.sin(rotation/180f*3.14f) * 140f;
-            Entity bullet = bulletFactory.create(body, (float)vx, (float)vy, false, false, true, 0.6f, rotation, true);
+            Entity bullet = bulletFactory.create(new BulletOptions(body, (float)vx, (float)vy, false, false, true, 0.6f, rotation, true));
             BulletComponent bulletComp = bullet.getComponent(BulletComponent.class);
             bulletComp.setExplosive(true);
         }

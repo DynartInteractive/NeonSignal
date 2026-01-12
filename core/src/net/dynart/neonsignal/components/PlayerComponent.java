@@ -1,14 +1,18 @@
 package net.dynart.neonsignal.components;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.dynart.neonsignal.GameStage;
+import net.dynart.neonsignal.core.BulletOptions;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.BulletFactory;
 import net.dynart.neonsignal.core.Component;
@@ -97,7 +101,7 @@ public class PlayerComponent extends Component {
 
     private float attackTime;
     private float lastAttackTime;
-    //private String lastAnimation;
+    private String currentAnimationName = "player_idle";
     //private GameSprite weaponSprite;
 
     private static final float CROUCH_HEIGHT = 128f;
@@ -126,18 +130,46 @@ public class PlayerComponent extends Component {
     private String animPrefix = "";
 
     private GunPosition gunPosition = GunPosition.FORWARD;
+    private Map<String, Vector2> gunBarrelPosition = new HashMap<>();
+    private Map<String, Vector2> gunBarrelVelocity = new HashMap<>();
 
     @Override
     public void postConstruct(final Entity entity) {
         super.postConstruct(entity);
         ViewComponent view = entity.getComponent(ViewComponent.class);
         view.setLayer(90);
-        //view.addSprite(new GameSprite(), "player_top_idle");
 
-        //weaponSprite = new GameSprite();
-        //view.addSprite(weaponSprite, "weapon1_idle");
-        //view.addSprite(weaponSprite, "player_bottom_idle");
-        //weaponSprite.setVisible(false);
+        gunBarrelPosition.put("player_idle_up", new Vector2(-35, 281));
+        gunBarrelPosition.put("player_idle_diagonal_up", new Vector2(50, 260));
+        gunBarrelPosition.put("player_idle", new Vector2(84, 123));
+        gunBarrelPosition.put("player_idle_diagonal_down", new Vector2(97, 60));
+        gunBarrelPosition.put("player_run_diagonal_up", new Vector2(40, 266));
+        gunBarrelPosition.put("player_run", new Vector2(92, 144));
+        gunBarrelPosition.put("player_run_diagonal_down", new Vector2(74, 69));
+        gunBarrelPosition.put("player_jump_begin_up", new Vector2(-35, 294));
+        gunBarrelPosition.put("player_jump_end_up", new Vector2(-35, 294));
+        gunBarrelPosition.put("player_jump_begin_diagonal_up", new Vector2(52, 275));
+        gunBarrelPosition.put("player_jump_end_diagonal_up", new Vector2(52, 275));
+        gunBarrelPosition.put("player_jump_begin", new Vector2(106, 160));
+        gunBarrelPosition.put("player_jump_end", new Vector2(106, 160));
+        gunBarrelPosition.put("player_jump_begin_diagonal_down", new Vector2(79, 77));
+        gunBarrelPosition.put("player_jump_end_diagonal_down", new Vector2(79, 77));
+
+        gunBarrelVelocity.put("player_idle_up", new Vector2(0, 1));
+        gunBarrelVelocity.put("player_idle_diagonal_up", new Vector2(0.707f, 0.707f));
+        gunBarrelVelocity.put("player_idle", new Vector2(1, 0));
+        gunBarrelVelocity.put("player_idle_diagonal_down", new Vector2(0.707f, -0.707f));
+        gunBarrelVelocity.put("player_run_diagonal_up", new Vector2(0.707f, 0.707f));
+        gunBarrelVelocity.put("player_run", new Vector2(1, 0));
+        gunBarrelVelocity.put("player_run_diagonal_down", new Vector2(0.707f, -0.707f));
+        gunBarrelVelocity.put("player_jump_begin_up", new Vector2(0, 1));
+        gunBarrelVelocity.put("player_jump_end_up", new Vector2(0, 1));
+        gunBarrelVelocity.put("player_jump_begin_diagonal_up", new Vector2(0.707f, 0.707f));
+        gunBarrelVelocity.put("player_jump_end_diagonal_up", new Vector2(0.707f, 0.707f));
+        gunBarrelVelocity.put("player_jump_begin", new Vector2(1, 0));
+        gunBarrelVelocity.put("player_jump_end", new Vector2(1, 0));
+        gunBarrelVelocity.put("player_jump_begin_diagonal_down", new Vector2(0.707f, -0.707f));
+        gunBarrelVelocity.put("player_jump_end_diagonal_down", new Vector2(0.707f, -0.707f));
 
         GameScene gameScene = engine.getGameScene();
         gameController = engine.getGameController();
@@ -523,11 +555,7 @@ public class PlayerComponent extends Component {
         boolean bDown = gameController.isBDown();
         if (onSwitch == null) {
             if (bDown && !lastBDown && attackTime <= 0) {
-                switch (currentWeaponIndex) {
-                    case 0: punch(); break;
-                    case 1: break; // TODO: crowbarPunch()
-                    case 2: fireball(); break;
-                }
+                fire();
             }
         } else {
             if (bDown && !lastBDown) {
@@ -701,7 +729,8 @@ public class PlayerComponent extends Component {
     private void setAnimation(String animationName) {
         ViewComponent view = entity.getComponent(ViewComponent.class);
         String animPostfix = gunPosition.getName() != null ? "_" + gunPosition.getName() : "";
-        view.setAnimation(0, "player_" + animPrefix + animationName + animPostfix);
+        currentAnimationName = "player_" + animPrefix + animationName + animPostfix;
+        view.setAnimation(0, currentAnimationName);
     }
 
     private void setAnimationTime(float time) {
@@ -890,42 +919,30 @@ public class PlayerComponent extends Component {
         jumpCounter = 0;
     }
 
-    private void fireball() {
-        bulletFactory.create(
-            body, flipX ? -200f : 200f, 0, flipX, false, true, 0.5f, 0, false
-        );
-        soundManager.play("fireball");
+    public Vector2 getCurrentGunBarrelPosition() {
+        Vector2 gunBPos = gunBarrelPosition.get(currentAnimationName);
+        return new Vector2(body.getCenterX() + (flipX ? -1 : 1) * gunBPos.x, body.getBottom() + gunBPos.y);
     }
 
-    private void punch() {
+    private void fire() {
 
-        lastAttackTime = 0;
-        attackTime = 0.3f;
+        Vector2 a = new Vector2(body.getCenterX(), body.getCenterY());
+        Vector2 b = getCurrentGunBarrelPosition();
+        if (grid.getIntersection(a, b, null) || entityManager.getIntersection(a, b, null, entity)) {
+            return;
+        }
 
-        Entity bulletEntity = bulletFactory.create(
-            body, 0, 0, flipX, false, false, 0.2f, 0, false
-        );
+        Vector2 gunBVel = gunBarrelVelocity.get(currentAnimationName);
 
-        BodyComponent bulletBody = bulletEntity.getComponent(BodyComponent.class);
-        bulletBody.setSize(22, 8);
-        bulletBody.setX(bulletBody.getX() + (flipX ? -8 : 8));
-        bulletBody.setY(bulletBody.getY());
-        bulletBody.setAlign(Align.CENTER_TOP);
+        BulletOptions bo = new BulletOptions();
+        bo.ownerBody = body;
+        bo.positionX = b.x;
+        bo.positionY = b.y;
+        bo.velocityX = (flipX ? -1 : 1) * gunBVel.x * 1000f;
+        bo.velocityY = gunBVel.y * 1000f;
+        //bo.sprite = "player_bullet1";
 
-        ViewComponent bulletView = bulletEntity.getComponent(ViewComponent.class);
-        bulletView.setAnimation(0, "player_bullet1");
-
-        OverlapAttackComponent bulletAttack = bulletEntity.getComponent(OverlapAttackComponent.class);
-        bulletAttack.setPower(0.34f);
-
-        BulletComponent bulletComponent = bulletEntity.getComponent(BulletComponent.class);
-        bulletComponent.setExplosive(false);
-        bulletComponent.setCollisionSound(soundManager.getRandom(punchSounds));
-
-        bulletEntity.setParent(entity);
-
-        soundManager.play("punch_whoosh");
-        //soundManager.play("fireball");
+        bulletFactory.create(bo);
     }
 
     private void addDust() {

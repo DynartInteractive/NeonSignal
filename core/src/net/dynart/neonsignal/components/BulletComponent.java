@@ -82,8 +82,8 @@ public class BulletComponent extends Component {
             soundManager.play(collisionSound, entity.getVolumeRelatedToPlayer());
         }
 
+        remove();
         if (explosive) {
-            remove();
             Entity particle = particlePool.obtain();
             BodyComponent explosionBody = particle.getComponent(BodyComponent.class);
             ParticleComponent explosionParticle = particle.getComponent(ParticleComponent.class);
