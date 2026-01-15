@@ -4,6 +4,12 @@
   <properties>
    <property name="type" value="player"/>
   </properties>
-  <image source="objects/player.png" width="32" height="32"/>
+  <image source="objects/player.png" width="256" height="256"/>
+ </tile>
+ <tile id="1">
+  <properties>
+   <property name="type" value="fly"/>
+  </properties>
+  <image source="objects/fly.png" width="98" height="79"/>
  </tile>
 </tileset>

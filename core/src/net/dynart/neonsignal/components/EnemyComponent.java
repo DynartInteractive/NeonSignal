@@ -50,12 +50,13 @@ public class EnemyComponent extends Component {
 
         GameSprite sprite = new GameSprite();
         view.addSprite(sprite);
-        view.setSprite(1, spritePrefix + "_die");
+        view.setSprite(1, spritePrefix + "_dead");
         view.setAlign(1, view.getAlign(0)); // copy the align
         sprite.setVisible(false);
 
         miniBar = entity.getComponent(MiniBarComponent.class);
-        miniBar.add(entity);
+        if (miniBar != null)
+            miniBar.add(entity);
 
         EntityCollisionComponent entityCollision = entity.getComponent(EntityCollisionComponent.class);
         if (entityCollision != null) {
@@ -66,7 +67,8 @@ public class EnemyComponent extends Component {
     private void damage() {
         messageHandler.send(DAMAGED);
         damageTime = 0.2f;
-        miniBar.setVisibleTime(1.0f);
+        if (miniBar != null)
+            miniBar.setVisibleTime(1.0f);
     }
 
     public float getDamageTime() {
@@ -75,7 +77,8 @@ public class EnemyComponent extends Component {
 
     @Override
     public void postUpdate(float delta) {
-        miniBar.adjustDisplay(health.getValue(), delta);
+        if (miniBar != null)
+            miniBar.adjustDisplay(health.getValue(), delta);
         if (damageTime > 0) {
             ViewComponent view = entity.getComponent(ViewComponent.class);
             damageTime -= delta;
@@ -104,7 +107,7 @@ public class EnemyComponent extends Component {
         particleVelocity.setY(100f);
         particleVelocity.setGravity(config.getDefaultGravity() * 1.5f);
         ViewComponent particleView = particle.getComponent(ViewComponent.class);
-        particleView.setSprite(0, spritePrefix + "_die");
+        particleView.setSprite(0, spritePrefix + "_dead");
         ViewComponent entityView = entity.getComponent(ViewComponent.class);
         particleView.flipX(entityView.isFlipX());
         entityManager.add(particle);

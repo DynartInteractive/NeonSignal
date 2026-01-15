@@ -21,6 +21,11 @@ public class HealthComponent extends Component {
         this.maxValue = maxValue;
     }
 
+    public HealthComponent(float maxValue, float value) {
+        this.value = value;
+        this.maxValue = maxValue;
+    }
+
     public Entity getDecreasedByEntity() {
         return decreaseByEntity;
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -56,27 +58,19 @@ public class GameStage extends Stage {
     private final MessageListener playerScoreChangedListener;
     private final Label scoreLabel;
 
-    // floppy
-    private final MessageListener playerFloppyChangedListener;
-    private final Label floppyLabel;
-
     // health
-    private final Group healthGroup;
-    private static final float MAX_HEARTH_LINE_WIDTH = 118;
+    private final Group hpGroup;
+    private static final float MAX_HP_LINE_WIDTH = 256;
     private static final Color DANGER_COLOR = new Color(1, 0, 0.45f, 1);
     private static final Color WARNING_COLOR = new Color(1, 0.88f, 0, 1);
     private static final Color GOOD_COLOR = new Color(0.5f, 0.88f, 0, 1);
     private final MessageListener healthChangedListener;
-    private final Image healthIconImage;
-    private final Image healthLineImage;
-    private final Color healthLineColor = new Color(GOOD_COLOR);
+    private final Image hpLineImage;
+    private final TextureRegion originalHpLineImageRegion;
+    private final Color hpLineColor = new Color(GOOD_COLOR);
     private float health = 1;
     private float targetHealthSign = 0;
     private float targetHealth = 1;
-
-    // floppy
-    private final Group floppyGroup;
-    private final Image floppyIconImage;
 
     // game over
     private final FadeImage whiteImage;
@@ -162,60 +156,29 @@ public class GameStage extends Stage {
         addActor(pauseButton);
 
 
-        // health icon
-        healthIconImage = new Image(uiPixelSkin.getDrawable("hud_hearth"));
-        healthIconImage.setOrigin(Align.center);
-        healthIconImage.setAlign(Align.center);
-
         // health bar
         Group healthBarGroup = new Group();
-        healthBarGroup.setY(16);
-        healthBarGroup.setX(56);
+        healthBarGroup.setY(0);
+        healthBarGroup.setX(0);
 
-        healthLineImage = new Image(uiPixelSkin.getDrawable("hud_hearth_line"));
-        healthLineImage.setX(4);
-        healthLineImage.setY(8);
-        healthLineImage.setWidth(MAX_HEARTH_LINE_WIDTH);
-        healthLineImage.setColor(GOOD_COLOR);
+        hpLineImage = new Image(uiPixelSkin.getDrawable("hud_hp_line"));
+        hpLineImage.setColor(GOOD_COLOR);
 
-        Image healthBarImage = new Image(uiPixelSkin.getDrawable("hud_hearth_bar"));
-        Image healthBarBgImage = new Image(uiPixelSkin.getDrawable("hud_hearth_bar_bg"));
+        originalHpLineImageRegion = new TextureRegion(((TextureRegionDrawable)hpLineImage.getDrawable()).getRegion());
 
-        healthBarGroup.addActor(healthBarBgImage);
-        healthBarGroup.addActor(healthLineImage);
+        Image healthBarImage = new Image(uiPixelSkin.getDrawable("hud_hp_bar"));
+
         healthBarGroup.addActor(healthBarImage);
+        healthBarGroup.addActor(hpLineImage);
 
         // health
-        healthGroup = new Group();
-        healthGroup.setY(config.getStageVirtualHeight() - 105f);
-        healthGroup.setX(35 + screen.getSideBlackBarWidth());
+        hpGroup = new Group();
+        hpGroup.setY(config.getStageVirtualHeight() - 74);
+        hpGroup.setX(screen.getSideBlackBarWidth() + 96);
 
-        healthGroup.addActor(healthBarGroup);
-        healthGroup.addActor(healthIconImage);
+        hpGroup.addActor(healthBarGroup);
 
-        addActor(healthGroup);
-
-        // floppy icon
-        floppyIconImage = new Image(uiPixelSkin.getDrawable("hud_floppy"));
-        floppyIconImage.setOrigin(Align.center);
-        floppyIconImage.setAlign(Align.center);
-
-        // floppy label
-        floppyLabel = new Label("", ls);
-        floppyLabel.setAlignment(Align.bottomLeft);
-        floppyLabel.setX(90);
-        floppyLabel.setY(0);
-
-        // floppy
-        floppyGroup = new Group();
-        floppyGroup.setY(config.getStageVirtualHeight() - 105f);
-        floppyGroup.setX(270 + screen.getSideBlackBarWidth());
-
-        floppyGroup.addActor(floppyIconImage);
-        floppyGroup.addActor(floppyLabel);
-
-        addActor(floppyGroup);
-
+        addActor(hpGroup);
 
         // events
 
@@ -240,13 +203,6 @@ public class GameStage extends Stage {
             }
         };
 
-        playerFloppyChangedListener = new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                updateFloppy();
-            }
-        };
-
 
     }
 
@@ -259,9 +215,7 @@ public class GameStage extends Stage {
         pauseButton.setX(getWidth() - pauseButton.getWidth() - 20 - sideBlackBarWidth);
         whiteImage.setWidth(getWidth());
         whiteImage.setHeight(getHeight());
-        healthGroup.setX(35 + sideBlackBarWidth);
-        floppyGroup.setX(270 + sideBlackBarWidth);
-        floppyLabel.setText(player.getFloppy());
+        hpGroup.setX(35 + sideBlackBarWidth);
         scoreLabel.setX(getWidth() - scorePadding - scoreLabel.getWidth());
         scoreLabel.setY(getHeight() - scoreLabel.getHeight() - 30);
     }
@@ -270,18 +224,9 @@ public class GameStage extends Stage {
         scoreLabel.setText(player.getScore());
     }
 
-    private void updateFloppy() {
-        floppyLabel.setText(player.getFloppy());
-        floppyIconImage.setScale(1.5f);
-        floppyIconImage.addAction(Actions.scaleTo(1, 1, 0.3f));
-    }
-
-
     private void updateHealth() {
         targetHealth = healthComponent.getValue() / healthComponent.getMaxValue();
         targetHealthSign = Math.signum(targetHealth - health);
-        healthIconImage.setScale(1.5f);
-        healthIconImage.addAction(Actions.scaleTo(1, 1, 0.3f));
     }
 
     public void showItemScore(float x, float y, String text, float r, float g, float b) {
@@ -323,14 +268,21 @@ public class GameStage extends Stage {
         }
 
         if (health < 0.5) {
-            healthLineColor.set(DANGER_COLOR);
-            healthLineColor.lerp(WARNING_COLOR, health * 2f);
+            hpLineColor.set(DANGER_COLOR);
+            hpLineColor.lerp(WARNING_COLOR, health * 2f);
         } else {
-            healthLineColor.set(WARNING_COLOR);
-            healthLineColor.lerp(GOOD_COLOR, (health - 0.5f) * 2f);
+            hpLineColor.set(WARNING_COLOR);
+            hpLineColor.lerp(GOOD_COLOR, (health - 0.5f) * 2f);
         }
-        healthLineImage.setColor(healthLineColor);
-        healthLineImage.setWidth(MAX_HEARTH_LINE_WIDTH * health);
+
+        float h = health * 0.78f + 0.11f; // crop 0.11 from both sides and shift
+
+        TextureRegion region = ((TextureRegionDrawable)hpLineImage.getDrawable()).getRegion();
+        region.setRegion(originalHpLineImageRegion);
+        region.setRegion(region.getRegionX(), region.getRegionY(), (int)((float)region.getRegionWidth() * h), region.getRegionHeight());
+        ((TextureRegionDrawable)hpLineImage.getDrawable()).setRegion(region);
+        hpLineImage.setColor(hpLineColor);
+        hpLineImage.setWidth(MAX_HP_LINE_WIDTH * h);
     }
 
     @Override
@@ -355,7 +307,6 @@ public class GameStage extends Stage {
         updateScore();
         updateHealth();
         MessageHandler messageHandler = player.getMessageHandler();
-        messageHandler.subscribe(PlayerComponent.FLOPPY_CHANGED, playerFloppyChangedListener);
         messageHandler.subscribe(PlayerComponent.SCORE_CHANGED, playerScoreChangedListener);
         messageHandler.subscribe(HealthComponent.DECREASED, healthChangedListener);
         messageHandler.subscribe(HealthComponent.INCREASED, healthChangedListener);

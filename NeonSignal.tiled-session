@@ -42,11 +42,11 @@
             "expandedObjectLayers": [
                 2
             ],
-            "scale": 0.5,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 269,
-                "y": 456
+                "x": 764.6666666666666,
+                "y": 601.3333333333333
             }
         },
         "assets/data/levels/tileset1.tsx": {

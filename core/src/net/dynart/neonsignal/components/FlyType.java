@@ -1,15 +1,14 @@
 package net.dynart.neonsignal.components;
 
-public enum CrabType {
+public enum FlyType {
 
-    RED("", 0.25f, 28),
-    BLUE("blue_", 0.34f, 40);
+    DEFAULT("", 0.25f, 28);
 
     private final String animPrefix;
     private final float power;
     private final float defaultSpeed;
 
-    CrabType(String animPrefix, float power, float defaultSpeed) {
+    FlyType(String animPrefix, float power, float defaultSpeed) {
         this.animPrefix = animPrefix;
         this.power = power;
         this.defaultSpeed = defaultSpeed;

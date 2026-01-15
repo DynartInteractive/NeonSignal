@@ -2,7 +2,7 @@ package net.dynart.neonsignal;
 
 import net.dynart.neonsignal.components.BlockComponent;
 import net.dynart.neonsignal.components.BodyComponent;
-import net.dynart.neonsignal.components.CrabType;
+import net.dynart.neonsignal.components.FlyType;
 import net.dynart.neonsignal.components.ElectricSpikeComponent;
 import net.dynart.neonsignal.components.EnemyBlockComponent;
 import net.dynart.neonsignal.components.FrogType;
@@ -61,7 +61,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
             new ColliderComponent(),
             new BlockComponent(),
             new MountableComponent(),
-            new HealthComponent(1f),
+            new HealthComponent(1f, 0.66f),
             new MiniBarComponent(false),
             new WaterCollisionComponent(),
             new SplashComponent(),
@@ -79,43 +79,37 @@ public class NeonSignalEntityFactory extends EntityFactory {
         return createItem(parameters);
     }
 
-    public Entity createFloppy(Parameters parameters) {
-        return createItem(parameters);
-    }
-
     public Entity createCoin(Parameters parameters) {
         return createItem(parameters);
     }
 
-    public Entity createCrab(Parameters parameters) {
-        return createCrab(parameters, CrabType.RED);
+    public Entity createFly(Parameters parameters) {
+        return createFly(parameters, FlyType.DEFAULT);
     }
 
-    public Entity createBlueCrab(Parameters parameters) {
-        return createCrab(parameters, CrabType.BLUE);
-    }
-
-    private Entity createCrab(Parameters parameters, CrabType crabType) {
+    private Entity createFly(Parameters parameters, FlyType flyType) {
         Entity result = new Entity(engine);
         result.addComponents(
             createBody(parameters, 28, 14),
-            createGravity(config.getDefaultGravity()),
+            new VelocityComponent(),
             new GridCollisionComponent(),
             new EntityCollisionComponent(PlayerComponent.class),
             new BlockComponent(),
-            new EnemyComponent("enemy_" + crabType.getAnimPrefix() + "crab"),
+            new EnemyComponent("fly"),
             new ActivateOnScreenComponent(),
             new HealthComponent(1.0f),
-            new MiniBarComponent(true),
-            new OverlapAttackComponent(crabType.getPower(), true),
+            //new MiniBarComponent(true),
+            new OverlapAttackComponent(flyType.getPower(), true),
             new OverlapAttackableComponent(),
+            /*
             new WalkerComponent(
                 parameters.get("direction", "left"),
-                parameters.getFloat("speed", crabType.getDefaultSpeed()),
+                parameters.getFloat("speed", flyType.getDefaultSpeed()),
                 parameters.getBoolean("watch_edge", true),
                 false, true
             ),
-            createAnimation(crabType.getAnimPrefix() + "crab")
+             */
+            createAnimation(flyType.getAnimPrefix() + "fly_idle")
         );
         addMountableIfNeeded(result, parameters);
         return result;

@@ -50,7 +50,6 @@ public class PlayerComponent extends Component {
     }
 
     public static final String SCORE_CHANGED = "player_score_changed";
-    public static final String FLOPPY_CHANGED = "player_floppy_changed";
     public static final String WANTS_TO_DROP = "player_wants_to_drop";
 
     private static final float maxUnderWaterTime = 10f;
@@ -68,7 +67,6 @@ public class PlayerComponent extends Component {
     private ParticlePool particlePool;
 
     private int score;
-    private int floppy;
 
     private int itemCount;
     private int knockoutCount;
@@ -246,12 +244,6 @@ public class PlayerComponent extends Component {
         return score;
     }
 
-    public void addFloppy(int number) {
-        if (number != 0) {
-            floppy += number;
-            messageHandler.send(FLOPPY_CHANGED);
-        }
-    }
 
     public int getItemCount() {
         return itemCount;
@@ -273,9 +265,6 @@ public class PlayerComponent extends Component {
         return secretCount;
     }
 
-    public int getFloppy() {
-        return floppy;
-    }
 
     public void jumpOnNextFrame() {
         jumpOnNextFrame = true;
@@ -422,12 +411,6 @@ public class PlayerComponent extends Component {
                 health.increase(0.05f);
                 gameStage.showItemScore(x, y, "+5", 0.47f, 1f, 0f);
                 addPoint(5);
-                break;
-            case "floppy":
-                gameStage.showItemScore(x, y + 8, "+1", 0.6f, 0.6f, 0.6f);
-                addFloppy(1);
-                gameStage.showItemScore(x, y, "+50", 1, 0.8f, 0.1f);
-                addPoint(50);
                 break;
             case "coin":
                 gameStage.showItemScore(x, y, "+1", 1, 0.8f, 0.1f);

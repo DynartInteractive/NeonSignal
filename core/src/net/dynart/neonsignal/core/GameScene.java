@@ -307,8 +307,8 @@ public class GameScene {
     private void drawBackgrounds() {
         batch.begin();
         batch.setProjectionMatrix(camera.combined);
-        drawBackground(backgroundBackTexture, 10f);
-        drawBackground(backgroundFrontTexture, 2f);
+        drawBackground(backgroundBackTexture, 10f, 0);
+        drawBackground(backgroundFrontTexture, 2f, 0.1f);
         batch.end();
     }
 
@@ -390,7 +390,7 @@ public class GameScene {
         }
     }
 
-    private void drawBackground(Texture texture, float scrollRatio) {
+    private void drawBackground(Texture texture, float scrollRatio, float scrollY) {
         if (texture == null) {
             return;
         }
@@ -399,7 +399,6 @@ public class GameScene {
         float x = camera.position.x - viewport.getWorldWidth() / 2f;
         float y = camera.position.y - viewport.getWorldHeight() / 2f;
         float scrollX = x / (texture.getWidth() * scrollRatio);
-        float scrollY = -0.5f;
         batch.draw(texture,
             x, y, viewport.getWorldWidth(), viewport.getWorldHeight(),
             scrollX, scrollY + v, scrollX + u, scrollY

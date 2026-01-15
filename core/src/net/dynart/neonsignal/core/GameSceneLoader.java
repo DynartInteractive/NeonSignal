@@ -224,7 +224,9 @@ public class GameSceneLoader {
         Texture texture = null;
         if (properties.containsKey(key)) {
             String name = properties.get(key).toString();
-            texture = textureManager.getTexture(name);
+            if (!name.isEmpty()) {
+                texture = textureManager.getTexture(name);
+            }
         }
         return texture;
     }
