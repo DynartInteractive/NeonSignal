@@ -99,14 +99,16 @@ public class GameScreen extends Screen {
     }
 
     @Override
+    public void show() {
+        Gdx.input.setCursorCatched(engine.getSettings().mustCatchMouse());
+    }
+
+    @Override
     public void resize(int width, int height) {
         super.resize(width, height);
         gameStage.resize();
         touchListener.resize();
         gameScene.resize(width, height);
-
-        //Gdx.input.setCursorCatched(false);
-        Gdx.input.setCursorCatched(engine.getSettings().mustCatchMouse());
     }
 
     @Override
