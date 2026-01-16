@@ -197,10 +197,11 @@ public class CameraHandler {
         float maxHeight = grid.getWorldY(grid.getHeight());
         float min = l[BOTTOM] != -1 ? l[BOTTOM] + viewHalfHeight : viewHalfHeight;
         float max = (l[TOP] != -1 ? l[TOP] : maxHeight) - viewHalfHeight;
+        if (y > max) {
+            y = max;
+        }
         if (y < min) {
             y = min;
-        } else if (y > max) {
-            y = max;
         }
         /*
         // set camera position to the "exact" virtual pixels

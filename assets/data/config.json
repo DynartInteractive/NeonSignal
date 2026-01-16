@@ -21,7 +21,7 @@
         "player_inactive_health_time": 2.0,
         "player_jump_velocity_addition": 90.0,
         "player_sliding_divider": 5.0,
-        "player_pain_horizontal_velocity": 50.0,
+        "player_pain_horizontal_velocity": 250.0,
         "player_pain_time": 0.3,
         "default_gravity": -4500.0,
         "default_sound_volume": 1.0,

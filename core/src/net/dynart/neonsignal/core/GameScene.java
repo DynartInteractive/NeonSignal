@@ -364,9 +364,11 @@ public class GameScene {
                 PlayerComponent player = entity.getComponent(PlayerComponent.class);
                 ViewComponent view = entity.getComponent(ViewComponent.class);
 
-                float dir = view.isFlipX() ? -1 : 1;
                 Vector2 a = new Vector2(body.getCenterX(), body.getCenterY());
                 Vector2 b = player.getCurrentGunBarrelPosition();
+                if (b == null) {
+                    continue;
+                }
 
                 Vector2 out = new Vector2();
                 Vector2 gridOut = new Vector2();

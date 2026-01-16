@@ -133,7 +133,7 @@ public class ViewComponent extends Component {
             TextureRegion region;
             try {
                 region = (TextureRegion) animation.getKeyFrame(animationTimes.get(index));
-            } catch (ArrayIndexOutOfBoundsException e) {
+            } catch (ArrayIndexOutOfBoundsException | ArithmeticException e) {
                 throw new RuntimeException("Animation doesn't exist: " + animationName);
             }
             sprite.setRegion(region);

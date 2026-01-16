@@ -147,6 +147,7 @@
         "player_jump_end_diagonal_down": {"duration": 0.1, "atlas": "sprites", "region": "player_jump_end_diagonal_down", "mode": "normal"},
 
         "player_pain": {"duration": 0.1, "atlas": "sprites", "region": "player_pain", "mode": "loop"},
+        "player_die": {"duration": 0.5, "atlas": "sprites", "region": "player_die", "mode": "normal"},
 
         "player_bullet1": {"duration": 0.2, "atlas": "sprites", "region": "player_bullet1", "mode": "normal"},
 

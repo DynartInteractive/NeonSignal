@@ -2,6 +2,7 @@ package net.dynart.neonsignal;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -23,6 +24,7 @@ import net.dynart.neonsignal.components.BodyComponent;
 import net.dynart.neonsignal.components.HealthComponent;
 import net.dynart.neonsignal.components.PlayerComponent;
 import net.dynart.neonsignal.components.ViewComponent;
+import net.dynart.neonsignal.core.SpriteAnimationManager;
 import net.dynart.neonsignal.core.controller.ControllerType;
 import net.dynart.neonsignal.core.TextureManager;
 import net.dynart.neonsignal.core.Entity;
@@ -76,12 +78,18 @@ public class GameStage extends Stage {
     private final FadeImage whiteImage;
     private final Image playerImage;
 
+    private final Animation playerDieAnimation;
+    private float playerDieAnimationTime = 0;
+
     public GameStage(Viewport viewport, Engine engine, final GameScreen screen) {
         super(viewport);
         this.engine = engine;
 
         config = engine.getConfig();
         settings = engine.getSettings();
+
+        SpriteAnimationManager sam = engine.getSpriteAnimationManager();
+        playerDieAnimation = sam.get("player_die");
 
         this.screen = screen;
 
@@ -295,11 +303,19 @@ public class GameStage extends Stage {
             labelShadowPool[i].setPosition(v.x - 25, v.y - 2);
         }
         super.act(delta);
+        if (playerDieAnimationTime > 0) {
+            playerDieAnimationTime += delta;
+            playerDieAnimation.getKeyFrame(playerDieAnimationTime);
+            TextureRegionDrawable drawable = (TextureRegionDrawable)playerImage.getDrawable();
+            drawable.setRegion((TextureRegion)playerDieAnimation.getKeyFrame(playerDieAnimationTime));
+        }
+
         updateHealthLine();
     }
 
     public void setPlayer(Entity player) {
         playerImage.setVisible(false);
+        playerDieAnimationTime = 0;
         this.player = player.getComponent(PlayerComponent.class);
         healthComponent = player.getComponent(HealthComponent.class);
         body = player.getComponent(BodyComponent.class);
@@ -321,9 +337,10 @@ public class GameStage extends Stage {
         ));
         playerImage.setVisible(true);
         GameScreen gameScreen = (GameScreen)engine.getScreen("game");
-        Vector2 pos = gameScreen.getStagePositionFromScene(body.getX(), body.getY());
-        playerImage.setPosition(pos.x - 10, pos.y);
-        playerImage.setScale(4f * (view.isFlipX() ? -1 : 1), 4f);
+        Vector2 pos = gameScreen.getStagePositionFromScene(body.getCenterX(), body.getBottom());
+        playerImage.setPosition(pos.x - 128f, pos.y - 16f);
+        playerImage.setScale((view.isFlipX() ? -0.66f : 0.66f), 0.66f);
+        playerDieAnimationTime = 0.0001f;
     }
 
     public void revive() {

@@ -2,7 +2,7 @@ package net.dynart.neonsignal.components;
 
 public enum FlyType {
 
-    DEFAULT("", 0.25f, 28);
+    DEFAULT("", 0.34f, 28);
 
     private final String animPrefix;
     private final float power;

@@ -61,7 +61,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
             new ColliderComponent(),
             new BlockComponent(),
             new MountableComponent(),
-            new HealthComponent(1f, 0.66f),
+            new HealthComponent(1f),
             new MiniBarComponent(false),
             new WaterCollisionComponent(),
             new SplashComponent(),
@@ -90,7 +90,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
     private Entity createFly(Parameters parameters, FlyType flyType) {
         Entity result = new Entity(engine);
         result.addComponents(
-            createBody(parameters, 28, 14),
+            createBody(parameters, 95, 75),
             new VelocityComponent(),
             new GridCollisionComponent(),
             new EntityCollisionComponent(PlayerComponent.class),

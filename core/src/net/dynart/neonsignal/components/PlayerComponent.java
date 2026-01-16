@@ -771,9 +771,7 @@ public class PlayerComponent extends Component {
                     // if started to fall down
                     setAnimation("jump_end");
                 }
-
             }
-
         }
 
         view.flipX(flipX);
@@ -904,6 +902,9 @@ public class PlayerComponent extends Component {
 
     public Vector2 getCurrentGunBarrelPosition() {
         Vector2 gunBPos = gunBarrelPosition.get(currentAnimationName);
+        if (gunBPos == null) {
+            return null;
+        }
         return new Vector2(body.getCenterX() + (flipX ? -1 : 1) * gunBPos.x, body.getBottom() + gunBPos.y);
     }
 
@@ -911,6 +912,9 @@ public class PlayerComponent extends Component {
 
         Vector2 a = new Vector2(body.getCenterX(), body.getCenterY());
         Vector2 b = getCurrentGunBarrelPosition();
+        if (b == null) {
+            return;
+        }
         if (grid.getIntersection(a, b, null) || entityManager.getIntersection(a, b, null, entity)) {
             return;
         }
