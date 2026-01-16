@@ -214,12 +214,6 @@ public class EngineConfig {
     }
 
     public float getGameVirtualHeight() {
-        float h = Gdx.graphics.getHeight();
-        if (h == 800 || h == 480 || h == 320) { // 1280x800, 800x480, 480x320
-            return 160;
-        } else if (h == 600) { // 1024x600
-            return 150;
-        }
         return gameVirtualHeight;
     }
 
