@@ -52,7 +52,7 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
         config = new NeonSignalEngineConfig();
         config.load(configSection);
         config.setEntityFactory(new NeonSignalEntityFactory());
-        config.setDefaultFadeRenderer(new NeonSignalGlassesFadeRenderer());
+        config.setDefaultFadeRenderer(new NeonSignalFadeRenderer());
         config.setScriptLoader(new NeonSignalScriptLoader());
 
         engine = new Engine(config, debug);
