@@ -127,7 +127,7 @@ public class TouchListener extends InputAdapter {
         }
         for (int i = 0; i < buttonCount; i++) {
             String name = buttonNames[i];
-            Vector2 position = settings.getTouchPosition(name);
+            Vector2 position = settings.getTouchPosition(name, engine.getScreen("game"));
             if (position.x < 0) {
                 position.x += gameStage.getWidth();
             }

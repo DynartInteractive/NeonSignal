@@ -89,9 +89,9 @@ public class Settings {
         return getControllerType() != ControllerType.TOUCH;
     }
 
-    public Vector2 getTouchPosition(String name) {
+    public Vector2 getTouchPosition(String name, Screen screen) {
         Vector2 defaultPosition = config.getDefaultTouchPositions().get(name);
-        touchPosition.x = preferences.getFloat("button_" + name + "_x", defaultPosition.x);
+        touchPosition.x = preferences.getFloat("button_" + name + "_x", defaultPosition.x - screen.getSideBlackBarWidth());
         touchPosition.y = preferences.getFloat("button_" + name + "_y", defaultPosition.y);
         return touchPosition;
     }

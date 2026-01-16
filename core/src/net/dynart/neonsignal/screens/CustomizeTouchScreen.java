@@ -125,7 +125,7 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         for (String name : config.getTouchButtonNames()) {
             FadeImage buttonImage = new FadeImage(skin.getDrawable(name + "_button_down"));
             buttonImages.put(name, buttonImage);
-            Vector2 buttonPosition = new Vector2(settings.getTouchPosition(name));
+            Vector2 buttonPosition = new Vector2(settings.getTouchPosition(name, this));
             buttonPositions.put(name, buttonPosition);
             buttonImage.addListener(new ButtonImageDragListener(buttonPosition));
             buttonImage.setUserObject(name);
