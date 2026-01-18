@@ -53,7 +53,7 @@ public class GameScene {
     private boolean firstFrame;
 
     // draw related
-    private final int[] secretLayer = new int[1];
+    private final int[] secretLayer = new int[] { -1 };
     private SpriteBatch batch;
     private Viewport viewport;
     private TiledMapRenderer tiledMapRenderer;
@@ -168,6 +168,7 @@ public class GameScene {
         grid.clear();
         pathManager.clear();
         secretManager.clear();
+        secretLayer[0] = -1; // no secret layer
         for (int i = 0; i < 4; i++) {
             cameraHandler.setNewLimit(i, -1);
         }
@@ -235,12 +236,13 @@ public class GameScene {
 
     public void draw() {
         resetAlpha();
-        animateItemLayers();
+        //animateItemLayers();
         tiledMapRenderer.setView((OrthographicCamera)camera);
         drawBackgrounds();
         tiledMapRenderer.render(backLayers);
         drawEntities(false);
         tiledMapRenderer.render(frontLayers);
+
         drawSecretLayer();
         drawEntities(true);
         drawDebugBodies();
@@ -299,6 +301,7 @@ public class GameScene {
     }
 
     private void drawSecretLayer() {
+        if (secretLayer[0] < 0) return;
         batch.setColor(1f, 1f, 1f, secretManager.getAlpha());
         tiledMapRenderer.render(secretLayer);
         batch.setColor(1f, 1f, 1f, 1f);

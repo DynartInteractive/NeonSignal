@@ -48,4 +48,9 @@ public enum Direction {
         return ByName.get(name);
     }
 
+    @Override
+    public String toString() {
+        return "Direction::" + name();
+    }
+
 }

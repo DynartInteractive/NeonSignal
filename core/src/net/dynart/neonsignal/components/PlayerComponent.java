@@ -745,10 +745,10 @@ public class PlayerComponent extends Component {
             } else if (!body.isInAir()) {
 
                 if (body.wasInAir()) { // if just fallen down
-                    //setAnimation("jump_end");
-                    //setAnimationTime(0);
-                    addDust();
-                    soundManager.playRandom(fallDownSounds);
+                    if (!view.isPaused()) {
+                        addDust();
+                        soundManager.playRandom(fallDownSounds);
+                    }
                 } else {
                     // set the "idle" or "run" animation regarding the velocity, controller and animation state
                     setAnimation((velocity.getX() == 0 || (!lastHorizontalDown && !entityManager.isInAnimation())) ? "idle" : "run");

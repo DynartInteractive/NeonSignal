@@ -13,15 +13,17 @@ public class CameraLimitTriggerComponent extends Component {
     private final String[] targets = { "", "", "", "" };
     private final boolean fade;
     private final boolean instant;
+    private final boolean inAirCheck;
 
 
-    public CameraLimitTriggerComponent(String leftTargetName, String rightTargetName, String topTargetName, String bottomTargetName, boolean fade, boolean instant) {
+    public CameraLimitTriggerComponent(String leftTargetName, String rightTargetName, String topTargetName, String bottomTargetName, boolean fade, boolean instant, boolean inAirCheck) {
         targets[CameraHandler.LEFT] = leftTargetName;
         targets[CameraHandler.RIGHT] = rightTargetName;
         targets[CameraHandler.TOP] = topTargetName;
         targets[CameraHandler.BOTTOM] = bottomTargetName;
         this.fade = fade;
         this.instant = instant;
+        this.inAirCheck = inAirCheck;
     }
 
     @Override
@@ -32,7 +34,8 @@ public class CameraLimitTriggerComponent extends Component {
         BodyComponent body = entity.getComponent(BodyComponent.class);
         Entity player = engine.getGameScene().getPlayer();
         BodyComponent playerBody = player.getComponent(BodyComponent.class);
-        if (!playerBody.isInAir() && body.isOverlap(playerBody) && !lastGroup.equals(entity.getGroup())) {
+        boolean firstCondition  = !inAirCheck || !playerBody.isInAir();
+        if (firstCondition && body.isOverlap(playerBody) && !lastGroup.equals(entity.getGroup())) {
             lastGroup = entity.getGroup() == null ? "" : entity.getGroup();
             setLimits();
         }

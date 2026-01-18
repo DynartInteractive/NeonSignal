@@ -47,6 +47,7 @@ public class ViewComponent extends Component {
     private int layer = 100;
     private int repeatX = 1;
     private int repeatY = 1;
+    private boolean paused;
 
     public ViewComponent(Engine engine) {
         GameScene gameScene = engine.getGameScene();
@@ -58,6 +59,14 @@ public class ViewComponent extends Component {
         viewport = gameScene.getViewport();
         tileWidth = config.getTileWidth();
         tileHeight = config.getTileHeight();
+    }
+
+    public void setPaused(boolean p) {
+        paused = p;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 
     public void setRepeatX(int value) {
@@ -121,6 +130,7 @@ public class ViewComponent extends Component {
     public void setRotation(int index, float value) { sprites.get(index).setRotation(value); }
 
     public void setAnimation(int index, String animationName) {
+        if (paused) return;
         if (animationName == null) {
             animations.set(index, null);
         } else {
@@ -160,6 +170,7 @@ public class ViewComponent extends Component {
 
     @Override
     public void preUpdate(float deltaTime) {
+        if (paused) return;
         for (int i = 0; i < animations.size(); i++) {
             animationTimes.set(i, animationTimes.get(i) + deltaTime);
         }
@@ -243,8 +254,10 @@ public class ViewComponent extends Component {
             float ratioY = (float)Gdx.graphics.getHeight() / (float)viewport.getWorldHeight();
             float y = ((int)((body.getGlobalY()) * ratioY)) / ratioY;
             */
-            sprite.setX(body.getGlobalX() + plusX);
-            sprite.setY(body.getGlobalY() + plusY);
+            if (!paused) {
+                sprite.setX(body.getGlobalX() + plusX);
+                sprite.setY(body.getGlobalY() + plusY);
+            }
             sprite.draw(batch, flipX, flipY);
         }
     }

@@ -82,7 +82,9 @@ public class GameSceneLoader {
         setPlayer();
         gameScene.createBackAndFrontLayers(backLayerList, frontLayerList);
         gameScene.createTiledMapRenderer(tiledMap);
-        ReviveComponent.clearCurrent();
+
+        Gdx.app.log(LOG_TAG, "backLayers: " + backLayerList);
+        Gdx.app.log(LOG_TAG, "frontLayers: " + frontLayerList);
     }
 
     private void loadMusic() {
@@ -232,6 +234,7 @@ public class GameSceneLoader {
     }
 
     private void loadLayer(int layerIndex, MapLayer mapLayer) {
+        Gdx.app.log(LOG_TAG, "Loading layer " + layerIndex + " (" + mapLayer.getName() + ")");
         MapObjects mapObjects = mapLayer.getObjects();
         // if the layer has objects then load those
         if (mapObjects.getCount() > 0) {

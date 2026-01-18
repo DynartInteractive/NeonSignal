@@ -27,6 +27,7 @@ import net.dynart.neonsignal.components.OxygenComponent;
 import net.dynart.neonsignal.components.PlatformComponent;
 import net.dynart.neonsignal.components.PusherComponent;
 import net.dynart.neonsignal.components.ReviveComponent;
+import net.dynart.neonsignal.components.SceneWarpComponent;
 import net.dynart.neonsignal.components.SecretComponent;
 import net.dynart.neonsignal.components.ConveyorComponent;
 import net.dynart.neonsignal.components.SpikeComponent;
@@ -495,10 +496,33 @@ public class EntityFactory {
                 parameters.get("top"),
                 parameters.get("bottom"),
                 parameters.getBoolean("fade"),
-                parameters.getBoolean("instant")
+                parameters.getBoolean("instant"),
+                parameters.getBoolean("in_air_check", true)
             )
         );
         return camLimit;
+    }
+
+    public Entity createSceneWarp(Parameters parameters) {
+        parameters.set("active", true);
+        Entity warp = new Entity(engine);
+        warp.addComponents(
+            createBody(parameters),
+            new SceneWarpComponent(
+                parameters.get("target"),
+                parameters.getBoolean("fade")
+            ),
+            new CameraLimitTriggerComponent(
+                parameters.get("left"),
+                parameters.get("right"),
+                parameters.get("top"),
+                parameters.get("bottom"),
+                parameters.getBoolean("fade"),
+                parameters.getBoolean("instant"),
+                false
+            )
+        );
+        return warp;
     }
 
     public Entity createRevive(Parameters parameters) {
