@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "Bash(git checkout:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew core:compileJava:*)",
+      "Bash(./gradlew.bat core:compileJava:*)"
     ]
   }
 }

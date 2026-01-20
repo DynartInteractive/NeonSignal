@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "assets/data/levels/test.tmx",
+    "activeFile": "",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -62,7 +62,6 @@
     "map.tileWidth": 48,
     "map.width": 60,
     "openFiles": [
-        "assets/data/levels/test.tmx"
     ],
     "project": "NeonSignal.tiled-project",
     "property.type": "string",

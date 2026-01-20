@@ -30,6 +30,8 @@ import net.dynart.neonsignal.core.ui.FadeImage;
 import net.dynart.neonsignal.core.ui.MenuButton;
 import net.dynart.neonsignal.core.ui.MenuCursor;
 import net.dynart.neonsignal.core.ui.MenuCursorItem;
+import net.dynart.neonsignal.core.ui.TypewriterAction;
+import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
 
 public class CutsceneScreen extends MenuScreen {
 
@@ -54,6 +56,14 @@ public class CutsceneScreen extends MenuScreen {
     private final List<Label> textBubbleLabels = new ArrayList<>();
     private final Label.LabelStyle textBubbleLs;
     private final SequenceCommand commands = new SequenceCommand();
+
+    // nexus says box
+    private final Group nexusBox;
+    private final Image nexusBoxBg;
+    private final List<Label> nexusLabels = new ArrayList<>();
+    private final Label.LabelStyle nexusLabelStyle;
+    private boolean nexusSaysFinished = true;
+    private final List<TypewriterAction> activeTypewriterActions = new ArrayList<>();
     private Command endCommand;
     private boolean requestEnd;
     private float fadeTime = 0;
@@ -104,6 +114,33 @@ public class CutsceneScreen extends MenuScreen {
             textBubble.addActor(tbLabel);
         }
 
+        // nexus says box
+        nexusBoxBg = new Image(skin.getDrawable("dialog_bg"));
+        nexusBoxBg.setWidth(800);
+        nexusBoxBg.setHeight(200);
+
+        nexusLabelStyle = new Label.LabelStyle();
+        nexusLabelStyle.font = fontManager.get("text_bubble");
+
+        nexusBox = new Group();
+        nexusBox.addActor(nexusBoxBg);
+
+        float nexusLineHeight = nexusLabelStyle.font.getLineHeight();
+        for (int i = 0; i < 10; i++) {
+            Label nexusLabel = new Label("", nexusLabelStyle);
+            nexusLabel.getStyle().font.getData().markupEnabled = true;
+            nexusLabel.setColor(0.9f, 0.9f, 0.9f, 1);
+            nexusLabel.setAlignment(Align.left);
+            nexusLabel.setWidth(nexusBoxBg.getWidth() - 40);
+            nexusLabel.setHeight(nexusLineHeight);
+            nexusLabel.setX(20);
+            nexusLabel.setVisible(false);
+            nexusLabels.add(nexusLabel);
+            nexusBox.addActor(nexusLabel);
+        }
+
+        nexusBox.setVisible(false);
+
         // black bars
         topBar = new Image(textureManager.getTexture("black"));
         topBar.setHeight(BAR_HEIGHT);
@@ -116,6 +153,7 @@ public class CutsceneScreen extends MenuScreen {
         addSideBlackBars(stage);
 
         stage.addActor(textBubble);
+        stage.addActor(nexusBox);
 
         characterImage = new FadeImage(textureManager.getTexture("coolfox"));
         characterImage.setY(-40);
@@ -224,6 +262,18 @@ public class CutsceneScreen extends MenuScreen {
         for (Label l : textBubbleLabels) {
             l.clearActions();
         }
+
+        // Reset nexus box state
+        nexusSaysFinished = true;
+        nexusBox.setVisible(false);
+        nexusBox.clearActions();
+        activeTypewriterActions.clear();
+        for (Label l : nexusLabels) {
+            l.clearActions();
+            l.setVisible(false);
+            l.setText("");
+        }
+
         adjustSkipButton();
     }
 
@@ -456,6 +506,146 @@ public class CutsceneScreen extends MenuScreen {
         topBar.addAction(Actions.moveTo(0, stage.getHeight(), 0.28f, Interpolation.pow2In));
         bottomBar.addAction(Actions.moveTo(0, -BAR_HEIGHT, 0.28f, Interpolation.pow2In));
         stage.addAction(Actions.sequence(Actions.delay(0.3f), movingFinishedAction, moveOutEndAction));
+    }
+
+    /**
+     * Display multi-line text with typewriter animation in the nexus box.
+     *
+     * @param lines List of NexusLine objects containing text and per-line delays
+     * @param charDelay Seconds between characters during typewriter effect
+     * @param lineDelay Default delay before each line starts (if line.delay is 0)
+     * @param holdTime Seconds to display after typing completes
+     */
+    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime) {
+        nexusSaysFinished = false;
+        activeTypewriterActions.clear();
+
+        // Clear previous labels
+        for (Label label : nexusLabels) {
+            label.clearActions();
+            label.setVisible(false);
+            label.setText("");
+        }
+
+        // Calculate box height based on number of lines
+        float nexusLineHeight = nexusLabelStyle.font.getLineHeight();
+        float padding = 40;
+        float boxHeight = padding + lines.size() * nexusLineHeight + padding;
+        nexusBoxBg.setHeight(boxHeight);
+
+        // Position box centered horizontally, lower third of screen
+        nexusBox.setX((stage.getWidth() - nexusBoxBg.getWidth()) / 2);
+        nexusBox.setY(150);
+
+        // Calculate total animation time for scheduling fadeout
+        float totalTypingTime = 0;
+        float[] lineStartTimes = new float[lines.size()];
+
+        for (int i = 0; i < lines.size(); i++) {
+            NexusLine line = lines.get(i);
+            float lineDelayTime = (line.delay > 0) ? line.delay : (i > 0 ? lineDelay : 0);
+            lineStartTimes[i] = totalTypingTime + lineDelayTime;
+
+            int visibleChars = countVisibleChars(line.text);
+            float typingDuration = visibleChars * charDelay;
+            totalTypingTime = lineStartTimes[i] + typingDuration;
+        }
+
+        // Setup labels and typewriter actions
+        float topY = boxHeight - padding - nexusLineHeight;
+        for (int i = 0; i < lines.size() && i < nexusLabels.size(); i++) {
+            NexusLine line = lines.get(i);
+            Label label = nexusLabels.get(i);
+            label.setY(topY - i * nexusLineHeight);
+            label.setVisible(true);
+            label.setText("");
+
+            float startDelay = lineStartTimes[i];
+
+            TypewriterAction typewriter = new TypewriterAction(label, line.text, charDelay, null);
+            activeTypewriterActions.add(typewriter);
+
+            label.addAction(Actions.sequence(
+                Actions.delay(startDelay),
+                typewriter
+            ));
+        }
+
+        // Fade in the box
+        Color c = nexusBox.getColor();
+        c.a = 0;
+        nexusBox.setColor(c);
+        nexusBox.setVisible(true);
+
+        // Schedule fade out and completion
+        nexusBox.addAction(Actions.sequence(
+            Actions.fadeIn(0.2f, Interpolation.pow2Out),
+            Actions.delay(totalTypingTime + holdTime),
+            Actions.fadeOut(0.2f, Interpolation.pow2In),
+            new Action() {
+                @Override
+                public boolean act(float delta) {
+                    nexusBox.setVisible(false);
+                    nexusSaysFinished = true;
+                    return true;
+                }
+            }
+        ));
+    }
+
+    /**
+     * Check if the nexusSays animation has finished.
+     */
+    public boolean isNexusSaysFinished() {
+        return nexusSaysFinished || isAnimationFinished();
+    }
+
+    /**
+     * Skip the nexusSays animation and immediately hide the box.
+     */
+    public void skipNexusSays() {
+        // Skip all typewriter animations
+        for (TypewriterAction action : activeTypewriterActions) {
+            action.skip();
+        }
+
+        // Clear existing actions and fade out quickly
+        nexusBox.clearActions();
+        nexusBox.addAction(Actions.sequence(
+            Actions.fadeOut(0.1f),
+            new Action() {
+                @Override
+                public boolean act(float delta) {
+                    nexusBox.setVisible(false);
+                    nexusSaysFinished = true;
+                    return true;
+                }
+            }
+        ));
+    }
+
+    /**
+     * Count visible characters in text, excluding markup tags like [color] and [/].
+     */
+    private int countVisibleChars(String text) {
+        int count = 0;
+        boolean inTag = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == '[') {
+                if (i + 1 < text.length() && text.charAt(i + 1) == '[') {
+                    count++;
+                    i++;
+                } else {
+                    inTag = true;
+                }
+            } else if (c == ']' && inTag) {
+                inTag = false;
+            } else if (!inTag) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }
