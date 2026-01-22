@@ -75,6 +75,8 @@ public class CutsceneScreen extends MenuScreen {
     private final Image bottomBar;
 
     protected final MenuButton skipButton;
+    protected final MenuButton nexusButton;
+    private MenuCursorItem nexusButtonItem;
 
     private final FadeImage characterImage;
 
@@ -168,8 +170,19 @@ public class CutsceneScreen extends MenuScreen {
             }
         });
 
+        nexusButton = new MenuButton(engine, "");
+        nexusButton.setWidth(240);
+        nexusButton.setHeight(80);
+        nexusButton.setVisible(false);
+        nexusButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                nexusButtonClicked();
+            }
+        });
+
         stage.addActor(menuCursor.getCursorImage());
         stage.addActor(skipButton);
+        stage.addActor(nexusButton);
 
         setUpCursor();
     }
@@ -274,6 +287,10 @@ public class CutsceneScreen extends MenuScreen {
             l.setText("");
         }
 
+        // Reset nexus button state
+        nexusButton.setVisible(false);
+        nexusButton.clearActions();
+
         adjustSkipButton();
     }
 
@@ -281,6 +298,28 @@ public class CutsceneScreen extends MenuScreen {
         MenuCursorItem item;
         item = menuCursor.addItem(skipButton);
         item.setListener(MenuCursor.Event.ENTER, item1 -> skipClicked());
+
+        nexusButtonItem = menuCursor.addItem(nexusButton);
+        nexusButtonItem.setListener(MenuCursor.Event.ENTER, item1 -> nexusButtonClicked());
+    }
+
+    private void nexusButtonClicked() {
+        nexusButton.clearActions();
+        nexusButton.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
+
+        nexusBox.clearActions();
+        nexusBox.addAction(Actions.sequence(
+            Actions.fadeOut(0.2f, Interpolation.pow2In),
+            new Action() {
+                @Override
+                public boolean act(float delta) {
+                    nexusBox.setVisible(false);
+                    nexusButton.setVisible(false);
+                    nexusSaysFinished = true;
+                    return true;
+                }
+            }
+        ));
     }
 
     @Override
@@ -515,8 +554,9 @@ public class CutsceneScreen extends MenuScreen {
      * @param charDelay Seconds between characters during typewriter effect
      * @param lineDelay Default delay before each line starts (if line.delay is 0)
      * @param holdTime Seconds to display after typing completes
+     * @param buttonLabel Label for a button to show after animation (null for auto-finish)
      */
-    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime) {
+    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
         nexusSaysFinished = false;
         activeTypewriterActions.clear();
 
@@ -527,10 +567,14 @@ public class CutsceneScreen extends MenuScreen {
             label.setText("");
         }
 
-        // Calculate box height based on number of lines
+        // Hide nexus button initially
+        nexusButton.setVisible(false);
+
+        // Calculate box height based on number of lines (add space for button if needed)
         float nexusLineHeight = nexusLabelStyle.font.getLineHeight();
         float padding = 40;
-        float boxHeight = padding + lines.size() * nexusLineHeight + padding;
+        float buttonSpace = (buttonLabel != null) ? nexusButton.getHeight() + 20 : 0;
+        float boxHeight = padding + lines.size() * nexusLineHeight + buttonSpace + padding;
         nexusBoxBg.setHeight(boxHeight);
 
         // Position box centered horizontally, lower third of screen
@@ -577,20 +621,46 @@ public class CutsceneScreen extends MenuScreen {
         nexusBox.setColor(c);
         nexusBox.setVisible(true);
 
-        // Schedule fade out and completion
-        nexusBox.addAction(Actions.sequence(
-            Actions.fadeIn(0.2f, Interpolation.pow2Out),
-            Actions.delay(totalTypingTime + holdTime),
-            Actions.fadeOut(0.2f, Interpolation.pow2In),
-            new Action() {
-                @Override
-                public boolean act(float delta) {
-                    nexusBox.setVisible(false);
-                    nexusSaysFinished = true;
-                    return true;
+        if (buttonLabel != null) {
+            // Setup button to appear after typing completes
+            nexusButton.setText(buttonLabel);
+            nexusButton.setX(nexusBox.getX() + (nexusBoxBg.getWidth() - nexusButton.getWidth()) / 2);
+            nexusButton.setY(nexusBox.getY() + padding);
+
+            Color btnColor = nexusButton.getColor();
+            btnColor.a = 0;
+            nexusButton.setColor(btnColor);
+
+            // Schedule button appearance and set cursor to it
+            nexusBox.addAction(Actions.sequence(
+                Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                Actions.delay(totalTypingTime),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        nexusButton.setVisible(true);
+                        nexusButton.addAction(Actions.fadeIn(0.2f, Interpolation.pow2Out));
+                        menuCursor.setCurrentItem(nexusButtonItem);
+                        return true;
+                    }
                 }
-            }
-        ));
+            ));
+        } else {
+            // Schedule fade out and completion (original behavior)
+            nexusBox.addAction(Actions.sequence(
+                Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                Actions.delay(totalTypingTime + holdTime),
+                Actions.fadeOut(0.2f, Interpolation.pow2In),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        nexusBox.setVisible(false);
+                        nexusSaysFinished = true;
+                        return true;
+                    }
+                }
+            ));
+        }
     }
 
     /**
@@ -608,6 +678,10 @@ public class CutsceneScreen extends MenuScreen {
         for (TypewriterAction action : activeTypewriterActions) {
             action.skip();
         }
+
+        // Hide the nexus button
+        nexusButton.clearActions();
+        nexusButton.setVisible(false);
 
         // Clear existing actions and fade out quickly
         nexusBox.clearActions();

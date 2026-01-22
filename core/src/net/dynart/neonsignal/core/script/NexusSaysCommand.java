@@ -29,22 +29,24 @@ public class NexusSaysCommand implements Command, SkippableCommand {
     private final float charDelay;
     private final float lineDelay;
     private final float holdTime;
+    private final String buttonLabel;
 
     private boolean first = true;
 
-    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay, float holdTime) {
+    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
         this.cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
         this.lines = lines;
         this.charDelay = charDelay;
         this.lineDelay = lineDelay;
         this.holdTime = holdTime;
+        this.buttonLabel = buttonLabel;
     }
 
     @Override
     public boolean act(float delta) {
         if (first) {
             first = false;
-            cutsceneScreen.nexusSays(lines, charDelay, lineDelay, holdTime);
+            cutsceneScreen.nexusSays(lines, charDelay, lineDelay, holdTime, buttonLabel);
             return false;
         }
         return cutsceneScreen.isNexusSaysFinished();

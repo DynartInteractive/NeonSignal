@@ -209,7 +209,8 @@ public class ScriptLoader {
         float charDelay = value.getFloat("char_delay", 0.03f);
         float lineDelay = value.getFloat("line_delay", 0.5f);
         float holdTime = value.getFloat("hold_time", 2.0f);
+        String buttonLabel = value.getString("button_label", null);
 
-        return new NexusSaysCommand(engine, lines, charDelay, lineDelay, holdTime);
+        return new NexusSaysCommand(engine, lines, charDelay, lineDelay, holdTime, buttonLabel);
     }
 }

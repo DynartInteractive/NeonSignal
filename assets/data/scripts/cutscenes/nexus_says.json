@@ -8,6 +8,7 @@
     ],
     "char_delay": 0.04,
     "line_delay": 0.6,
-    "hold_time": 3.0
+    "hold_time": 3.0,
+    "button_label": "Next"
   }}
 ]}
