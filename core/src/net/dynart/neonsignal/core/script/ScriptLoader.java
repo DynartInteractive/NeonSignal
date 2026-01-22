@@ -203,7 +203,8 @@ public class ScriptLoader {
                 String text = lineValue.getString("text", "");
                 float delay = lineValue.getFloat("delay", 0);
                 String font = lineValue.getString("font", null);
-                lines.add(new NexusLine(text, delay, font));
+                float marginBottom = lineValue.getFloat("margin_bottom", 5);
+                lines.add(new NexusLine(text, delay, font, marginBottom));
             }
         }
 

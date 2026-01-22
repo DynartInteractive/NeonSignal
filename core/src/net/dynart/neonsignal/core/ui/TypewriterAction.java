@@ -3,6 +3,8 @@ package net.dynart.neonsignal.core.ui;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
+import net.dynart.neonsignal.core.SoundManager;
+
 /**
  * Scene2D Action that reveals text character-by-character with typewriter effect.
  * Handles LibGDX color markup tags by skipping over [...] during reveal.
@@ -13,31 +15,65 @@ public class TypewriterAction extends Action {
     private final String fullText;
     private final float charDelay;
     private final Runnable onComplete;
+    private final SoundManager soundManager;
+    private final String soundName;
 
     private float elapsed = 0;
     private int visibleCharCount = 0;
     private int totalVisibleChars;
     private boolean finished = false;
     private boolean skipped = false;
+    private boolean started = false;
+    private Long soundId;
+    private boolean fadingOut = false;
+    private float fadeVolume = 1f;
+    private static final float FADE_SPEED = 10f; // fade out in ~0.1 seconds
 
     public TypewriterAction(Label label, String fullText, float charDelay, Runnable onComplete) {
+        this(label, fullText, charDelay, onComplete, null, null);
+    }
+
+    public TypewriterAction(Label label, String fullText, float charDelay, Runnable onComplete, SoundManager soundManager, String soundName) {
         this.label = label;
         this.fullText = fullText;
         this.charDelay = charDelay;
         this.onComplete = onComplete;
+        this.soundManager = soundManager;
+        this.soundName = soundName;
         this.totalVisibleChars = countVisibleChars(fullText);
     }
 
     @Override
     public boolean act(float delta) {
+        // Handle sound fade-out
+        if (fadingOut && soundId != null) {
+            fadeVolume -= delta * FADE_SPEED;
+            if (fadeVolume <= 0) {
+                fadeVolume = 0;
+                if (soundManager != null) {
+                    soundManager.stop(soundId);
+                }
+                soundId = null;
+                fadingOut = false;
+            } else if (soundManager != null) {
+                soundManager.setVolume(soundId, fadeVolume);
+            }
+        }
+
         if (finished) {
-            return true;
+            return !fadingOut; // Wait for fade to complete
         }
 
         if (skipped) {
             label.setText(fullText);
             finish();
-            return true;
+            return !fadingOut;
+        }
+
+        // Start sound on first act
+        if (!started) {
+            started = true;
+            startSound();
         }
 
         elapsed += delta;
@@ -51,10 +87,22 @@ public class TypewriterAction extends Action {
         if (visibleCharCount >= totalVisibleChars) {
             label.setText(fullText);
             finish();
-            return true;
+            return !fadingOut;
         }
 
         return false;
+    }
+
+    private void startSound() {
+        if (soundManager != null && soundName != null) {
+            soundId = soundManager.play(soundName, 1f, 0f);
+        }
+    }
+
+    private void stopSound() {
+        if (soundId != null) {
+            fadingOut = true;
+        }
     }
 
     /**
@@ -62,6 +110,12 @@ public class TypewriterAction extends Action {
      */
     public void skip() {
         skipped = true;
+        // Stop sound immediately on skip (no fade)
+        if (soundManager != null && soundId != null) {
+            soundManager.stop(soundId);
+            soundId = null;
+        }
+        fadingOut = false;
     }
 
     /**
@@ -73,6 +127,7 @@ public class TypewriterAction extends Action {
 
     private void finish() {
         finished = true;
+        stopSound();
         if (onComplete != null) {
             onComplete.run();
         }

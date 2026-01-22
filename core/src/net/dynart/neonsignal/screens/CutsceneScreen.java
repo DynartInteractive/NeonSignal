@@ -18,6 +18,7 @@ import net.dynart.neonsignal.core.script.ScriptLoader;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.FontManager;
 import net.dynart.neonsignal.core.GameScene;
+import net.dynart.neonsignal.core.SoundManager;
 import net.dynart.neonsignal.core.TextureManager;
 import net.dynart.neonsignal.core.script.Command;
 import net.dynart.neonsignal.core.script.SequenceCommand;
@@ -78,6 +79,8 @@ public class CutsceneScreen extends MenuScreen {
     protected final MenuButton nexusButton;
     private MenuCursorItem nexusButtonItem;
 
+    private final Image nexusDimBg;
+
     //private final FadeImage characterImage;
 
     private final TextureManager textureManager;
@@ -123,7 +126,7 @@ public class CutsceneScreen extends MenuScreen {
         nexusBoxBg.setHeight(200);
 
         nexusLabelStyle = new Label.LabelStyle();
-        nexusLabelStyle.font = fontManager.get("default");
+        nexusLabelStyle.font = fontManager.get("secondary");
 
         nexusBox = new Group();
         nexusBox.addActor(nexusBoxBg);
@@ -154,6 +157,11 @@ public class CutsceneScreen extends MenuScreen {
         stage.addActor(bottomBar);
 
         addSideBlackBars(stage);
+
+        // Dim background for nexus says dialog
+        nexusDimBg = new Image(textureManager.getTexture("black"));
+        nexusDimBg.setVisible(false);
+        stage.addActor(nexusDimBg);
 
 //        stage.addActor(textBubble);
         stage.addActor(nexusBox);
@@ -292,6 +300,10 @@ public class CutsceneScreen extends MenuScreen {
         nexusButton.setVisible(false);
         nexusButton.clearActions();
 
+        // Reset dim background
+        nexusDimBg.setVisible(false);
+        nexusDimBg.clearActions();
+
         adjustSkipButton();
     }
 
@@ -308,6 +320,9 @@ public class CutsceneScreen extends MenuScreen {
         nexusButton.clearActions();
         nexusButton.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
 
+        nexusDimBg.clearActions();
+        nexusDimBg.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
+
         nexusBox.clearActions();
         nexusBox.addAction(Actions.sequence(
             Actions.fadeOut(0.2f, Interpolation.pow2In),
@@ -316,6 +331,7 @@ public class CutsceneScreen extends MenuScreen {
                 public boolean act(float delta) {
                     nexusBox.setVisible(false);
                     nexusButton.setVisible(false);
+                    nexusDimBg.setVisible(false);
                     nexusSaysFinished = true;
 
                     // Re-enable skip button for next command
@@ -334,6 +350,7 @@ public class CutsceneScreen extends MenuScreen {
         super.resize(width, height);
         bottomBar.setWidth(stage.getWidth());
         topBar.setWidth(stage.getWidth());
+        nexusDimBg.setSize(stage.getWidth(), stage.getHeight());
         adjustSkipButton();
     }
 
@@ -590,16 +607,32 @@ public class CutsceneScreen extends MenuScreen {
         // Hide nexus button initially
         nexusButton.setVisible(false);
 
-        // Calculate box height based on number of lines (add space for button if needed)
-        float nexusLineHeight = nexusLabelStyle.font.getLineHeight();
-        float padding = 40;
-        float buttonSpace = (buttonLabel != null) ? nexusButton.getHeight() + 20 : 0;
-        float boxHeight = padding + lines.size() * nexusLineHeight + buttonSpace + padding;
+        float paddingX = 100;
+        float paddingTop = 50;
+        float paddingBottom = 70;
+
+        // First pass: determine fonts and calculate line heights (including margins)
+        float[] lineHeights = new float[lines.size()];
+        float totalLinesHeight = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            NexusLine line = lines.get(i);
+            float lineHeight;
+            if (line.font != null) {
+                lineHeight = fontManager.get(line.font).getLineHeight();
+            } else {
+                lineHeight = nexusLabelStyle.font.getLineHeight();
+            }
+            lineHeights[i] = lineHeight;
+            totalLinesHeight += lineHeight + line.marginBottom;
+        }
+
+        // Calculate box height (button goes outside the box)
+        float boxHeight = paddingTop + totalLinesHeight + paddingBottom;
         nexusBoxBg.setHeight(boxHeight);
 
-        // Position box centered horizontally, lower third of screen
+        // Position box centered horizontally and vertically
         nexusBox.setX((stage.getWidth() - nexusBoxBg.getWidth()) / 2);
-        nexusBox.setY(150);
+        nexusBox.setY((stage.getHeight() - boxHeight) / 2);
 
         // Calculate total animation time for scheduling fadeout
         float totalTypingTime = 0;
@@ -616,13 +649,11 @@ public class CutsceneScreen extends MenuScreen {
         }
 
         // Setup labels and typewriter actions
-        float topY = boxHeight - padding - nexusLineHeight;
+        float currentY = boxHeight - paddingTop;
+        SoundManager soundManager = engine.getSoundManager();
         for (int i = 0; i < lines.size() && i < nexusLabels.size(); i++) {
             NexusLine line = lines.get(i);
             Label label = nexusLabels.get(i);
-            label.setY(topY - i * nexusLineHeight);
-            label.setVisible(true);
-            label.setText("");
 
             // Apply per-line font if specified
             if (line.font != null) {
@@ -634,9 +665,17 @@ public class CutsceneScreen extends MenuScreen {
                 label.setStyle(nexusLabelStyle);
             }
 
+            currentY -= lineHeights[i];
+            label.setX(paddingX);
+            label.setWidth(nexusBoxBg.getWidth() - paddingX * 2);
+            label.setY(currentY);
+            label.setVisible(true);
+            label.setText("");
+            currentY -= line.marginBottom;
+
             float startDelay = lineStartTimes[i];
 
-            TypewriterAction typewriter = new TypewriterAction(label, line.text, charDelay, null);
+            TypewriterAction typewriter = new TypewriterAction(label, line.text, charDelay, null, soundManager, "terminal");
             activeTypewriterActions.add(typewriter);
 
             label.addAction(Actions.sequence(
@@ -645,6 +684,13 @@ public class CutsceneScreen extends MenuScreen {
             ));
         }
 
+        // Fade in the dim background
+        Color dimColor = nexusDimBg.getColor();
+        dimColor.a = 0;
+        nexusDimBg.setColor(dimColor);
+        nexusDimBg.setVisible(true);
+        nexusDimBg.addAction(Actions.alpha(0.4f, 0.2f, Interpolation.pow2Out));
+
         // Fade in the box
         Color c = nexusBox.getColor();
         c.a = 0;
@@ -652,10 +698,10 @@ public class CutsceneScreen extends MenuScreen {
         nexusBox.setVisible(true);
 
         if (buttonLabel != null) {
-            // Setup button to appear after typing completes
+            // Setup button to appear after typing completes (below the box like DialogScreen)
             nexusButton.setText(buttonLabel);
             nexusButton.setX(nexusBox.getX() + (nexusBoxBg.getWidth() - nexusButton.getWidth()) / 2);
-            nexusButton.setY(nexusBox.getY() + padding);
+            nexusButton.setY(nexusBox.getY() - nexusButton.getHeight() - 20);
 
             Color btnColor = nexusButton.getColor();
             btnColor.a = 0;
@@ -691,10 +737,16 @@ public class CutsceneScreen extends MenuScreen {
                     @Override
                     public boolean act(float delta) {
                         nexusBox.setVisible(false);
+                        nexusDimBg.setVisible(false);
                         nexusSaysFinished = true;
                         return true;
                     }
                 }
+            ));
+            // Fade out dim background in parallel
+            nexusDimBg.addAction(Actions.sequence(
+                Actions.delay(0.2f + totalTypingTime + holdTime),
+                Actions.fadeOut(0.2f, Interpolation.pow2In)
             ));
         }
     }
@@ -719,6 +771,10 @@ public class CutsceneScreen extends MenuScreen {
         nexusButton.clearActions();
         nexusButton.setVisible(false);
 
+        // Hide the dim background
+        nexusDimBg.clearActions();
+        nexusDimBg.addAction(Actions.fadeOut(0.1f));
+
         // Clear existing actions and fade out quickly
         nexusBox.clearActions();
         nexusBox.addAction(Actions.sequence(
@@ -727,6 +783,7 @@ public class CutsceneScreen extends MenuScreen {
                 @Override
                 public boolean act(float delta) {
                     nexusBox.setVisible(false);
+                    nexusDimBg.setVisible(false);
                     nexusSaysFinished = true;
                     return true;
                 }

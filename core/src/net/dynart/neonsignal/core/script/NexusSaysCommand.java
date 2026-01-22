@@ -18,11 +18,13 @@ public class NexusSaysCommand implements Command, SkippableCommand {
         public final String text;
         public final float delay;
         public final String font;
+        public final float marginBottom;
 
-        public NexusLine(String text, float delay, String font) {
+        public NexusLine(String text, float delay, String font, float marginBottom) {
             this.text = text;
             this.delay = delay;
             this.font = font;
+            this.marginBottom = marginBottom;
         }
     }
 
