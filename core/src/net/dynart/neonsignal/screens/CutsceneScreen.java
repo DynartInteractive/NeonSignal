@@ -316,6 +316,12 @@ public class CutsceneScreen extends MenuScreen {
                     nexusBox.setVisible(false);
                     nexusButton.setVisible(false);
                     nexusSaysFinished = true;
+
+                    // Re-enable skip button for next command
+                    canSkip = false;
+                    menuCursor.setDisabled(true);
+                    menuCursor.setGlobalAlpha(0);
+                    menuCursor.setCurrentItem(skipButton);
                     return true;
                 }
             }
@@ -388,7 +394,7 @@ public class CutsceneScreen extends MenuScreen {
             menuCursor.setGlobalAlpha(c.a);
             skipButton.setColor(c);
 
-        } else if (gameController.isAnyKeyPressed() && !canSkip) {
+        } else if (gameController.isAnyKeyPressed() && !canSkip && !nexusButton.isVisible()) {
 
             skipButton.setVisible(true);
             menuCursor.setGlobalAlpha(0);
@@ -399,6 +405,8 @@ public class CutsceneScreen extends MenuScreen {
             fadeTime = FADE_MAX_TIME;
             fadeOutWaitTime = FADE_OUT_WAIT_MAX_TIME;
             fadeOut = false;
+
+            menuCursor.setCurrentItem(skipButton);
         }
 
         commands.act(delta);
@@ -638,8 +646,14 @@ public class CutsceneScreen extends MenuScreen {
                 new Action() {
                     @Override
                     public boolean act(float delta) {
+                        // Hide skip button while nexus button is active
+                        skipButton.setVisible(false);
+                        canSkip = false;
+
                         nexusButton.setVisible(true);
                         nexusButton.addAction(Actions.fadeIn(0.2f, Interpolation.pow2Out));
+                        menuCursor.setDisabled(false);
+                        menuCursor.setGlobalAlpha(1f);
                         menuCursor.setCurrentItem(nexusButtonItem);
                         return true;
                     }
