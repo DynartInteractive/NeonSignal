@@ -41,7 +41,7 @@ public class LevelButton extends Group {
             starImages[j].setX(j * 35 + 9);
             starImages[j].setY(-14);
             starImages[j].setVisible(false);
-            addActor(starImages[j]);
+            //addActor(starImages[j]);
         }
     }
 

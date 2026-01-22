@@ -102,8 +102,7 @@
     },
     "fonts": {
         "default": {"path": "data/fonts/orbitron.fnt"},
-        "secondary": {"path": "data/fonts/orbitron_small.fnt", "load_now": true},
-        "text_bubble": {"path": "data/fonts/boldly_missy.fnt"}
+        "secondary": {"path": "data/fonts/orbitron_small.fnt", "load_now": true}
     },
     "textures": {
         "bg1_back": {"path": "data/textures/bg1_back.png"},

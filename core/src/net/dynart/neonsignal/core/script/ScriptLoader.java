@@ -202,7 +202,8 @@ public class ScriptLoader {
             for (JsonValue lineValue : linesArray) {
                 String text = lineValue.getString("text", "");
                 float delay = lineValue.getFloat("delay", 0);
-                lines.add(new NexusLine(text, delay));
+                String font = lineValue.getString("font", null);
+                lines.add(new NexusLine(text, delay, font));
             }
         }
 

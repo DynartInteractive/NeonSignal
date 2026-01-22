@@ -52,7 +52,7 @@ public class PauseScreen extends MenuScreen {
         clear = false;
 
         table = new Table();
-        table.setBackground(skin.getDrawable("dialog_bg"));
+        table.setBackground(skin.getDrawable("header_bg"));
         table.setHeight(150);
         group.addActor(table);
 

@@ -17,10 +17,12 @@ public class NexusSaysCommand implements Command, SkippableCommand {
     public static class NexusLine {
         public final String text;
         public final float delay;
+        public final String font;
 
-        public NexusLine(String text, float delay) {
+        public NexusLine(String text, float delay, String font) {
             this.text = text;
             this.delay = delay;
+            this.font = font;
         }
     }
 

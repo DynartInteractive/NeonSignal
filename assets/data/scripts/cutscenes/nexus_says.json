@@ -3,8 +3,8 @@
   {"nexus_says": {
     "lines": [
       {"text": "Welcome to Neon Signal.", "delay": 0},
-      {"text": "The signal is [#ff0000]strong[#ffffff] tonight.", "delay": 0.5},
-      {"text": "Are you ready?", "delay": 1.0}
+      {"text": "The signal is [#ff0000]strong[#ffffff] tonight.", "delay": 0.5, "font":  "secondary"},
+      {"text": "Are you ready?", "delay": 1.0, "font":  "secondary"}
     ],
     "char_delay": 0.04,
     "line_delay": 0.6,

@@ -51,10 +51,10 @@ public class CutsceneScreen extends MenuScreen {
     private boolean sayFinished;
 
     // text bubble
-    private final Group textBubble;
-    private final Image textBubbleBg;
-    private final List<Label> textBubbleLabels = new ArrayList<>();
-    private final Label.LabelStyle textBubbleLs;
+    //private final Group textBubble;
+    //private final Image textBubbleBg;
+    //private final List<Label> textBubbleLabels = new ArrayList<>();
+    //private final Label.LabelStyle textBubbleLs;
     private final SequenceCommand commands = new SequenceCommand();
 
     // nexus says box
@@ -78,9 +78,10 @@ public class CutsceneScreen extends MenuScreen {
     protected final MenuButton nexusButton;
     private MenuCursorItem nexusButtonItem;
 
-    private final FadeImage characterImage;
+    //private final FadeImage characterImage;
 
     private final TextureManager textureManager;
+    private final FontManager fontManager;
 
     public CutsceneScreen(Engine engine) {
         super(engine);
@@ -91,8 +92,8 @@ public class CutsceneScreen extends MenuScreen {
         gameController = engine.getGameController();
 
         textureManager = engine.getTextureManager();
-        FontManager fontManager = engine.getFontManager();
-
+        fontManager = engine.getFontManager();
+/*
         // text bubble
         textBubbleBg = new Image(skin.getDrawable("text_bubble"));
         textBubbleBg.setWidth(510);
@@ -115,14 +116,14 @@ public class CutsceneScreen extends MenuScreen {
             textBubbleLabels.add(tbLabel);
             textBubble.addActor(tbLabel);
         }
-
+*/
         // nexus says box
         nexusBoxBg = new Image(skin.getDrawable("dialog_bg"));
         nexusBoxBg.setWidth(800);
         nexusBoxBg.setHeight(200);
 
         nexusLabelStyle = new Label.LabelStyle();
-        nexusLabelStyle.font = fontManager.get("text_bubble");
+        nexusLabelStyle.font = fontManager.get("default");
 
         nexusBox = new Group();
         nexusBox.addActor(nexusBoxBg);
@@ -154,13 +155,13 @@ public class CutsceneScreen extends MenuScreen {
 
         addSideBlackBars(stage);
 
-        stage.addActor(textBubble);
+//        stage.addActor(textBubble);
         stage.addActor(nexusBox);
-
+/*
         characterImage = new FadeImage(textureManager.getTexture("coolfox"));
         characterImage.setY(-40);
         stage.addActor(characterImage);
-
+*/
         skipButton = new MenuButton(engine, "Skip");
         skipButton.setWidth(240);
         skipButton.setHeight(120);
@@ -267,7 +268,7 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setColor(c);
 
         canSkip = false;
-
+/*
         setCharacterVisible(false);
         setTextBubbleVisible(false);
         characterImage.clearActions();
@@ -275,7 +276,7 @@ public class CutsceneScreen extends MenuScreen {
         for (Label l : textBubbleLabels) {
             l.clearActions();
         }
-
+*/
         // Reset nexus box state
         nexusSaysFinished = true;
         nexusBox.setVisible(false);
@@ -345,7 +346,7 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setX(stage.getWidth() - skipButton.getWidth() - getSideBlackBarWidth() - 20);
         skipButton.setY(stage.getHeight() - skipButton.getHeight() - 20);
     }
-
+/*
     private float getCharacterImageX(boolean left) {
         return left
             ? getSideBlackBarWidth() - 50 + characterImage.getWidth()
@@ -357,7 +358,7 @@ public class CutsceneScreen extends MenuScreen {
             ? getSideBlackBarWidth() + 100 + textBubbleBg.getWidth()
             : stage.getWidth() - getSideBlackBarWidth() - textBubbleBg.getWidth() - 100;
     }
-
+*/
     @Override
     public void draw() {
         clear();
@@ -382,16 +383,23 @@ public class CutsceneScreen extends MenuScreen {
             if (fadeTime < 0) {
                 fadeTime = 0;
                 canSkip = !fadeOut;
-                menuCursor.setDisabled(fadeOut);
                 if (fadeOut) {
                     skipButton.setVisible(false);
-                    menuCursor.setDisabled(true);
+                    // Only disable cursor if nexusButton is not active
+                    if (!nexusButton.isVisible()) {
+                        menuCursor.setDisabled(true);
+                    }
+                } else {
+                    menuCursor.setDisabled(false);
                 }
             }
             Color c = skipButton.getColor();
             float r = fadeTime / FADE_MAX_TIME;
             c.a = fadeOut ? r : 1f - r;
-            menuCursor.setGlobalAlpha(c.a);
+            // Only adjust cursor alpha if nexusButton is not active
+            if (!nexusButton.isVisible()) {
+                menuCursor.setGlobalAlpha(c.a);
+            }
             skipButton.setColor(c);
 
         } else if (gameController.isAnyKeyPressed() && !canSkip && !nexusButton.isVisible()) {
@@ -416,7 +424,7 @@ public class CutsceneScreen extends MenuScreen {
 
 
     public void say(String text, String name, boolean start, boolean finish, boolean left) {
-
+/*
         String[] lines = text.split("\n");
         if (lines.length > 3) {
             throw new RuntimeException("Say text more than 3 lines.");
@@ -514,19 +522,23 @@ public class CutsceneScreen extends MenuScreen {
                 Actions.sequence(Actions.delay(textBubbleDelay + 0.5f), sayEndAction)
             );
         }
-
+*/
     }
 
     public void setCharacterVisible(boolean value) {
+        /*
         Color c = characterImage.getColor();
         c.a = value ? 1 : 0;
         characterImage.setColor(c);
+         */
     }
 
     public void setTextBubbleVisible(boolean value) {
+        /*
         Color c = textBubble.getColor();
         c.a = value ? 1 : 0;
         textBubble.setColor(c);
+         */
     }
 
     public void load(String path) {
@@ -611,6 +623,16 @@ public class CutsceneScreen extends MenuScreen {
             label.setY(topY - i * nexusLineHeight);
             label.setVisible(true);
             label.setText("");
+
+            // Apply per-line font if specified
+            if (line.font != null) {
+                Label.LabelStyle lineStyle = new Label.LabelStyle();
+                lineStyle.font = fontManager.get(line.font);
+                lineStyle.font.getData().markupEnabled = true;
+                label.setStyle(lineStyle);
+            } else {
+                label.setStyle(nexusLabelStyle);
+            }
 
             float startDelay = lineStartTimes[i];
 

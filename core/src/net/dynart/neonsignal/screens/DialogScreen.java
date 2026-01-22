@@ -213,7 +213,8 @@ public class DialogScreen extends Screen {
     }
 
     void adjustLayout() {
-        table.setWidth(stage.getWidth());
+        table.setWidth(stage.getWidth() - 100);
+        table.setX(50);
         table.setY((stage.getHeight() - table.getHeight()) / 2f);
         float y = table.getY() - 50;
         float x = (stage.getWidth() - 260 * buttonCount) / 2f + 5f;
