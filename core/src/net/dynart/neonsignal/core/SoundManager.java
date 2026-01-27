@@ -121,7 +121,8 @@ public class SoundManager {
 
     public Long play(String name, float volume, float dnpDuration) {
         if (!soundPaths.containsKey(name)) {
-            throw new RuntimeException("Sound not found: " + name);
+            return 0L;
+            //throw new RuntimeException("Sound not found: " + name);
         }
         if (!sounds.containsKey(name)) {
             sounds.put(name, assetManager.get(soundPaths.get(name), Sound.class));
@@ -165,19 +166,6 @@ public class SoundManager {
         volume = value * value; // exponential sounds natural
     }
 
-    public void stop(Long soundId) {
-        if (soundId == null) return;
-        for (Sound sound : sounds.values()) {
-            sound.stop(soundId);
-        }
-    }
-
-    public void setVolume(Long soundId, float volume) {
-        if (soundId == null) return;
-        for (Sound sound : sounds.values()) {
-            sound.setVolume(soundId, volume);
-        }
-    }
 
     public void setMusicVolume(float value) {
         musicVolume = value * value; // exponential sounds natural
