@@ -87,9 +87,10 @@ public class TouchListener extends InputAdapter {
         PlayerAbility[] move = { PlayerAbility.MOVE };
         abilityByActor.put("joy_bottom", move);
         abilityByActor.put("joy_top", move);
-        abilityByActor.put("a", PlayerAbility.ANY_JUMP);
-        abilityByActor.put("b", PlayerAbility.ANY_PUNCH);
-        abilityByActor.put("c", PlayerAbility.CHANGE_WEAPON);
+        abilityByActor.put("a", PlayerAbility.JUMPING);
+        abilityByActor.put("b", PlayerAbility.DASHING);
+        abilityByActor.put("x", PlayerAbility.FIRING);
+        abilityByActor.put("y", PlayerAbility.CHANGE_WEAPON);
 
         adjustActive();
     }

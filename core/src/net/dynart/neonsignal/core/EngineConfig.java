@@ -59,8 +59,8 @@ public class EngineConfig {
     protected String[] touchButtonNames = {"left", "right", "a", "b"};
     protected float touchButtonSize = 200;
     protected Map<String, Vector2> defaultTouchPositions = new HashMap<>();
-    protected Button[] buttonOrder = { Button.LEFT, Button.RIGHT, Button.UP, Button.DOWN, Button.A, Button.B, Button.MENU};
-    protected String[] buttonLabels = { "Left", "Right", "Up", "Down", "Jump", "Fire", "Pause" };
+    protected Button[] buttonOrder = { Button.LEFT, Button.RIGHT, Button.UP, Button.DOWN, Button.A, Button.B, Button.X, Button.Y, Button.MENU};
+    protected String[] buttonLabels = { "Left", "Right", "Up", "Down", "Jump", "Dash", "Fire", "Switch", "Pause" };
     protected Map<Button, Integer> defaultKeyMapping = new HashMap<>();
     protected Map<Button, Integer> defaultJoyMapping = new HashMap<>();
     protected Map<Button, AxisData> defaultAxisMapping = new HashMap<>();

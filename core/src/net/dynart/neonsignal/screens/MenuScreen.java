@@ -116,7 +116,7 @@ abstract class MenuScreen extends Screen implements DialogListener {
     public void update(float delta) {
         super.update(delta);
         menuCursor.update();
-        if (engine.getGameController().isMenuPressed()) {
+        if (engine.getGameController().isMenuPressed() || engine.getGameController().isBPressed()) {
             backClicked();
         }
     }

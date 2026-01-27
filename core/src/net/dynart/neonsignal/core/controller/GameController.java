@@ -32,10 +32,12 @@ public class GameController {
 
     private boolean aDown;
     private boolean bDown;
-    private boolean cDown;
+    private boolean xDown;
+    private boolean yDown;
 
     private boolean menuDown;
     private boolean menuKeyPressed;
+    private boolean bPressed;
 
     private boolean anyPointerDown;
 
@@ -101,15 +103,30 @@ public class GameController {
     }
 
     public void setBDown(boolean value) {
+        if (!value && bDown) {
+            bPressed = true;
+        }
         bDown = value;
     }
 
-    public boolean isCDown() {
-        return cDown;
+    public boolean isBPressed() {
+        return bPressed;
     }
 
-    public void setCDown(boolean value) {
-        cDown = value;
+    public boolean isXDown() {
+        return xDown;
+    }
+
+    public void setXDown(boolean value) {
+        xDown = value;
+    }
+
+    public boolean isYDown() {
+        return yDown;
+    }
+
+    public void setYDown(boolean value) {
+        yDown = value;
     }
 
     public boolean isMenuDown() {
@@ -172,8 +189,10 @@ public class GameController {
             setADown(value);
         } else if (button == Button.B) {
             setBDown(value);
-        } else if (button == Button.C) {
-            setCDown(value);
+        } else if (button == Button.X) {
+            setXDown(value);
+        } else if (button == Button.Y) {
+            setYDown(value);
         } else if (button == Button.MENU) {
             setMenuDown(value);
         } else if (button == Button.LEFT) {
@@ -202,8 +221,10 @@ public class GameController {
             setADown(down);
         } else if (keyCode == map.get(Button.B)) {
             setBDown(down);
-        } else if (keyCode == map.get(Button.C)) {
-            setCDown(down);
+        } else if (keyCode == map.get(Button.X)) {
+            setXDown(down);
+        } else if (keyCode == map.get(Button.Y)) {
+            setYDown(down);
         } else if (keyCode == map.get(Button.MENU)) {
             setMenuDown(down);
         } else {
@@ -231,7 +252,7 @@ public class GameController {
     }
 
     public boolean isAnyKeyDown() {
-        return aDown || bDown || cDown || menuDown
+        return aDown || bDown || xDown || yDown || menuDown
             || upKeyDown || downKeyDown || leftKeyDown || rightKeyDown
             || anyPointerDown;
     }
@@ -258,6 +279,7 @@ public class GameController {
     public void postUpdate() {
         anyKeyPressed = false;
         menuKeyPressed = false;
+        bPressed = false;
     }
 
     public void setPointerDown(int pointer, boolean value) {
@@ -276,7 +298,8 @@ public class GameController {
         setDownDown(false);
         setADown(false);
         setBDown(false);
-        setCDown(false);
+        setXDown(false);
+        setYDown(false);
         setMenuDown(false);
         anyPointerDown = false;
         pointersDown.clear();

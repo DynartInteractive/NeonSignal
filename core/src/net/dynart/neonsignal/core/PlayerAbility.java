@@ -5,11 +5,11 @@ public enum PlayerAbility {
     MOVE,
     JUMP,
     DOUBLE_JUMP,
-    PUNCH,
-    CROWBAR_PUNCH,
-    FIRE_PUNCH;
+    DASH,
+    FIRE;
 
-    public static final PlayerAbility[] ANY_JUMP = { PlayerAbility.JUMP, PlayerAbility.DOUBLE_JUMP };
-    public static final PlayerAbility[] ANY_PUNCH = { PlayerAbility.PUNCH, PlayerAbility.CROWBAR_PUNCH, PlayerAbility.FIRE_PUNCH };
-    public static final PlayerAbility[] CHANGE_WEAPON = { PlayerAbility.CROWBAR_PUNCH, PlayerAbility.FIRE_PUNCH };
+    public static final PlayerAbility[] JUMPING = { PlayerAbility.JUMP, PlayerAbility.DOUBLE_JUMP };
+    public static final PlayerAbility[] FIRING = { PlayerAbility.FIRE };
+    public static final PlayerAbility[] DASHING = { PlayerAbility.DASH };
+    public static final PlayerAbility[] CHANGE_WEAPON = { };
 }

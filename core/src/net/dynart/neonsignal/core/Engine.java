@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.controller.GameController;
 import net.dynart.neonsignal.core.controller.GamepadListener;
 import net.dynart.neonsignal.core.controller.KeyboardListener;
@@ -62,6 +63,8 @@ public class Engine implements LoadingFinishedListener {
     private FadeRenderer fadeRenderer;
     private float accTime;
     private boolean resetDeltaTime;
+    private TutorialTextProvider tutorialTextProvider;
+    private ControlNameProvider controlNameProvider;
 
     public Engine(EngineConfig engineConfig, boolean debug) {
         instance = this;
@@ -107,6 +110,10 @@ public class Engine implements LoadingFinishedListener {
         scriptLoader = config.getScriptLoader();
         scriptLoader.init(this);
 
+        // create control name and tutorial text providers
+        controlNameProvider = new ControlNameProvider(this);
+        tutorialTextProvider = new TutorialTextProvider(this);
+
         // load the resources.json
         JsonReader jsonReader = new JsonReader();
         JsonValue internalJson = JsonUtil.tryToLoad(jsonReader, Gdx.files.internal("data/resources.json"));
@@ -143,6 +150,8 @@ public class Engine implements LoadingFinishedListener {
     public Stencil getStencil() { return stencil; }
     public FadeRenderer getFadeRenderer() { return fadeRenderer; }
     public ScriptLoader getScriptLoader() { return scriptLoader; }
+    public TutorialTextProvider getTutorialTextProvider() { return tutorialTextProvider; }
+    public ControlNameProvider getControlNameProvider() { return controlNameProvider; }
     public Screen getCurrentScreen() {
         return screen;
     }

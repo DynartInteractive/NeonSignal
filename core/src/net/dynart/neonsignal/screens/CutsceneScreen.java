@@ -18,6 +18,7 @@ import net.dynart.neonsignal.core.script.ScriptLoader;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.FontManager;
 import net.dynart.neonsignal.core.GameScene;
+import net.dynart.neonsignal.core.SoundManager;
 import net.dynart.neonsignal.core.TextureManager;
 import net.dynart.neonsignal.core.script.Command;
 import net.dynart.neonsignal.core.script.SequenceCommand;
@@ -26,10 +27,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.dynart.neonsignal.core.Engine;
+import net.dynart.neonsignal.core.TutorialTextProvider;
 import net.dynart.neonsignal.core.ui.FadeImage;
 import net.dynart.neonsignal.core.ui.MenuButton;
 import net.dynart.neonsignal.core.ui.MenuCursor;
 import net.dynart.neonsignal.core.ui.MenuCursorItem;
+import net.dynart.neonsignal.core.ui.TypewriterAction;
+import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
 
 public class CutsceneScreen extends MenuScreen {
 
@@ -49,11 +53,19 @@ public class CutsceneScreen extends MenuScreen {
     private boolean sayFinished;
 
     // text bubble
-    private final Group textBubble;
-    private final Image textBubbleBg;
-    private final List<Label> textBubbleLabels = new ArrayList<>();
-    private final Label.LabelStyle textBubbleLs;
+    //private final Group textBubble;
+    //private final Image textBubbleBg;
+    //private final List<Label> textBubbleLabels = new ArrayList<>();
+    //private final Label.LabelStyle textBubbleLs;
     private final SequenceCommand commands = new SequenceCommand();
+
+    // nexus says box
+    private final Group nexusBox;
+    private final Image nexusBoxBg;
+    private final List<Label> nexusLabels = new ArrayList<>();
+    private final Label.LabelStyle nexusLabelStyle;
+    private boolean nexusSaysFinished = true;
+    private final List<TypewriterAction> activeTypewriterActions = new ArrayList<>();
     private Command endCommand;
     private boolean requestEnd;
     private float fadeTime = 0;
@@ -65,10 +77,16 @@ public class CutsceneScreen extends MenuScreen {
     private final Image bottomBar;
 
     protected final MenuButton skipButton;
+    protected final MenuButton nexusButton;
+    private MenuCursorItem nexusButtonItem;
 
-    private final FadeImage characterImage;
+    private final Image nexusDimBg;
+
+    //private final FadeImage characterImage;
 
     private final TextureManager textureManager;
+    private final FontManager fontManager;
+    private final TutorialTextProvider tutorialTextProvider;
 
     public CutsceneScreen(Engine engine) {
         super(engine);
@@ -79,8 +97,9 @@ public class CutsceneScreen extends MenuScreen {
         gameController = engine.getGameController();
 
         textureManager = engine.getTextureManager();
-        FontManager fontManager = engine.getFontManager();
-
+        fontManager = engine.getFontManager();
+        tutorialTextProvider = engine.getTutorialTextProvider();
+/*
         // text bubble
         textBubbleBg = new Image(skin.getDrawable("text_bubble"));
         textBubbleBg.setWidth(510);
@@ -103,6 +122,33 @@ public class CutsceneScreen extends MenuScreen {
             textBubbleLabels.add(tbLabel);
             textBubble.addActor(tbLabel);
         }
+*/
+        // nexus says box
+        nexusBoxBg = new Image(skin.getDrawable("dialog_bg"));
+        nexusBoxBg.setWidth(800);
+        nexusBoxBg.setHeight(200);
+
+        nexusLabelStyle = new Label.LabelStyle();
+        nexusLabelStyle.font = fontManager.get("secondary");
+
+        nexusBox = new Group();
+        nexusBox.addActor(nexusBoxBg);
+
+        float nexusLineHeight = nexusLabelStyle.font.getLineHeight();
+        for (int i = 0; i < 10; i++) {
+            Label nexusLabel = new Label("", nexusLabelStyle);
+            nexusLabel.getStyle().font.getData().markupEnabled = true;
+            nexusLabel.setColor(0.9f, 0.9f, 0.9f, 1);
+            nexusLabel.setAlignment(Align.left);
+            nexusLabel.setWidth(nexusBoxBg.getWidth() - 40);
+            nexusLabel.setHeight(nexusLineHeight);
+            nexusLabel.setX(20);
+            nexusLabel.setVisible(false);
+            nexusLabels.add(nexusLabel);
+            nexusBox.addActor(nexusLabel);
+        }
+
+        nexusBox.setVisible(false);
 
         // black bars
         topBar = new Image(textureManager.getTexture("black"));
@@ -115,12 +161,18 @@ public class CutsceneScreen extends MenuScreen {
 
         addSideBlackBars(stage);
 
-        stage.addActor(textBubble);
+        // Dim background for nexus says dialog
+        nexusDimBg = new Image(textureManager.getTexture("black"));
+        nexusDimBg.setVisible(false);
+        stage.addActor(nexusDimBg);
 
+//        stage.addActor(textBubble);
+        stage.addActor(nexusBox);
+/*
         characterImage = new FadeImage(textureManager.getTexture("coolfox"));
         characterImage.setY(-40);
         stage.addActor(characterImage);
-
+*/
         skipButton = new MenuButton(engine, "Skip");
         skipButton.setWidth(240);
         skipButton.setHeight(120);
@@ -130,8 +182,19 @@ public class CutsceneScreen extends MenuScreen {
             }
         });
 
+        nexusButton = new MenuButton(engine, "");
+        nexusButton.setWidth(240);
+        nexusButton.setHeight(80);
+        nexusButton.setVisible(false);
+        nexusButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                nexusButtonClicked();
+            }
+        });
+
         stage.addActor(menuCursor.getCursorImage());
         stage.addActor(skipButton);
+        stage.addActor(nexusButton);
 
         setUpCursor();
     }
@@ -216,7 +279,7 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setColor(c);
 
         canSkip = false;
-
+/*
         setCharacterVisible(false);
         setTextBubbleVisible(false);
         characterImage.clearActions();
@@ -224,6 +287,26 @@ public class CutsceneScreen extends MenuScreen {
         for (Label l : textBubbleLabels) {
             l.clearActions();
         }
+*/
+        // Reset nexus box state
+        nexusSaysFinished = true;
+        nexusBox.setVisible(false);
+        nexusBox.clearActions();
+        activeTypewriterActions.clear();
+        for (Label l : nexusLabels) {
+            l.clearActions();
+            l.setVisible(false);
+            l.setText("");
+        }
+
+        // Reset nexus button state
+        nexusButton.setVisible(false);
+        nexusButton.clearActions();
+
+        // Reset dim background
+        nexusDimBg.setVisible(false);
+        nexusDimBg.clearActions();
+
         adjustSkipButton();
     }
 
@@ -231,6 +314,38 @@ public class CutsceneScreen extends MenuScreen {
         MenuCursorItem item;
         item = menuCursor.addItem(skipButton);
         item.setListener(MenuCursor.Event.ENTER, item1 -> skipClicked());
+
+        nexusButtonItem = menuCursor.addItem(nexusButton);
+        nexusButtonItem.setListener(MenuCursor.Event.ENTER, item1 -> nexusButtonClicked());
+    }
+
+    private void nexusButtonClicked() {
+        nexusButton.clearActions();
+        nexusButton.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
+
+        nexusDimBg.clearActions();
+        nexusDimBg.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
+
+        nexusBox.clearActions();
+        nexusBox.addAction(Actions.sequence(
+            Actions.fadeOut(0.2f, Interpolation.pow2In),
+            new Action() {
+                @Override
+                public boolean act(float delta) {
+                    nexusBox.setVisible(false);
+                    nexusButton.setVisible(false);
+                    nexusDimBg.setVisible(false);
+                    nexusSaysFinished = true;
+
+                    // Re-enable skip button for next command
+                    canSkip = false;
+                    menuCursor.setDisabled(true);
+                    menuCursor.setGlobalAlpha(0);
+                    menuCursor.setCurrentItem(skipButton);
+                    return true;
+                }
+            }
+        ));
     }
 
     @Override
@@ -238,6 +353,7 @@ public class CutsceneScreen extends MenuScreen {
         super.resize(width, height);
         bottomBar.setWidth(stage.getWidth());
         topBar.setWidth(stage.getWidth());
+        nexusDimBg.setSize(stage.getWidth(), stage.getHeight());
         adjustSkipButton();
     }
 
@@ -250,7 +366,7 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setX(stage.getWidth() - skipButton.getWidth() - getSideBlackBarWidth() - 20);
         skipButton.setY(stage.getHeight() - skipButton.getHeight() - 20);
     }
-
+/*
     private float getCharacterImageX(boolean left) {
         return left
             ? getSideBlackBarWidth() - 50 + characterImage.getWidth()
@@ -262,7 +378,7 @@ public class CutsceneScreen extends MenuScreen {
             ? getSideBlackBarWidth() + 100 + textBubbleBg.getWidth()
             : stage.getWidth() - getSideBlackBarWidth() - textBubbleBg.getWidth() - 100;
     }
-
+*/
     @Override
     public void draw() {
         clear();
@@ -287,19 +403,26 @@ public class CutsceneScreen extends MenuScreen {
             if (fadeTime < 0) {
                 fadeTime = 0;
                 canSkip = !fadeOut;
-                menuCursor.setDisabled(fadeOut);
                 if (fadeOut) {
                     skipButton.setVisible(false);
-                    menuCursor.setDisabled(true);
+                    // Only disable cursor if nexusButton is not active
+                    if (!nexusButton.isVisible()) {
+                        menuCursor.setDisabled(true);
+                    }
+                } else {
+                    menuCursor.setDisabled(false);
                 }
             }
             Color c = skipButton.getColor();
             float r = fadeTime / FADE_MAX_TIME;
             c.a = fadeOut ? r : 1f - r;
-            menuCursor.setGlobalAlpha(c.a);
+            // Only adjust cursor alpha if nexusButton is not active
+            if (!nexusButton.isVisible()) {
+                menuCursor.setGlobalAlpha(c.a);
+            }
             skipButton.setColor(c);
 
-        } else if (gameController.isAnyKeyPressed() && !canSkip) {
+        } else if (gameController.isAnyKeyPressed() && !canSkip && !nexusButton.isVisible()) {
 
             skipButton.setVisible(true);
             menuCursor.setGlobalAlpha(0);
@@ -310,6 +433,8 @@ public class CutsceneScreen extends MenuScreen {
             fadeTime = FADE_MAX_TIME;
             fadeOutWaitTime = FADE_OUT_WAIT_MAX_TIME;
             fadeOut = false;
+
+            menuCursor.setCurrentItem(skipButton);
         }
 
         commands.act(delta);
@@ -319,7 +444,7 @@ public class CutsceneScreen extends MenuScreen {
 
 
     public void say(String text, String name, boolean start, boolean finish, boolean left) {
-
+/*
         String[] lines = text.split("\n");
         if (lines.length > 3) {
             throw new RuntimeException("Say text more than 3 lines.");
@@ -417,19 +542,23 @@ public class CutsceneScreen extends MenuScreen {
                 Actions.sequence(Actions.delay(textBubbleDelay + 0.5f), sayEndAction)
             );
         }
-
+*/
     }
 
     public void setCharacterVisible(boolean value) {
+        /*
         Color c = characterImage.getColor();
         c.a = value ? 1 : 0;
         characterImage.setColor(c);
+         */
     }
 
     public void setTextBubbleVisible(boolean value) {
+        /*
         Color c = textBubble.getColor();
         c.a = value ? 1 : 0;
         textBubble.setColor(c);
+         */
     }
 
     public void load(String path) {
@@ -442,6 +571,8 @@ public class CutsceneScreen extends MenuScreen {
 
     @Override
     public void moveIn() {
+        /*bottomBar.setVisible(false);
+        topBar.setVisible(false);*/
         if (moving) { return; }
         moving = true;
         topBar.setY(stage.getHeight());
@@ -456,6 +587,239 @@ public class CutsceneScreen extends MenuScreen {
         topBar.addAction(Actions.moveTo(0, stage.getHeight(), 0.28f, Interpolation.pow2In));
         bottomBar.addAction(Actions.moveTo(0, -BAR_HEIGHT, 0.28f, Interpolation.pow2In));
         stage.addAction(Actions.sequence(Actions.delay(0.3f), movingFinishedAction, moveOutEndAction));
+    }
+
+    /**
+     * Display multi-line text with typewriter animation in the nexus box.
+     *
+     * @param lines List of NexusLine objects containing text and per-line delays
+     * @param charDelay Seconds between characters during typewriter effect
+     * @param lineDelay Default delay before each line starts (if line.delay is 0)
+     * @param holdTime Seconds to display after typing completes
+     * @param buttonLabel Label for a button to show after animation (null for auto-finish)
+     */
+    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
+        nexusSaysFinished = false;
+        activeTypewriterActions.clear();
+
+        // Clear previous labels
+        for (Label label : nexusLabels) {
+            label.clearActions();
+            label.setVisible(false);
+            label.setText("");
+        }
+
+        // Hide nexus button initially
+        nexusButton.setVisible(false);
+
+        float paddingX = 100;
+        float paddingTop = 50;
+        float paddingBottom = 70;
+
+        // First pass: determine fonts and calculate line heights (including margins)
+        float[] lineHeights = new float[lines.size()];
+        float totalLinesHeight = 0;
+        for (int i = 0; i < lines.size(); i++) {
+            NexusLine line = lines.get(i);
+            float lineHeight;
+            if (line.font != null) {
+                lineHeight = fontManager.get(line.font).getLineHeight();
+            } else {
+                lineHeight = nexusLabelStyle.font.getLineHeight();
+            }
+            lineHeights[i] = lineHeight;
+            totalLinesHeight += lineHeight + line.marginBottom;
+        }
+
+        // Calculate box height (button goes outside the box)
+        float boxHeight = paddingTop + totalLinesHeight + paddingBottom;
+        nexusBoxBg.setHeight(boxHeight);
+
+        // Position box centered horizontally and vertically
+        nexusBox.setX((stage.getWidth() - nexusBoxBg.getWidth()) / 2);
+        nexusBox.setY((stage.getHeight() - boxHeight) / 2);
+
+        // Calculate total animation time for scheduling fadeout
+        float totalTypingTime = 0;
+        float[] lineStartTimes = new float[lines.size()];
+
+        String[] resolvedTexts = new String[lines.size()];
+        for (int i = 0; i < lines.size(); i++) {
+            NexusLine line = lines.get(i);
+            resolvedTexts[i] = tutorialTextProvider.resolveVariables(line.text);
+            float lineDelayTime = (line.delay > 0) ? line.delay : (i > 0 ? lineDelay : 0);
+            lineStartTimes[i] = totalTypingTime + lineDelayTime;
+
+            int visibleChars = countVisibleChars(resolvedTexts[i]);
+            float typingDuration = visibleChars * charDelay;
+            totalTypingTime = lineStartTimes[i] + typingDuration;
+        }
+
+        // Setup labels and typewriter actions
+        float currentY = boxHeight - paddingTop;
+        SoundManager soundManager = engine.getSoundManager();
+        for (int i = 0; i < lines.size() && i < nexusLabels.size(); i++) {
+            NexusLine line = lines.get(i);
+            Label label = nexusLabels.get(i);
+
+            // Apply per-line font if specified
+            if (line.font != null) {
+                Label.LabelStyle lineStyle = new Label.LabelStyle();
+                lineStyle.font = fontManager.get(line.font);
+                lineStyle.font.getData().markupEnabled = true;
+                label.setStyle(lineStyle);
+            } else {
+                label.setStyle(nexusLabelStyle);
+            }
+
+            currentY -= lineHeights[i];
+            label.setX(paddingX);
+            label.setWidth(nexusBoxBg.getWidth() - paddingX * 2);
+            label.setY(currentY);
+            label.setVisible(true);
+            label.setText("");
+            currentY -= line.marginBottom;
+
+            float startDelay = lineStartTimes[i];
+
+            TypewriterAction typewriter = new TypewriterAction(label, resolvedTexts[i], charDelay, null, soundManager, "terminal");
+            activeTypewriterActions.add(typewriter);
+
+            label.addAction(Actions.sequence(
+                Actions.delay(startDelay),
+                typewriter
+            ));
+        }
+
+        // Fade in the dim background
+        Color dimColor = nexusDimBg.getColor();
+        dimColor.a = 0;
+        nexusDimBg.setColor(dimColor);
+        nexusDimBg.setVisible(true);
+        nexusDimBg.addAction(Actions.alpha(0.4f, 0.2f, Interpolation.pow2Out));
+
+        // Fade in the box
+        Color c = nexusBox.getColor();
+        c.a = 0;
+        nexusBox.setColor(c);
+        nexusBox.setVisible(true);
+
+        if (buttonLabel != null) {
+            // Setup button to appear after typing completes (below the box like DialogScreen)
+            nexusButton.setText(buttonLabel);
+            nexusButton.setX(nexusBox.getX() + (nexusBoxBg.getWidth() - nexusButton.getWidth()) / 2);
+            nexusButton.setY(nexusBox.getY() - nexusButton.getHeight() - 20);
+
+            Color btnColor = nexusButton.getColor();
+            btnColor.a = 0;
+            nexusButton.setColor(btnColor);
+
+            // Schedule button appearance and set cursor to it
+            nexusBox.addAction(Actions.sequence(
+                Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                Actions.delay(totalTypingTime),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        // Hide skip button while nexus button is active
+                        skipButton.setVisible(false);
+                        canSkip = false;
+
+                        nexusButton.setVisible(true);
+                        nexusButton.addAction(Actions.fadeIn(0.2f, Interpolation.pow2Out));
+                        menuCursor.setDisabled(false);
+                        menuCursor.setGlobalAlpha(1f);
+                        menuCursor.setCurrentItem(nexusButtonItem);
+                        return true;
+                    }
+                }
+            ));
+        } else {
+            // Schedule fade out and completion (original behavior)
+            nexusBox.addAction(Actions.sequence(
+                Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                Actions.delay(totalTypingTime + holdTime),
+                Actions.fadeOut(0.2f, Interpolation.pow2In),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        nexusBox.setVisible(false);
+                        nexusDimBg.setVisible(false);
+                        nexusSaysFinished = true;
+                        return true;
+                    }
+                }
+            ));
+            // Fade out dim background in parallel
+            nexusDimBg.addAction(Actions.sequence(
+                Actions.delay(0.2f + totalTypingTime + holdTime),
+                Actions.fadeOut(0.2f, Interpolation.pow2In)
+            ));
+        }
+    }
+
+    /**
+     * Check if the nexusSays animation has finished.
+     */
+    public boolean isNexusSaysFinished() {
+        return nexusSaysFinished || isAnimationFinished();
+    }
+
+    /**
+     * Skip the nexusSays animation and immediately hide the box.
+     */
+    public void skipNexusSays() {
+        // Skip all typewriter animations
+        for (TypewriterAction action : activeTypewriterActions) {
+            action.skip();
+        }
+
+        // Hide the nexus button
+        nexusButton.clearActions();
+        nexusButton.setVisible(false);
+
+        // Hide the dim background
+        nexusDimBg.clearActions();
+        nexusDimBg.addAction(Actions.fadeOut(0.1f));
+
+        // Clear existing actions and fade out quickly
+        nexusBox.clearActions();
+        nexusBox.addAction(Actions.sequence(
+            Actions.fadeOut(0.1f),
+            new Action() {
+                @Override
+                public boolean act(float delta) {
+                    nexusBox.setVisible(false);
+                    nexusDimBg.setVisible(false);
+                    nexusSaysFinished = true;
+                    return true;
+                }
+            }
+        ));
+    }
+
+    /**
+     * Count visible characters in text, excluding markup tags like <color> and </>.
+     */
+    private int countVisibleChars(String text) {
+        int count = 0;
+        boolean inTag = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == '<') {
+                if (i + 1 < text.length() && text.charAt(i + 1) == '<') {
+                    count++;
+                    i++;
+                } else {
+                    inTag = true;
+                }
+            } else if (c == '>' && inTag) {
+                inTag = false;
+            } else if (!inTag) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }

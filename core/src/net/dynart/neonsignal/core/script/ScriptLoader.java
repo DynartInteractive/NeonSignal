@@ -7,8 +7,10 @@ import com.badlogic.gdx.utils.JsonValue;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.core.utils.StringUtil;
+import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
@@ -190,5 +192,29 @@ public class ScriptLoader {
             value.getString("entity"),
             value.getString("parent")
         );
+    }
+
+    public Command createNexusSays(JsonValue value) {
+        List<NexusLine> lines = new ArrayList<>();
+
+        JsonValue linesArray = value.get("lines");
+        if (linesArray != null) {
+            for (JsonValue lineValue : linesArray) {
+                String text = lineValue.getString("text", "");
+                float delay = lineValue.getFloat("delay", 0);
+                String font = lineValue.getString("font", null);
+                float marginBottom = lineValue.getFloat("margin_bottom", 5);
+                lines.add(new NexusLine(text, delay, font, marginBottom));
+            }
+        }
+
+        float charDelay = value.getFloat("char_delay", 0.03f);
+        float lineDelay = value.getFloat("line_delay", 0.5f);
+        float holdTime = value.getFloat("hold_time", 2.0f);
+        boolean beginFade = value.getBoolean("begin_fade", true);
+        boolean endFade = value.getBoolean("end_fade", true);
+        String buttonLabel = value.getString("button_label", null);
+
+        return new NexusSaysCommand(engine, lines, charDelay, lineDelay, holdTime, buttonLabel, beginFade, endFade);
     }
 }

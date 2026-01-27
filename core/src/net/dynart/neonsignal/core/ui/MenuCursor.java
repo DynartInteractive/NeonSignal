@@ -161,7 +161,7 @@ public class MenuCursor {
     }
 
     private boolean isActionButtonDown() {
-        return gameController.isADown() || gameController.isBDown();
+        return gameController.isADown();
     }
 
     private void goToOrFireEvent(Neighbour neighbour) {

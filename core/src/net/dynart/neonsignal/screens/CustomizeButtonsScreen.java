@@ -44,10 +44,14 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         gameController = engine.getGameController();
         group.addActor(menuCursor.getCursorImage());
         createBackButton(engine);
-        createMenuButtons();
 
         addSideBlackBars(stage);
+    }
 
+    @Override
+    public void init() {
+        super.init();
+        createMenuButtons();
         setUpMenuCursor();
     }
 
@@ -103,15 +107,17 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         moveOut(backAction);
     }
 
+    private static final int LEFT_COLUMN_COUNT = 4;
+
     private void createMenuButtons() {
         float x = -280;
-        float y = 140;
+        float y = 170;
         for (int i = 0; i < config.getButtonOrder().length; i++) {
             createMenuButton(x, y, i);
-            y -= 130;
-            if (i == 3) {
+            y -= 105;
+            if (i == LEFT_COLUMN_COUNT - 1) {
                 x += 480;
-                y = 140;
+                y = 170;
             }
         }
     }
@@ -135,10 +141,9 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         });
 
         Button[] buttonOrder = config.getButtonOrder();
-        int halfLength = (int)Math.ceil((float)buttonOrder.length / 2f);
         boolean firstItem = true;
         for (int i = 0; i < buttonOrder.length; i++) {
-            MenuCursorItem item = createMenuCursorItem(selectListener, halfLength, i);
+            MenuCursorItem item = createMenuCursorItem(selectListener, i);
             if (firstItem) {
                 firstItem = false;
                 menuCursor.setCurrentItem(item);
@@ -146,12 +151,12 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         }
     }
 
-    private MenuCursorItem createMenuCursorItem(MenuCursor.Listener selectListener, int halfLength, int i) {
+    private MenuCursorItem createMenuCursorItem(MenuCursor.Listener selectListener, int i) {
         Button[] buttonOrder = config.getButtonOrder();
         Button button = buttonOrder[i];
         MenuButton menuButton = menuButtonMap.get(button);
         MenuCursorItem item = menuCursor.addItem(menuButton);
-        if (i == halfLength) {
+        if (i == LEFT_COLUMN_COUNT) {
             backButtonItem.setNeighbour(MenuCursor.Neighbour.DOWN, menuButton);
             item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
             backButtonItem.setNeighbour(MenuCursor.Neighbour.LEFT, menuButton);
@@ -160,19 +165,19 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         else if (i == 0) {
             item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
         }
-        if (i < halfLength && i + halfLength < buttonOrder.length) {
-            Button neighbourButton = buttonOrder[i + halfLength];
+        if (i < LEFT_COLUMN_COUNT && i + LEFT_COLUMN_COUNT < buttonOrder.length) {
+            Button neighbourButton = buttonOrder[i + LEFT_COLUMN_COUNT];
             item.setNeighbour(MenuCursor.Neighbour.RIGHT, menuButtonMap.get(neighbourButton));
         }
-        if (i >= halfLength) {
-            Button neighbourButton = buttonOrder[i - halfLength];
+        if (i >= LEFT_COLUMN_COUNT) {
+            Button neighbourButton = buttonOrder[i - LEFT_COLUMN_COUNT];
             item.setNeighbour(MenuCursor.Neighbour.LEFT, menuButtonMap.get(neighbourButton));
         }
-        if (i > 0 && i != halfLength) {
+        if (i > 0 && i != LEFT_COLUMN_COUNT) {
             Button neighbourButton = buttonOrder[i - 1];
             item.setNeighbour(MenuCursor.Neighbour.UP, menuButtonMap.get(neighbourButton));
         }
-        if (i < buttonOrder.length - 1 && i != halfLength -1) {
+        if (i < buttonOrder.length - 1 && i != LEFT_COLUMN_COUNT - 1) {
             Button neighbourButton = buttonOrder[i + 1];
             item.setNeighbour(MenuCursor.Neighbour.DOWN, menuButtonMap.get(neighbourButton));
         }
@@ -195,9 +200,9 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         MenuButton menuButton = new MenuButton(engine, name, styles.getDefaultButtonStyle());
         menuButton.setUserObject(buttonOrder[index]);
         menuButton.setPosition(x, y);
-        menuButton.setSize(250, 120);
+        menuButton.setSize(250, 95);
         menuButton.setWidth(250);
-        menuButton.setHeight(120);
+        menuButton.setHeight(95);
         menuButton.addListener(buttonClickListener);
         menuButtonMap.put(buttonOrder[index], menuButton);
 
@@ -207,7 +212,7 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         Label.LabelStyle ls = new Label.LabelStyle();
         ls.font = font;
         Label label = new Label(buttonLabels[index], ls);
-        label.setPosition(x - 170, y + 25);
+        label.setPosition(x - 170, y + 15);
         label.setSize(150, 95);
         label.setAlignment(Align.right);
 

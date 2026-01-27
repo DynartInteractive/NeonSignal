@@ -150,6 +150,20 @@ public class SoundManager {
         volume = value * value; // exponential sounds natural
     }
 
+    public void stop(Long soundId) {
+        if (soundId == null) return;
+        for (Sound sound : sounds.values()) {
+            sound.stop(soundId);
+        }
+    }
+
+    public void setVolume(Long soundId, float volume) {
+        if (soundId == null) return;
+        for (Sound sound : sounds.values()) {
+            sound.setVolume(soundId, volume);
+        }
+    }
+
     public void setMusicVolume(float value) {
         musicVolume = value * value; // exponential sounds natural
         if (music != null) {

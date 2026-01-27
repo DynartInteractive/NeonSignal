@@ -52,7 +52,7 @@ public class PauseScreen extends MenuScreen {
         clear = false;
 
         table = new Table();
-        table.setBackground(skin.getDrawable("dialog_bg"));
+        table.setBackground(skin.getDrawable("header_bg"));
         table.setHeight(150);
         group.addActor(table);
 
@@ -68,11 +68,12 @@ public class PauseScreen extends MenuScreen {
 
         addSideBlackBars(stage);
 
-        // if we hit "START" button, means: continue
+        // if we hit "START" or "B" button, means: continue
         stage.addListener(new InputListener() {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == engine.getGameController().getKeyCode(Button.MENU)) {
+                if (keycode == engine.getGameController().getKeyCode(Button.MENU)
+                        || keycode == engine.getGameController().getKeyCode(Button.B)) {
                     moveOut(continueAction);
                     return true;
                 } else {

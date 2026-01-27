@@ -1,6 +1,7 @@
 package net.dynart.neonsignal.screens;
 
 import net.dynart.neonsignal.core.controller.AxisData;
+import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.controller.GamepadListener;
 import net.dynart.neonsignal.core.controller.Button;
 import net.dynart.neonsignal.core.listeners.AxisMovedListener;
@@ -10,6 +11,7 @@ import net.dynart.neonsignal.core.Engine;
 
 public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements ButtonUpListener, AxisMovedListener {
 
+    private final ControlNameProvider controlNameProvider;
     private GamepadListener gamepadListener;
     private int buttonCodeForAssign;
     private int axisCodeForAssign;
@@ -17,6 +19,7 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
 
     public CustomizeGamepadScreen(final Engine engine) {
         super(engine);
+        controlNameProvider = engine.getControlNameProvider();
         gamepadListener = engine.getGamepadListener();
     }
 
@@ -33,19 +36,7 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
 
     @Override
     String getControlName(Button button) {
-        String result = "?";
-        Integer joyCode = gameController.getJoyCode(button);
-        int unusedButtonCode = config.getUnusedButtonCode();
-        if (joyCode != unusedButtonCode) {
-            result = joyCode.toString();
-        } else if (gameController.hasAxisData(button)) {
-            AxisData data = gameController.getAxisData(button);
-            if (data.getCode() != unusedButtonCode) {
-                String signStr = data.getSign() < 0 ? "-" : "+";
-                result = "Axis " + data.getCode() + signStr;
-            }
-        }
-        return result;
+        return controlNameProvider.getJoyControlName(button);
     }
 
     @Override

@@ -8,7 +8,8 @@ public enum Button {
     DOWN("down"),
     A("a"),
     B("b"),
-    C("c"),
+    X("x"),
+    Y("y"),
     MENU("menu");
 
     private final String name;

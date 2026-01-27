@@ -90,7 +90,8 @@ public class DialogScreen extends Screen {
         stage.addListener(new InputListener() {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == engine.getGameController().getKeyCode(Button.MENU)) {
+                if (keycode == engine.getGameController().getKeyCode(Button.MENU)
+                        || keycode == engine.getGameController().getKeyCode(Button.B)) {
                     if (listener != null) {
                         listener.dialogButtonClicked(0);
                     }
@@ -206,14 +207,15 @@ public class DialogScreen extends Screen {
     public void update(float delta) {
         super.update(delta);
         menuCursor.update();
-        if (engine.getGameController().isMenuPressed() && listener != null) {
+        if ((engine.getGameController().isMenuPressed() || engine.getGameController().isBPressed()) && listener != null) {
             listener.dialogButtonClicked(0);
         }
 
     }
 
     void adjustLayout() {
-        table.setWidth(stage.getWidth());
+        table.setWidth(stage.getWidth() - 100);
+        table.setX(50);
         table.setY((stage.getHeight() - table.getHeight()) / 2f);
         float y = table.getY() - 50;
         float x = (stage.getWidth() - 260 * buttonCount) / 2f + 5f;

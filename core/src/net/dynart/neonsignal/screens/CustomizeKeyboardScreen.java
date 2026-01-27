@@ -3,6 +3,7 @@ package net.dynart.neonsignal.screens;
 import com.badlogic.gdx.Input;
 
 import net.dynart.neonsignal.core.controller.Button;
+import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.DialogStage;
 import net.dynart.neonsignal.core.listeners.KeyUpListener;
 import net.dynart.neonsignal.core.ui.MenuButton;
@@ -10,11 +11,13 @@ import net.dynart.neonsignal.core.Engine;
 
 public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements KeyUpListener {
 
+    private final ControlNameProvider controlNameProvider;
     private int keyCodeForAssign;
     private DialogStage dialogStage;
 
     public CustomizeKeyboardScreen(final Engine engine) {
         super(engine);
+        controlNameProvider = engine.getControlNameProvider();
     }
 
     @Override
@@ -25,14 +28,7 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
 
     @Override
     String getControlName(Button button) {
-        String name = "";
-        int code = gameController.getKeyCode(button);
-        if (code == config.getUnusedButtonCode()) {
-            name = "?";
-        } else {
-            name = Input.Keys.toString(code);
-        }
-        return name;
+        return controlNameProvider.getKeyControlName(button);
     }
 
     @Override

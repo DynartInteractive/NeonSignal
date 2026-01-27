@@ -28,14 +28,15 @@
         "default_music_volume": 0.5,
         "default_controller_type": "touch",
         "unused_button_code": -999,
-        "touch_button_names": ["b", "c"],
+        "touch_button_names": ["b", "x", "y"],
         "touch_button_size": 100,
         "default_touch_positions": {
-           "b": [-248, 303],
-           "c": [-75, 513]
+           "b": [-248, 513],
+           "x": [-248, 303],
+           "y": [-75, 513]
         },
-        "button_order": ["left", "right", "up", "down", "a", "b", "c", "menu"],
-        "button_labels": ["Left", "Right", "Up", "Down", "Jump", "Fire", "Switch", "Menu / Back"],
+        "button_order": ["left", "right", "up", "down", "a", "b", "x", "y", "menu"],
+        "button_labels": ["Left", "Right", "Up", "Down", "Jump", "Back", "Fire", "Switch", "Menu"],
         "default_key_mapping": {
            "left": 21,
            "right": 22,
@@ -43,7 +44,8 @@
            "down": 20,
            "a": 62,
            "b": 129,
-           "c": 61,
+           "x": 61,
+           "y": 60,
            "menu": 111
         },
         "default_joy_mapping": {
@@ -53,7 +55,8 @@
            "down": -999,
            "a": 0,
            "b": 2,
-           "c": 1,
+           "x": 1,
+           "y": 3,
            "menu": 6
         },
         "default_axis_mapping": {
@@ -61,7 +64,7 @@
            "right": [1, 1],
            "up": [0, -1],
            "down": [0, 1]
-        },
+        }
     },
     "ios": {
 

@@ -1,6 +1,5 @@
 package net.dynart.neonsignal.components;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -76,7 +75,7 @@ public class PlayerComponent extends Component {
     private int jumpCounter = 0;
     private float inAirTime = 0;
     private float invincibleTime;
-    private boolean lastBDown = false;
+    private boolean lastXDown = false;
 
     private boolean flipX;
     private int axisXSign;
@@ -279,7 +278,7 @@ public class PlayerComponent extends Component {
     }
 
     private void switchWeapon() {
-        if (hasAbility(PlayerAbility.FIRE_PUNCH)) {
+        if (hasAbility(PlayerAbility.CHANGE_WEAPON)) {
             currentWeaponIndex++;
             if (currentWeaponIndex > 2) {
                 currentWeaponIndex = 0;
@@ -304,7 +303,7 @@ public class PlayerComponent extends Component {
         if (entityManager.isInAnimation()) {
             return;
         }
-        if (hasAbility(PlayerAbility.ANY_JUMP) && gameController.wantsToDrop() && jumpReleased) {
+        if (hasAbility(PlayerAbility.JUMPING) && gameController.wantsToDrop() && jumpReleased) {
             messageHandler.send(WANTS_TO_DROP);
             jumpReleased = false;
         }
@@ -331,7 +330,7 @@ public class PlayerComponent extends Component {
         adjustInvincibleBlink(delta);
         pickUpItems();
 
-        changeDown = gameController.isCDown();
+        changeDown = gameController.isYDown();
         if (hasAbility(PlayerAbility.CHANGE_WEAPON) && changeDown && !lastChangeDown) {
             switchWeapon();
         }
@@ -532,21 +531,21 @@ public class PlayerComponent extends Component {
     }
 
     private void handleFire() {
-        if (!hasAbility(PlayerAbility.ANY_PUNCH)) {
+        if (!hasAbility(PlayerAbility.FIRING)) {
             return;
         }
-        boolean bDown = gameController.isBDown();
+        boolean xDown = gameController.isXDown();
         if (onSwitch == null) {
-            if (bDown && !lastBDown && attackTime <= 0) {
+            if (xDown && !lastXDown && attackTime <= 0) {
                 fire();
             }
         } else {
-            if (bDown && !lastBDown) {
+            if (xDown && !lastXDown) {
                 KnifeSwitchComponent ksw = onSwitch.getComponent(KnifeSwitchComponent.class);
                 ksw.use();
             }
         }
-        lastBDown = bDown;
+        lastXDown = xDown;
     }
 
     private void adjustHealth(float delta) {
@@ -624,7 +623,7 @@ public class PlayerComponent extends Component {
     }
 
     private void handleVerticalVelocity(float delta) {
-        if (!hasAbility(PlayerAbility.ANY_JUMP)) {
+        if (!hasAbility(PlayerAbility.JUMPING)) {
             return;
         }
 
