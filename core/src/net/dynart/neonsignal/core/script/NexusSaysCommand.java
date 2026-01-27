@@ -34,20 +34,16 @@ public class NexusSaysCommand implements Command, SkippableCommand {
     private final float lineDelay;
     private final float holdTime;
     private final String buttonLabel;
-    private final boolean beginFade;
-    private final boolean endFade;
 
     private boolean first = true;
 
-    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel, boolean beginFade, boolean endFade) {
+    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
         this.cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
         this.lines = lines;
         this.charDelay = charDelay;
         this.lineDelay = lineDelay;
         this.holdTime = holdTime;
         this.buttonLabel = buttonLabel;
-        this.beginFade = beginFade;
-        this.endFade = endFade;
     }
 
     @Override

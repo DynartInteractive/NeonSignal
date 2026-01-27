@@ -75,6 +75,7 @@ public class SoundManager {
     private final Map<String[], Float> dnpaTime = new HashMap<>(); // dnpTime = do not play before time array (for random sound)
     private final Channel[] channels = new Channel[4];
     private int currentChannel;
+    private final Map<Long, Sound> instanceToSound = new HashMap<>();
     //private final AudioThread audioThread;
 
     public SoundManager(Engine engine) {
@@ -133,14 +134,28 @@ public class SoundManager {
             //audioThread.play(sound, this.volume * volume);
             channels[currentChannel].sound = sound;
             channels[currentChannel].instance = sound.play(this.volume * volume);
+            instanceToSound.put(channels[currentChannel].instance, sound);
             dnpTime.put(name, engine.getElapsedTime() + dnpDuration);
             currentChannel++;
             if (currentChannel == channels.length) {
                 currentChannel = 0;
             }
-            return channels[currentChannel].instance;
+            return channels[currentChannel == 0 ? channels.length - 1 : currentChannel - 1].instance;
         }
         return null;
+    }
+
+    public void stop(Long id) {
+        if (id != null && instanceToSound.containsKey(id)) {
+            instanceToSound.get(id).stop(id);
+            instanceToSound.remove(id);
+        }
+    }
+
+    public void setVolume(Long id, float volume) {
+        if (id != null && instanceToSound.containsKey(id)) {
+            instanceToSound.get(id).setVolume(id, this.volume * volume);
+        }
     }
 
     public void update() {

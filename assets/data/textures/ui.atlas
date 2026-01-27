@@ -20,6 +20,10 @@ bounds:1539,1644,108,144
 button_up
 bounds:1094,762,104,110
 split:34,37,27,31
+c_button_down
+bounds:179,317,106,112
+c_button_up
+bounds:1539,1530,106,112
 dialog_bg
 bounds:1,656,981,260
 split:67,61,65,72
@@ -82,11 +86,3 @@ transparent_white
 bounds:1094,744,16,16
 white
 bounds:778,524,16,16
-x_button_down
-bounds:179,317,106,112
-y_button_down
-bounds:179,317,106,112
-x_button_up
-bounds:1539,1530,106,112
-y_button_up
-bounds:1539,1530,106,112

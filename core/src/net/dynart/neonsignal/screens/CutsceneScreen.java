@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.TutorialTextProvider;
 import net.dynart.neonsignal.core.ui.FadeImage;
 import net.dynart.neonsignal.core.ui.MenuButton;
 import net.dynart.neonsignal.core.ui.MenuCursor;
@@ -86,7 +85,6 @@ public class CutsceneScreen extends MenuScreen {
 
     private final TextureManager textureManager;
     private final FontManager fontManager;
-    private final TutorialTextProvider tutorialTextProvider;
 
     public CutsceneScreen(Engine engine) {
         super(engine);
@@ -98,7 +96,6 @@ public class CutsceneScreen extends MenuScreen {
 
         textureManager = engine.getTextureManager();
         fontManager = engine.getFontManager();
-        tutorialTextProvider = engine.getTutorialTextProvider();
 /*
         // text bubble
         textBubbleBg = new Image(skin.getDrawable("text_bubble"));
@@ -571,8 +568,6 @@ public class CutsceneScreen extends MenuScreen {
 
     @Override
     public void moveIn() {
-        /*bottomBar.setVisible(false);
-        topBar.setVisible(false);*/
         if (moving) { return; }
         moving = true;
         topBar.setY(stage.getHeight());
@@ -643,14 +638,12 @@ public class CutsceneScreen extends MenuScreen {
         float totalTypingTime = 0;
         float[] lineStartTimes = new float[lines.size()];
 
-        String[] resolvedTexts = new String[lines.size()];
         for (int i = 0; i < lines.size(); i++) {
             NexusLine line = lines.get(i);
-            resolvedTexts[i] = tutorialTextProvider.resolveVariables(line.text);
             float lineDelayTime = (line.delay > 0) ? line.delay : (i > 0 ? lineDelay : 0);
             lineStartTimes[i] = totalTypingTime + lineDelayTime;
 
-            int visibleChars = countVisibleChars(resolvedTexts[i]);
+            int visibleChars = countVisibleChars(line.text);
             float typingDuration = visibleChars * charDelay;
             totalTypingTime = lineStartTimes[i] + typingDuration;
         }
@@ -682,7 +675,7 @@ public class CutsceneScreen extends MenuScreen {
 
             float startDelay = lineStartTimes[i];
 
-            TypewriterAction typewriter = new TypewriterAction(label, resolvedTexts[i], charDelay, null, soundManager, "terminal");
+            TypewriterAction typewriter = new TypewriterAction(label, line.text, charDelay, null, soundManager, "terminal");
             activeTypewriterActions.add(typewriter);
 
             label.addAction(Actions.sequence(
@@ -799,21 +792,21 @@ public class CutsceneScreen extends MenuScreen {
     }
 
     /**
-     * Count visible characters in text, excluding markup tags like <color> and </>.
+     * Count visible characters in text, excluding markup tags like [color] and [/].
      */
     private int countVisibleChars(String text) {
         int count = 0;
         boolean inTag = false;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (c == '<') {
-                if (i + 1 < text.length() && text.charAt(i + 1) == '<') {
+            if (c == '[') {
+                if (i + 1 < text.length() && text.charAt(i + 1) == '[') {
                     count++;
                     i++;
                 } else {
                     inTag = true;
                 }
-            } else if (c == '>' && inTag) {
+            } else if (c == ']' && inTag) {
                 inTag = false;
             } else if (!inTag) {
                 count++;

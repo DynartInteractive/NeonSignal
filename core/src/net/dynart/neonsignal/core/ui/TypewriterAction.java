@@ -65,7 +65,7 @@ public class TypewriterAction extends Action {
         }
 
         if (skipped) {
-            label.setText(convertMarkupToLibGDX(fullText));
+            label.setText(fullText);
             finish();
             return !fadingOut;
         }
@@ -81,11 +81,11 @@ public class TypewriterAction extends Action {
 
         if (targetChars > visibleCharCount) {
             visibleCharCount = Math.min(targetChars, totalVisibleChars);
-            label.setText(convertMarkupToLibGDX(getTextUpToVisibleChar(visibleCharCount)));
+            label.setText(getTextUpToVisibleChar(visibleCharCount));
         }
 
         if (visibleCharCount >= totalVisibleChars) {
-            label.setText(convertMarkupToLibGDX(fullText));
+            label.setText(fullText);
             finish();
             return !fadingOut;
         }
@@ -134,29 +134,22 @@ public class TypewriterAction extends Action {
     }
 
     /**
-     * Converts our <> markup to LibGDX's [] markup for label display.
-     */
-    private String convertMarkupToLibGDX(String text) {
-        return text.replace('<', '[').replace('>', ']');
-    }
-
-    /**
-     * Count visible characters in text, excluding markup tags like <color> and </>.
+     * Count visible characters in text, excluding markup tags like [color] and [/].
      */
     private int countVisibleChars(String text) {
         int count = 0;
         boolean inTag = false;
         for (int i = 0; i < text.length(); i++) {
             char c = text.charAt(i);
-            if (c == '<') {
-                // Check if this is an escaped bracket <<
-                if (i + 1 < text.length() && text.charAt(i + 1) == '<') {
-                    count++; // << counts as one visible <
-                    i++; // skip next <
+            if (c == '[') {
+                // Check if this is an escaped bracket [[
+                if (i + 1 < text.length() && text.charAt(i + 1) == '[') {
+                    count++; // [[ counts as one visible [
+                    i++; // skip next [
                 } else {
                     inTag = true;
                 }
-            } else if (c == '>' && inTag) {
+            } else if (c == ']' && inTag) {
                 inTag = false;
             } else if (!inTag) {
                 count++;
@@ -178,18 +171,18 @@ public class TypewriterAction extends Action {
         for (int i = 0; i < fullText.length() && visibleCount < targetVisibleChars; i++) {
             char c = fullText.charAt(i);
 
-            if (c == '<') {
-                // Check for escaped bracket <<
-                if (i + 1 < fullText.length() && fullText.charAt(i + 1) == '<') {
-                    result.append('<');
+            if (c == '[') {
+                // Check for escaped bracket [[
+                if (i + 1 < fullText.length() && fullText.charAt(i + 1) == '[') {
+                    result.append('[');
                     visibleCount++;
-                    i++; // skip next <
+                    i++; // skip next [
                     continue;
                 }
                 inTag = true;
                 tagStart = i;
                 result.append(c);
-            } else if (c == '>' && inTag) {
+            } else if (c == ']' && inTag) {
                 inTag = false;
                 result.append(c);
             } else if (inTag) {
@@ -203,7 +196,7 @@ public class TypewriterAction extends Action {
         // If we stopped mid-tag, complete it
         if (inTag && tagStart >= 0) {
             // Find the end of the current tag
-            int tagEnd = fullText.indexOf('>', result.length());
+            int tagEnd = fullText.indexOf(']', result.length());
             if (tagEnd >= 0) {
                 result.append(fullText, result.length(), tagEnd + 1);
             }

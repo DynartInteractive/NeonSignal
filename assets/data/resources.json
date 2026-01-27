@@ -31,7 +31,8 @@
         "electric_zap": {"path": "data/sounds/electric_zap.mp3"},
         "tram": {"path": "data/sounds/tram.mp3"},
         "tram2": {"path": "data/sounds/tram2.mp3"},
-        "tram_collide": {"path": "data/sounds/tram_collide.mp3"}
+        "tram_collide": {"path": "data/sounds/tram_collide.mp3"},
+        "terminal": {"path": "data/sounds/terminal.mp3"}
     },
     "music": {
         "logo": {"path": "data/music/logo.mp3"},
@@ -102,8 +103,7 @@
     },
     "fonts": {
         "default": {"path": "data/fonts/orbitron.fnt"},
-        "secondary": {"path": "data/fonts/orbitron_small.fnt", "load_now": true},
-        "text_bubble": {"path": "data/fonts/boldly_missy.fnt"}
+        "secondary": {"path": "data/fonts/orbitron_small.fnt", "load_now": true}
     },
     "textures": {
         "bg1_back": {"path": "data/textures/bg1_back.png"},

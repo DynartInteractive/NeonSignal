@@ -1,12 +1,14 @@
 {"sequence": [
   {"set_camera_limit": {"entity": "camera_limit"}},
-  {"add_player_ability": {"ability": "dash"}},
   {"nexus_says": {
     "lines": [
-      {"text": "Welcome to Neon Signal!", "margin_bottom": 20, "font": "default"},
-      {"text": "The signal is <#00ffff>strong<#ffffff> tonight."},
-      {"text": "Are you ready?"}
+      {"text": "Welcome to Neon Signal!", "delay": 0, "margin_bottom": 20, "font": "default"},
+      {"text": "The signal is [#00ffff]strong[#ffffff] tonight.", "delay": 0.5},
+      {"text": "Are you ready?", "delay": 1.0}
     ],
+    "char_delay": 0.04,
+    "line_delay": 0.6,
+    "hold_time": 3.0,
     "button_label": "Next"
   }}
 ]}
