@@ -117,6 +117,18 @@ public class PlayerComponent extends Component {
     private boolean poisonDamage;
     private Entity onSwitch;
 
+    // Dash state
+    private boolean lastBDown = false;
+    private float dashTime = 0;
+    private float lastDashTime = 0;
+    private float dashCooldownTime = 0;
+    private int dashDirection = 1;
+    private float gravityBeforeDash;
+
+    private static final float DASH_VELOCITY = 2100f;
+    private static final float DASH_DURATION = 0.3f;
+    private static final float DASH_COOLDOWN = 0.4f;
+
     private final Set<PlayerAbility> abilities = new HashSet<>();
 
 
@@ -151,6 +163,10 @@ public class PlayerComponent extends Component {
         gunBarrelPosition.put("player_jump_end", new Vector2(106, 160));
         gunBarrelPosition.put("player_jump_begin_diagonal_down", new Vector2(79, 77));
         gunBarrelPosition.put("player_jump_end_diagonal_down", new Vector2(79, 77));
+        gunBarrelPosition.put("player_dash_up", new Vector2(-35, 281));
+        gunBarrelPosition.put("player_dash_diagonal_up", new Vector2(40, 266));
+        gunBarrelPosition.put("player_dash", new Vector2(92, 144));
+        gunBarrelPosition.put("player_dash_diagonal_down", new Vector2(74, 69));
 
         gunBarrelVelocity.put("player_idle_up", new Vector2(0, 1));
         gunBarrelVelocity.put("player_idle_diagonal_up", new Vector2(0.707f, 0.707f));
@@ -167,6 +183,10 @@ public class PlayerComponent extends Component {
         gunBarrelVelocity.put("player_jump_end", new Vector2(1, 0));
         gunBarrelVelocity.put("player_jump_begin_diagonal_down", new Vector2(0.707f, -0.707f));
         gunBarrelVelocity.put("player_jump_end_diagonal_down", new Vector2(0.707f, -0.707f));
+        gunBarrelVelocity.put("player_dash_up", new Vector2(0, 1));
+        gunBarrelVelocity.put("player_dash_diagonal_up", new Vector2(0.707f, 0.707f));
+        gunBarrelVelocity.put("player_dash", new Vector2(1, 0));
+        gunBarrelVelocity.put("player_dash_diagonal_down", new Vector2(0.707f, -0.707f));
 
         GameScene gameScene = engine.getGameScene();
         gameController = engine.getGameController();
@@ -226,6 +246,20 @@ public class PlayerComponent extends Component {
             }
         }
         return false;
+    }
+
+    public boolean isDashing() {
+        return dashTime > 0;
+    }
+
+    public void cancelDash() {
+        if (dashTime > 0) {
+            dashTime = 0;
+            velocity.setGravity(gravityBeforeDash);
+            velocity.setMaxX(config.getPlayerMaxRunningVelocity());
+            velocity.setX(0);
+            velocity.setAcceleration(0);
+        }
     }
 
     public float getPower() {
@@ -320,7 +354,10 @@ public class PlayerComponent extends Component {
         handleVerticalVelocity(delta);
         handlePoisonedState(delta);
         if (!inPain) {
-            handleHorizontalVelocity();
+            handleDash(delta);
+            if (dashTime <= 0) {
+                handleHorizontalVelocity();
+            }
             handleGunPosition();
             handleFire();
         }
@@ -443,6 +480,7 @@ public class PlayerComponent extends Component {
         adjustView(delta);
         wasInPain = inPain;
         lastAttackTime = attackTime;
+        lastDashTime = dashTime;
         lastChangeDown = changeDown;
         lastPoisonedSecond = (int)poisonedTime;
 
@@ -565,6 +603,76 @@ public class PlayerComponent extends Component {
         return Math.abs(gameController.getAxisX()) > config.getPlayerMinHorizontalAxis();
     }
 
+    private void handleDash(float delta) {
+        // Update cooldown
+        if (dashCooldownTime > 0) {
+            dashCooldownTime -= delta;
+        }
+
+        // Check for dash input
+        boolean bDown = gameController.isBDown();
+        if (hasAbility(PlayerAbility.DASH) && bDown && !lastBDown
+                && dashTime <= 0 && dashCooldownTime <= 0 && !headUnderWater) {
+            // Start dash
+            dashTime = DASH_DURATION;
+            dashDirection = flipX ? -1 : 1;
+
+            // Disable gravity and increase max velocity during dash
+            gravityBeforeDash = velocity.getGravity();
+            velocity.setGravity(0);
+            velocity.setY(0);
+            velocity.setMaxX(DASH_VELOCITY);
+
+            soundManager.play("dash");
+            addDashDust();
+        }
+        lastBDown = bDown;
+
+        // During dash
+        if (dashTime > 0) {
+            dashTime -= delta;
+            velocity.setX(dashDirection * DASH_VELOCITY);
+            velocity.setAcceleration(0);
+
+            if (dashTime <= 0) {
+                // Dash ended, start cooldown
+                dashCooldownTime = DASH_COOLDOWN;
+
+                // Restore gravity and max velocity
+                velocity.setGravity(gravityBeforeDash);
+                velocity.setMaxX(config.getPlayerMaxRunningVelocity());
+
+                // Set up proper deceleration after dash
+                horizontalSign = dashDirection;
+                if (isHorizontalDown()) {
+                    // Player is holding direction, cap to normal max velocity
+                    velocity.setX(dashDirection * config.getPlayerMaxRunningVelocity());
+                } else {
+                    // Player not holding direction, start decelerating
+                    velocity.setAcceleration(-dashDirection * acceleration);
+                    velocity.setInitialX();
+                    lastHorizontalDown = true; // So handleHorizontalVelocity knows to decelerate
+                }
+            }
+        }
+    }
+
+    private void addDashDust() {
+        Entity dust = particlePool.obtain();
+        ParticleComponent particle = dust.getComponent(ParticleComponent.class);
+        particle.setLifeTime(0.25f);
+        BodyComponent dustBody = dust.getComponent(BodyComponent.class);
+        dustBody.setSize(16, 16);
+        dustBody.setAlign(Align.CENTER_BOTTOM);
+        dustBody.setX(body.getGlobalX());
+        dustBody.setY(body.getGlobalY());
+        ViewComponent view = dust.getComponent(ViewComponent.class);
+        view.setAnimation(0, "dust");
+        view.setAlign(0, Align.CENTER_BOTTOM);
+        view.flipX(!flipX);
+        entityManager.add(dust);
+    }
+
     private void handleHorizontalVelocity() {
         if (!hasAbility(PlayerAbility.MOVE)) {
             return;
@@ -651,6 +759,13 @@ public class PlayerComponent extends Component {
             }
             int maxJumpCount = hasAbility(PlayerAbility.DOUBLE_JUMP) ? 2 : 1;
             if (gameController.isADown() && jumpReleased && (jumpCounter < maxJumpCount || headUnderWater)) {
+                // Cancel dash if jumping during dash (restore gravity first)
+                if (dashTime > 0) {
+                    velocity.setGravity(gravityBeforeDash);
+                    velocity.setMaxX(config.getPlayerMaxRunningVelocity());
+                    dashTime = 0;
+                    dashCooldownTime = DASH_COOLDOWN;
+                }
                 float vy = headUnderWater ? config.getPlayerJumpVelocity() / 2.8f : config.getPlayerJumpVelocity();
                 velocity.setY(vy);
                 jumpCounter++;
@@ -740,6 +855,13 @@ public class PlayerComponent extends Component {
                     setAnimationTime(0);
                     setAnimation("attack1");
                 }
+
+            } else if (dashTime > 0) {
+                // dash animation - reset time when dash just started
+                if (lastDashTime == 0) {
+                    setAnimationTime(0);
+                }
+                setAnimation("dash");
 
             } else if (!body.isInAir()) {
 

@@ -70,6 +70,8 @@ public class SceneWarpComponent extends Component {
                 if (body.isOverlap(otherBody)) {
                     entityForMove = otherEntity; // on next update
                     entityForMove.setParent(null);
+                    PlayerComponent player = entityForMove.getComponent(PlayerComponent.class);
+                    player.cancelDash();
                     ViewComponent view = entityForMove.getComponent(ViewComponent.class);
                     view.setPaused(true);
                     if (fade) delay = 0.5f; // wait for fade out to finish

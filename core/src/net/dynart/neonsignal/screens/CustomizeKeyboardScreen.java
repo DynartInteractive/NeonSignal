@@ -1,6 +1,10 @@
 package net.dynart.neonsignal.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import net.dynart.neonsignal.core.controller.Button;
 import net.dynart.neonsignal.core.controller.ControlNameProvider;
@@ -14,6 +18,7 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
     private final ControlNameProvider controlNameProvider;
     private int keyCodeForAssign;
     private DialogStage dialogStage;
+    private final Set<Integer> keysToIgnore = new HashSet<>();
 
     public CustomizeKeyboardScreen(final Engine engine) {
         super(engine);
@@ -41,12 +46,21 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
     @Override
     void menuButtonClicked(MenuButton menuButton) {
         if (isAnimating()) { return; }
+        keysToIgnore.clear();
+        for (int i = 0; i < 256; i++) {
+            if (Gdx.input.isKeyPressed(i)) {
+                keysToIgnore.add(i);
+            }
+        }
         dialogStage.setKeyUpListener(this);
         showDialog("key", menuButton);
     }
 
     @Override
     public void keyUp(int keyCode) {
+        if (keysToIgnore.remove(keyCode)) {
+            return;
+        }
         dialogStage.setKeyUpListener(null);
         keyCodeForAssign = keyCode;
         Button buttonForSet = (Button)menuButtonForSet.getUserObject();
