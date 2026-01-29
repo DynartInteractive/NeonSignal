@@ -20,8 +20,8 @@ timeline0: 0.0
 - Life - 
 lowMin: 100.0
 lowMax: 100.0
-highMin: 500.0
-highMax: 500.0
+highMin: 200.0
+highMax: 200.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -61,7 +61,7 @@ timeline0: 0.0
 lowMin: 5.0
 lowMax: 5.0
 highMin: 10.0
-highMax: 20.0
+highMax: 15.0
 relative: false
 scalingCount: 3
 scaling0: 0.0
@@ -75,10 +75,10 @@ timeline2: 1.0
 active: false
 - Velocity - 
 active: true
-lowMin: 300.0
-lowMax: 300.0
-highMin: 600.0
-highMax: 600.0
+lowMin: 400.0
+lowMax: 400.0
+highMin: 400.0
+highMax: 500.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -88,8 +88,8 @@ timeline0: 0.0
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: -15.0
-highMax: 15.0
+highMin: -30.0
+highMax: 30.0
 relative: false
 scalingCount: 1
 scaling0: 1.0
@@ -114,9 +114,9 @@ active: false
 active: true
 lowMin: 0.0
 lowMax: 0.0
-highMin: -330.0
-highMax: -330.0
-relative: true
+highMin: 0.0
+highMax: 0.0
+relative: false
 scalingCount: 2
 scaling0: 0.0
 scaling1: 1.0

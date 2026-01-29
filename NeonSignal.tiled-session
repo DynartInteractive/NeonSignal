@@ -64,7 +64,7 @@
     "openFiles": [
     ],
     "project": "NeonSignal.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "assets/data/levels/test.tmx",
         "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx",

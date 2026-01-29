@@ -20,6 +20,7 @@ public class BulletOptions {
     public String sprite = null;
     public boolean explosive = false;
     public String sparkEffect = null;
+    public String[] hitSounds = new String[] {};
 
     public BulletOptions() {}
 

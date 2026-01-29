@@ -1,5 +1,7 @@
 package net.dynart.neonsignal.components;
 
+import com.badlogic.gdx.Gdx;
+
 import net.dynart.neonsignal.core.BulletPool;
 import net.dynart.neonsignal.core.Component;
 import net.dynart.neonsignal.core.Entity;
@@ -23,7 +25,7 @@ public class BulletComponent extends Component {
     private float lifeTime = -1;
     private float elapsedTime;
     private boolean explosive;
-    private String collisionSound;
+    private String[] hitSounds;
     private String sparkEffect;
 
     @Override
@@ -60,8 +62,8 @@ public class BulletComponent extends Component {
         explosive = value;
     }
 
-    public void setCollisionSound(String value) {
-        collisionSound = value;
+    public void setHitSounds(String[] value) {
+        hitSounds = value;
     }
 
     public void setSparkEffect(String value) {
@@ -88,8 +90,10 @@ public class BulletComponent extends Component {
         OverlapAttackComponent overlapAttack = entity.getComponent(OverlapAttackComponent.class);
         overlapAttack.setActive(false);
 
-        if (collisionSound != null) {
-            soundManager.play(collisionSound, entity.getVolumeRelatedToPlayer());
+        if (hitSounds.length > 0) {
+            Gdx.app.log("Bullet", "Hit volume: " + entity.getVolumeRelatedToPlayer());
+
+            soundManager.playRandom(hitSounds, entity.getVolumeRelatedToPlayer());
         }
 
         // Spawn spark effect rotated based on bullet velocity

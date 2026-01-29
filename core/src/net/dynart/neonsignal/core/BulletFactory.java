@@ -54,7 +54,7 @@ public class BulletFactory {
 
         BulletComponent bullet = bulletEntity.getComponent(BulletComponent.class);
         bullet.setLifeTime(o.lifeTime);
-        bullet.setCollisionSound(null);
+        bullet.setHitSounds(o.hitSounds);
         bullet.setExplosive(o.explosive);
         bullet.setSparkEffect(o.sparkEffect);
 

@@ -133,8 +133,10 @@ public class PlayerComponent extends Component {
 
 
     private static final String[] fallDownSounds = { "falldown", "falldown2", "falldown3" };
-    private static final String[] punchSounds = { "punch1", "punch2", "punch3" }; // 577063__bertsz__cinematic-punches.wav
     private static final String[] swimSounds = { "swim1", "swim2", "swim3" }; // avosound.com, Sound ID: 80475, Filename: Water,Churn,Heavy,Underwater,Metallic.wav
+
+    private static final String[] bulletHitSounds = { "laser_hit1", "laser_hit2" };
+    private static final String[] bulletFireSounds = { "laser_fire1", "laser_fire2", "laser_fire1" };
 
     private String animPrefix = "";
 
@@ -1048,7 +1050,12 @@ public class PlayerComponent extends Component {
         bo.positionY = b.y;
         bo.velocityX = (flipX ? -1 : 1) * gunBVel.x * 1000f;
         bo.velocityY = gunBVel.y * 1000f;
+        bo.sparkEffect = "bullet_sparks";
+        bo.hitSounds = bulletHitSounds;
+
         //bo.sprite = "player_bullet1";
+
+        soundManager.playRandom(bulletFireSounds);
 
         bulletFactory.create(bo);
     }
