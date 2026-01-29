@@ -10,6 +10,8 @@ Integrate LibGDX's built-in particle system with GDX Particle Editor support int
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.collision.BoundingBox;
 ```
 
 ## Architecture
@@ -22,7 +24,8 @@ Loads `.p` files created with GDX Particle Editor and pools effects using `Parti
 public class ParticleEffectManager {
     private TextureManager textureManager;
     private Map<String, ParticleEffectPool> pools = new HashMap<>();
-    private List<PooledEffect> activeEffects = new ArrayList<>();
+    private List<PooledEffect> backEffects = new ArrayList<>();  // Behind entities
+    private List<PooledEffect> frontEffects = new ArrayList<>(); // In front of entities
 
     public ParticleEffectManager(Engine engine) {
         this.textureManager = engine.getTextureManager();
@@ -36,15 +39,29 @@ public class ParticleEffectManager {
     }
 
     public PooledEffect spawn(String name, float x, float y) {
-        PooledEffect effect = pools.get(name).obtain();
+        return spawn(name, x, y, false);
+    }
+
+    public PooledEffect spawn(String name, float x, float y, boolean behind) {
+        ParticleEffectPool pool = pools.get(name);
+        if (pool == null) {
+            Gdx.app.error("Particles", "Unknown effect: " + name);
+            return null;
+        }
+        PooledEffect effect = pool.obtain();
         effect.setPosition(x, y);
         effect.start();
-        activeEffects.add(effect);
+        (behind ? backEffects : frontEffects).add(effect);
         return effect;
     }
 
     public void update(float delta) {
-        for (Iterator<PooledEffect> it = activeEffects.iterator(); it.hasNext();) {
+        updateList(backEffects, delta);
+        updateList(frontEffects, delta);
+    }
+
+    private void updateList(List<PooledEffect> effects, float delta) {
+        for (Iterator<PooledEffect> it = effects.iterator(); it.hasNext();) {
             PooledEffect effect = it.next();
             effect.update(delta);
             if (effect.isComplete()) {
@@ -54,9 +71,34 @@ public class ParticleEffectManager {
         }
     }
 
-    public void draw(SpriteBatch batch) {
-        for (PooledEffect effect : activeEffects) {
-            effect.draw(batch);
+    public void drawBack(SpriteBatch batch, Rectangle viewport) {
+        drawList(backEffects, batch, viewport);
+    }
+
+    public void drawFront(SpriteBatch batch, Rectangle viewport) {
+        drawList(frontEffects, batch, viewport);
+    }
+
+    private void drawList(List<PooledEffect> effects, SpriteBatch batch, Rectangle viewport) {
+        for (PooledEffect effect : effects) {
+            BoundingBox bb = effect.getBoundingBox();
+            if (viewport.overlaps(bb.min.x, bb.min.y, bb.getWidth(), bb.getHeight())) {
+                effect.draw(batch);
+            }
+        }
+    }
+
+    public void dispose() {
+        for (PooledEffect effect : backEffects) {
+            effect.free();
+        }
+        for (PooledEffect effect : frontEffects) {
+            effect.free();
+        }
+        backEffects.clear();
+        frontEffects.clear();
+        for (ParticleEffectPool pool : pools.values()) {
+            pool.clear();
         }
     }
 }
@@ -74,8 +116,11 @@ public class ParticleEmitterComponent extends Component {
 
     private String effectName;
     private boolean continuous;
+    private boolean behind;        // Render behind entities
     private Align align;           // Emission point alignment
     private float offsetX, offsetY; // Additional offset from aligned position
+    private boolean flipWithEntity; // Flip effect when entity faces left
+    private float prewarmTime;     // Pre-simulate this many seconds on spawn
 
     @Override
     public void postConstruct(Entity entity) {
@@ -84,13 +129,19 @@ public class ParticleEmitterComponent extends Component {
         body = entity.getComponent(BodyComponent.class);
 
         if (continuous) {
-            effect = particleManager.spawn(effectName, getEmitX(), getEmitY());
-            effect.setContinuous(true);
+            effect = particleManager.spawn(effectName, getEmitX(), getEmitY(), behind);
+            if (effect != null) {
+                effect.setContinuous(true);
+                if (prewarmTime > 0) {
+                    effect.update(prewarmTime); // Pre-simulate to avoid empty start
+                }
+            }
         }
     }
 
     private float getEmitX() {
-        return body.getCenterX() + align.getLeftMultiplier() * body.getHalfWidth() + offsetX;
+        float flipMultiplier = (flipWithEntity && !body.isFacingRight()) ? -1 : 1;
+        return body.getCenterX() + (align.getLeftMultiplier() * body.getHalfWidth() + offsetX) * flipMultiplier;
     }
 
     private float getEmitY() {
@@ -101,12 +152,27 @@ public class ParticleEmitterComponent extends Component {
     public void update(float delta) {
         if (effect != null) {
             effect.setPosition(getEmitX(), getEmitY());
+            // Flip particle direction when entity changes facing
+            if (flipWithEntity) {
+                effect.setFlip(!body.isFacingRight(), false);
+            }
         }
     }
 
     // For one-shot effects triggered by events
     public void emit() {
-        particleManager.spawn(effectName, getEmitX(), getEmitY());
+        PooledEffect spawned = particleManager.spawn(effectName, getEmitX(), getEmitY(), behind);
+        if (spawned != null && flipWithEntity && !body.isFacingRight()) {
+            spawned.setFlip(true, false);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (effect != null) {
+            effect.allowCompletion(); // Let particles fade out naturally
+            effect = null;
+        }
     }
 }
 ```
@@ -119,7 +185,7 @@ private ParticleEffectManager particleEffectManager;
 
 public void init() {
     // ... existing code ...
-    particleEffectManager = new ParticleEffectManager();
+    particleEffectManager = new ParticleEffectManager(engine);
 }
 
 public void update(float deltaTime) {
@@ -128,14 +194,28 @@ public void update(float deltaTime) {
 }
 
 public void draw() {
-    // ... existing layers ...
+    Rectangle viewport = camera.getViewportBounds();
 
-    // Draw particles after entities but before front layer
+    // ... background layers ...
+
+    // Draw particles behind entities
     batch.begin();
-    particleEffectManager.draw(batch);
+    particleEffectManager.drawBack(batch, viewport);
     batch.end();
 
-    // ... front layers ...
+    // ... draw entities ...
+
+    // Draw particles in front of entities
+    batch.begin();
+    particleEffectManager.drawFront(batch, viewport);
+    batch.end();
+
+    // ... front layers (UI, etc.) ...
+}
+
+public void dispose() {
+    // ... existing dispose code ...
+    particleEffectManager.dispose();
 }
 ```
 
@@ -161,9 +241,12 @@ public Entity createParticleEmitter(Parameters parameters) {
         new ParticleEmitterComponent(
             parameters.get("effect", "dust"),
             parameters.getBoolean("continuous", true),
+            parameters.getBoolean("behind", false),
             Align.valueOf(parameters.get("align", "center").toUpperCase()),
             parameters.getFloat("offsetX", 0),
-            parameters.getFloat("offsetY", 0)
+            parameters.getFloat("offsetY", 0),
+            parameters.getBoolean("flipWithEntity", false),
+            parameters.getFloat("prewarmTime", 0)
         )
     );
     return result;
@@ -173,12 +256,12 @@ public Entity createParticleEmitter(Parameters parameters) {
 ## File Structure
 
 ```
+assets/data/textures/
+├── particles.atlas  # Created with GDX Texture Packer
+└── particles.png    # Created with GDX Texture Packer
 assets/data/particles/
 ├── dust.p           # Created with GDX Particle Editor
-├── dust.png         # Particle texture (or use atlas)
-├── fire.p
-├── fire.png
-└── sparkle.p
+└── fire.p           # Created with GDX Particle Editor
 ```
 
 ## Level Placement (Tiled)
@@ -189,9 +272,12 @@ Entity type uses snake_case:
 type: "particle_emitter"
 effect: "fire"
 continuous: true
+behind: false            # true = render behind entities, false = in front
 align: "center_bottom"   # Uses Align enum: center, center_bottom, left_top, etc.
 offsetX: 0               # Additional offset from aligned position
 offsetY: 0
+flipWithEntity: false    # true = flip effect direction when entity faces left
+prewarmTime: 0           # Seconds to pre-simulate (avoids empty start for continuous effects)
 ```
 
 ## Code-Triggered Effects
@@ -199,8 +285,11 @@ offsetY: 0
 For one-shot effects from components (e.g., in PlayerComponent):
 
 ```java
-// One-shot effect on dash
+// One-shot effect on dash (renders in front of entities)
 particleEffectManager.spawn("dash_dust", body.getCenterX(), body.getBottom());
+
+// Ambient effect behind entities
+particleEffectManager.spawn("ambient_dust", x, y, true);
 ```
 
 ## Advantages of LibGDX Particles
@@ -215,10 +304,10 @@ particleEffectManager.spawn("dash_dust", body.getCenterX(), body.getBottom());
 
 ## Implementation Steps
 
-1. Create `ParticleEffectManager` class
-2. Add manager to `GameScene` (init, update, draw, dispose)
+1. Create `ParticleEffectManager` class (with back/front layers, culling, dispose)
+2. Add manager to `GameScene` (init, update, drawBack/drawFront, dispose)
 3. Add `particles` section to `resources.json` loading
-4. Create `ParticleEmitterComponent`
+4. Create `ParticleEmitterComponent` (with flip support, prewarm, destroy cleanup)
 5. Add `createParticleEmitter` factory method
 6. Create test particle effect with GDX Particle Editor
 7. Place test emitter in level

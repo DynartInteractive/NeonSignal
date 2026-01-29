@@ -19,6 +19,7 @@ public class BulletOptions {
     public Float sizeY = null;
     public String sprite = null;
     public boolean explosive = false;
+    public String sparkEffect = null;
 
     public BulletOptions() {}
 

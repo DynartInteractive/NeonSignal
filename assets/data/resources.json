@@ -127,6 +127,10 @@
         "sprites": {"path": "data/textures/sprites.atlas"},
         "logo": {"path": "data/textures/logo.atlas"}
     },
+    "particles": {
+        "test": {"path": "data/particles/test.p", "atlas": "sprites"},
+        "bullet_sparks": {"path": "data/particles/bullet_sparks.p", "atlas": "sprites"}
+    },
     "sprite_animations": {
 
         "player_idle_up": {"duration": 0.1, "atlas": "sprites", "region": "player_idle_up", "mode": "normal"},

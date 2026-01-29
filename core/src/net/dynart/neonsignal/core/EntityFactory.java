@@ -24,6 +24,7 @@ import net.dynart.neonsignal.components.ActivateOnScreenComponent;
 import net.dynart.neonsignal.components.ItemComponent;
 import net.dynart.neonsignal.components.MovableComponent;
 import net.dynart.neonsignal.components.OxygenComponent;
+import net.dynart.neonsignal.components.ParticleEmitterComponent;
 import net.dynart.neonsignal.components.PlatformComponent;
 import net.dynart.neonsignal.components.PusherComponent;
 import net.dynart.neonsignal.components.ReviveComponent;
@@ -570,6 +571,25 @@ public class EntityFactory {
             new EnemyBlockComponent()
         );
         return enemyBlock;
+    }
+
+    public Entity createParticleEmitter(Parameters parameters) {
+        Entity emitter = new Entity(engine);
+        emitter.addComponents(
+            createBody(parameters),
+            new ParticleEmitterComponent(
+                parameters.get("effect", "dust"),
+                parameters.getBoolean("continuous", true),
+                parameters.getBoolean("behind", false),
+                Align.valueOf(parameters.get("align", "center").toUpperCase()),
+                parameters.getFloat("offsetX", 0),
+                parameters.getFloat("offsetY", 0),
+                parameters.getBoolean("flipWithEntity", false),
+                parameters.getFloat("prewarmTime", 0),
+                parameters.getFloat("rotation", 0)
+            )
+        );
+        return emitter;
     }
 
     public Entity createDecoration(Parameters parameters) {

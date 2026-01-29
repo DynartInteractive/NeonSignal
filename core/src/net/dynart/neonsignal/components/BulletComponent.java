@@ -6,6 +6,7 @@ import net.dynart.neonsignal.core.Entity;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.GameScene;
 import net.dynart.neonsignal.core.listeners.MessageListener;
+import net.dynart.neonsignal.core.ParticleEffectManager;
 import net.dynart.neonsignal.core.ParticlePool;
 import net.dynart.neonsignal.core.SoundManager;
 import net.dynart.neonsignal.core.utils.Align;
@@ -13,14 +14,17 @@ import net.dynart.neonsignal.core.utils.Align;
 public class BulletComponent extends Component {
 
     private BodyComponent body;
+    private VelocityComponent velocity;
     private EntityManager entityManager;
     private SoundManager soundManager;
     private BulletPool bulletPool;
     private ParticlePool particlePool;
+    private ParticleEffectManager particleEffectManager;
     private float lifeTime = -1;
     private float elapsedTime;
     private boolean explosive;
     private String collisionSound;
+    private String sparkEffect;
 
     @Override
     public void postConstruct(final Entity entity) {
@@ -30,7 +34,9 @@ public class BulletComponent extends Component {
         entityManager = gameScene.getEntityManager();
         bulletPool = gameScene.getBulletPool();
         particlePool = gameScene.getParticlePool();
+        particleEffectManager = gameScene.getParticleEffectManager();
         body = entity.getComponent(BodyComponent.class);
+        velocity = entity.getComponent(VelocityComponent.class);
 
         MessageListener collisionListener = new MessageListener() {
             @Override
@@ -58,6 +64,10 @@ public class BulletComponent extends Component {
         collisionSound = value;
     }
 
+    public void setSparkEffect(String value) {
+        sparkEffect = value;
+    }
+
     @Override
     public void update(float delta) {
         elapsedTime += delta;
@@ -80,6 +90,16 @@ public class BulletComponent extends Component {
 
         if (collisionSound != null) {
             soundManager.play(collisionSound, entity.getVolumeRelatedToPlayer());
+        }
+
+        // Spawn spark effect rotated based on bullet velocity
+        if (sparkEffect != null && velocity != null) {
+            particleEffectManager.spawnWithVelocity(
+                sparkEffect,
+                body.getCenterX(), body.getCenterY(),
+                velocity.getLastX(), velocity.getLastY(),
+                false
+            );
         }
 
         remove();

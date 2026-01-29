@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import net.dynart.neonsignal.components.ColliderComponent;
 import net.dynart.neonsignal.components.ElectricSpikeComponent;
+import net.dynart.neonsignal.components.ParticleEmitterComponent;
 import net.dynart.neonsignal.components.PlatformComponent;
 import net.dynart.neonsignal.components.PlayerComponent;
 
@@ -47,6 +48,7 @@ public class GameScene {
     private Camera camera;
     private CameraHandler cameraHandler;
     private ParticlePool particlePool;
+    private ParticleEffectManager particleEffectManager;
     private BulletPool bulletPool;
     private BulletFactory bulletFactory;
     private ShapeRenderer shapeRenderer;
@@ -86,6 +88,7 @@ public class GameScene {
         pathManager = new PathManager();
         secretManager = new SecretManager(engine);
         particlePool = new ParticlePool(engine);
+        particleEffectManager = new ParticleEffectManager(engine);
         bulletPool = new BulletPool(engine);
         bulletFactory = new BulletFactory(engine);
         entityFactory.postConstruct(engine); // needs to be on the end
@@ -114,6 +117,10 @@ public class GameScene {
 
     public ParticlePool getParticlePool() {
         return particlePool;
+    }
+
+    public ParticleEffectManager getParticleEffectManager() {
+        return particleEffectManager;
     }
 
     public BulletPool getBulletPool() {
@@ -168,6 +175,7 @@ public class GameScene {
         grid.clear();
         pathManager.clear();
         secretManager.clear();
+        particleEffectManager.clear();
         secretLayer[0] = -1; // no secret layer
         for (int i = 0; i < 4; i++) {
             cameraHandler.setNewLimit(i, -1);
@@ -227,6 +235,7 @@ public class GameScene {
         firstFrame = false;
         entityManager.update(dt);
         secretManager.update(dt);
+        particleEffectManager.update(dt);
         updateCamera(dt);
     }
 
@@ -240,7 +249,9 @@ public class GameScene {
         tiledMapRenderer.setView((OrthographicCamera)camera);
         drawBackgrounds();
         tiledMapRenderer.render(backLayers);
+        drawParticlesBack();
         drawEntities(false);
+        drawParticlesFront();
         tiledMapRenderer.render(frontLayers);
 
         drawSecretLayer();
@@ -261,6 +272,7 @@ public class GameScene {
 
     public void dispose() {
         batch.dispose();
+        particleEffectManager.dispose();
         if (backgroundFrontTexture != null) {
             backgroundFrontTexture.dispose();
         }
@@ -298,6 +310,18 @@ public class GameScene {
             mop.setActive(mop.isStart());
         }
         */
+    }
+
+    private void drawParticlesBack() {
+        batch.begin();
+        particleEffectManager.drawBack(batch, camera);
+        batch.end();
+    }
+
+    private void drawParticlesFront() {
+        batch.begin();
+        particleEffectManager.drawFront(batch, camera);
+        batch.end();
     }
 
     private void drawSecretLayer() {

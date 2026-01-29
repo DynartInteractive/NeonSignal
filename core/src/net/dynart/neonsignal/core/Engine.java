@@ -233,6 +233,7 @@ public class Engine implements LoadingFinishedListener {
     private void setUpGameScene() {
         gameScene = new GameScene(this);
         gameScene.init();
+        gameScene.getParticleEffectManager().load(resourcesJson);
         gameSceneLoader = new GameSceneLoader(this);
     }
 
