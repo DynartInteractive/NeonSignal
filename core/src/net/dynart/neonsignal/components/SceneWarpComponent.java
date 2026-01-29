@@ -1,22 +1,22 @@
 package net.dynart.neonsignal.components;
 
-import com.badlogic.gdx.Gdx;
-
 import net.dynart.neonsignal.core.Component;
 import net.dynart.neonsignal.core.Entity;
 import net.dynart.neonsignal.core.EntityManager;
 import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.utils.Direction;
 
 public class SceneWarpComponent extends Component {
+
+    // Warp just before fade completes (while screen is black), before CameraHandler switches screens
+    private static final float FADE_DELAY = 0.45f;
 
     private BodyComponent body;
     private EntityManager entityManager;
     private final String targetName;
     private BodyComponent targetBody;
     private Entity entityForMove;
-    private float delay;
-    private boolean fade;
+    private float fadeTimer;
+    private final boolean fade;
 
     public SceneWarpComponent(String targetName, boolean fade) {
         this.targetName = targetName;
@@ -45,10 +45,12 @@ public class SceneWarpComponent extends Component {
             }
         }
 
-        // update
-        if (delay > 0) {
-            delay -= delta;
-            return;
+        // Wait for fade delay before warping (fade is triggered by CameraHandler)
+        if (fadeTimer > 0) {
+            fadeTimer -= delta;
+            if (fadeTimer > 0) {
+                return;
+            }
         }
 
         if (entityForMove != null) {
@@ -63,7 +65,6 @@ public class SceneWarpComponent extends Component {
             velocity.setInitialX();
             velocity.setInitialY();
             entityForMove = null;
-            delay = 0;
         } else {
             for (Entity otherEntity : entityManager.getAllByClass(PlayerComponent.class)) {
                 BodyComponent otherBody = otherEntity.getComponent(BodyComponent.class);
@@ -74,7 +75,9 @@ public class SceneWarpComponent extends Component {
                     player.cancelDash();
                     ViewComponent view = entityForMove.getComponent(ViewComponent.class);
                     view.setPaused(true);
-                    if (fade) delay = 0.5f; // wait for fade out to finish
+                    if (fade) {
+                        fadeTimer = FADE_DELAY;
+                    }
                 }
             }
         }
