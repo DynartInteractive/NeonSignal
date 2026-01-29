@@ -26,26 +26,27 @@
         "default_gravity": -4500.0,
         "default_sound_volume": 1.0,
         "default_music_volume": 0.5,
+        "audio_max_distance": 960.0,
         "default_controller_type": "touch",
         "unused_button_code": -999,
         "touch_button_names": ["b", "x", "y"],
         "touch_button_size": 100,
         "default_touch_positions": {
-           "b": [-248, 513],
-           "x": [-248, 303],
-           "y": [-75, 513]
+           "b": [-171, 404],
+           "x": [-268, 300],
+           "y": [-77, 515]
         },
         "button_order": ["left", "right", "up", "down", "a", "b", "x", "y", "menu"],
-        "button_labels": ["Left", "Right", "Up", "Down", "Jump", "Back", "Fire", "Switch", "Menu"],
+        "button_labels": ["Left", "Right", "Up", "Down", "Jump", "Dash", "Fire", "Switch", "Menu"],
         "default_key_mapping": {
            "left": 21,
            "right": 22,
            "up": 19,
            "down": 20,
            "a": 62,
-           "b": 129,
-           "x": 61,
-           "y": 60,
+           "b": 57,
+           "x": 59,
+           "y": 61,
            "menu": 111
         },
         "default_joy_mapping": {
@@ -54,8 +55,8 @@
            "up": -999,
            "down": -999,
            "a": 0,
-           "b": 2,
-           "x": 1,
+           "b": 1,
+           "x": 2,
            "y": 3,
            "menu": 6
         },

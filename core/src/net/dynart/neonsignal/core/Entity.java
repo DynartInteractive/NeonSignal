@@ -193,7 +193,7 @@ public class Entity {
         BodyComponent playerBody = player.getComponent(BodyComponent.class);
         Vector2 v = new Vector2(body.getCenterX() - playerBody.getCenterX(), body.getCenterY() - playerBody.getCenterY());
         float distance = v.len();
-        float audioMaxDistance = 160;
+        float audioMaxDistance = engine.getConfig().getAudioMaxDistance();
         if (distance < audioMaxDistance) {
             volume = 1.0f - distance / audioMaxDistance;
         }

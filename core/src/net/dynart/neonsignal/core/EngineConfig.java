@@ -53,6 +53,7 @@ public class EngineConfig {
     protected float defaultGravity = 0.25f;
     protected float defaultSoundVolume = 0.75f;
     protected float defaultMusicVolume = 1f;
+    protected float audioMaxDistance = 160f;
     protected int unusedButtonCode = -999;
     protected boolean mobile;
     protected ControllerType defaultControllerType = ControllerType.TOUCH;
@@ -303,6 +304,10 @@ public class EngineConfig {
 
     public float getDefaultMusicVolume() {
         return defaultMusicVolume;
+    }
+
+    public float getAudioMaxDistance() {
+        return audioMaxDistance;
     }
 
     public ControllerType getDefaultControllerType() {
