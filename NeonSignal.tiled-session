@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "assets/data/levels/test1.tmx",
     "expandedProjectPaths": [
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
@@ -49,6 +49,14 @@
                 "y": 577.3333333333333
             }
         },
+        "assets/data/levels/test1.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 3884,
+                "y": 704
+            }
+        },
         "assets/data/levels/tileset1.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 0.5,
@@ -62,10 +70,12 @@
     "map.tileWidth": 48,
     "map.width": 60,
     "openFiles": [
+        "assets/data/levels/test1.tmx"
     ],
     "project": "NeonSignal.tiled-project",
     "property.type": "string",
     "recentFiles": [
+        "assets/data/levels/test1.tmx",
         "assets/data/levels/test.tmx",
         "C:/Users/gopher/Projects/coolfox/assets/data/levels/world1/level1_test2.tmx",
         "assets/data/levels/objects.tsx",
