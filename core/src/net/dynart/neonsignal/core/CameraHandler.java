@@ -70,8 +70,8 @@ public class CameraHandler {
                 System.arraycopy(newLimit, 0, limit, 0, 4);
                 fading = false;
                 fadeToLimit = false;
-                engine.getScreen("empty").fadeIn();
-                engine.setScreen("empty");
+                engine.getScreen("game_fade_in").fadeIn(); // otherwise flashing happens
+                engine.setScreen("game_fade_in");
                 return true;
             }
         };

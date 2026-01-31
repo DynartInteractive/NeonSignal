@@ -7,6 +7,8 @@ import net.dynart.neonsignal.core.GameScene;
 
 public class SceneWarpComponent extends Component {
 
+    private static String LOG_TAG = "SceneWrapComponent";
+
     // Warp just before fade completes (while screen is black), before CameraHandler switches screens
     private static final float FADE_DELAY = 0.45f;
 

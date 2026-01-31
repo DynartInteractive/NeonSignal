@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import net.dynart.neonsignal.core.LevelManager;
 import net.dynart.neonsignal.core.listeners.LoadingFinishedListener;
 
-import net.dynart.neonsignal.core.ui.Styles;
 import net.dynart.neonsignal.screens.CutsceneScreen;
 import net.dynart.neonsignal.screens.CompletedScreen;
 import net.dynart.neonsignal.screens.CustomizeGamepadScreen;
 import net.dynart.neonsignal.screens.CustomizeKeyboardScreen;
 import net.dynart.neonsignal.screens.CustomizeTouchScreen;
 import net.dynart.neonsignal.screens.DialogScreen;
-import net.dynart.neonsignal.screens.EmptyScreen;
+import net.dynart.neonsignal.screens.GameFadeInScreen;
 import net.dynart.neonsignal.screens.GameOverScreen;
 import net.dynart.neonsignal.screens.GameScreen;
 import net.dynart.neonsignal.screens.LoadingScreen;
@@ -78,9 +77,9 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     @Override
     public void loadingFinished() {
         GameScreen gameScreen = new GameScreen(engine);
-        engine.addScreen("empty", new EmptyScreen(engine));
         engine.addScreen("logo", new LogoScreen(engine));
         engine.addScreen("dialog", new DialogScreen(engine));
+        engine.addScreen("game_fade_in", new GameFadeInScreen(engine));
         engine.addScreen("game", gameScreen);
         engine.addScreen("pause", new PauseScreen(engine));
         engine.addScreen("menu", new MainMenuScreen(engine));

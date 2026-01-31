@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="27">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="29">
  <properties>
   <property name="background_back" value="bg1_back"/>
   <property name="background_front" value=""/>
@@ -35,7 +35,7 @@
 </data>
  </layer>
  <objectgroup id="2" name="Objects">
-  <object id="1" gid="1617" x="144" y="912" width="256" height="256"/>
+  <object id="1" gid="1617" x="3072" y="912" width="256" height="256"/>
   <object id="7" name="camera_limit" x="96" y="96" width="96" height="96">
    <properties>
     <property name="bottom" value="t1"/>
@@ -102,11 +102,28 @@
     <property name="type" value="action"/>
    </properties>
   </object>
-  <object id="25" x="1584" y="720" width="48" height="48">
+  <object id="25" x="4656" y="720" width="48" height="48">
    <properties>
     <property name="effect" value="test"/>
     <property name="type" value="particle_emitter"/>
    </properties>
+  </object>
+  <object id="27" name="camera_limit" x="3109.88" y="683.091" width="96" height="96">
+   <properties>
+    <property name="bottom" value="t1"/>
+    <property name="instant" type="bool" value="true"/>
+    <property name="left" value="t5"/>
+    <property name="right" value="t6"/>
+    <property name="top" value="t2"/>
+    <property name="type" value="camera_limit_trigger"/>
+   </properties>
+  </object>
+  <object id="28" x="3794" y="764">
+   <properties>
+    <property name="name" value="slope1"/>
+    <property name="type" value="slope"/>
+   </properties>
+   <polyline points="0,0 430,-284"/>
   </object>
  </objectgroup>
  <layer id="6" name="Front" width="120" height="23">

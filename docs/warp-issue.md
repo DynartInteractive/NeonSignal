@@ -23,7 +23,7 @@ The problem: SceneWarpComponent's timer started **one frame before** the actual 
 Set `SceneWarpComponent.FADE_DELAY` to 0.45s (slightly less than the 0.5s fade duration). This ensures:
 
 1. The warp happens while the screen is still black (~90% through fade)
-2. The warp completes before `CameraHandler.fadeEndAction` switches to the "empty" screen
+2. The warp completes before `CameraHandler.fadeEndAction` switches to the "game_fade_in" screen
 3. The player teleport is invisible to the user
 
 ## Technical Details
@@ -39,7 +39,7 @@ Screen fades to black
     ↓
 fadeEndAction executes:
   - Updates camera limits
-  - Switches to "empty" screen
+  - Switches to "game_fade_in" screen
   - Starts fadeIn
 ```
 
@@ -54,3 +54,14 @@ fadeEndAction executes:
 - `core/src/net/dynart/neonsignal/components/SceneWarpComponent.java`
 - `core/src/net/dynart/neonsignal/core/CameraHandler.java`
 - `core/src/net/dynart/neonsignal/components/CameraLimitTriggerComponent.java`
+
+
+
+---
+
+Let me trace through exactly why this bug happens:
+
+1. Unpause with Escape: PauseScreen's InputListener catches keyUp, returns true (consuming event), so KeyboardListener never gets the keyUp → menuDown stays true
+2. Later, SceneWarp triggers camera fade: CameraHandler calls gameScreen.fadeOut()
+3. Next frame: GameController.update() sees fade is OUT, calls reset() → calls setMenuDown(false) → since menuDown is still true, menuKeyPressed becomes true
+4. Same frame: GameScreen.update() checks isMenuPressed() → returns true → pause() is called!   

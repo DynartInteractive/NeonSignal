@@ -91,8 +91,6 @@ public class BulletComponent extends Component {
         overlapAttack.setActive(false);
 
         if (hitSounds.length > 0) {
-            Gdx.app.log("Bullet", "Hit volume: " + entity.getVolumeRelatedToPlayer());
-
             soundManager.playRandom(hitSounds, entity.getVolumeRelatedToPlayer());
         }
 
