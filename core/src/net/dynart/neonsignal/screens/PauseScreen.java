@@ -194,6 +194,9 @@ public class PauseScreen extends MenuScreen {
         continueAction = new Action() {
             @Override
             public boolean act(float delta) {
+                // Clear menuDown state that was left stuck because the stage's InputListener
+                // consumed the keyUp event before KeyboardListener could process it
+                engine.getGameController().setMenuDown(false);
                 engine.setScreen("game");
                 return true;
             }
