@@ -69,6 +69,10 @@ public class DialogScreen extends Screen {
 
         switchToBackScreenAction = new Action() {
             public boolean act(float delta) {
+                // Clear button states that may be stuck because the stage's InputListener
+                // consumed the keyUp event before KeyboardListener could process it
+                engine.getGameController().setMenuDown(false);
+                engine.getGameController().setBDown(false);
                 engine.setScreen(backScreen);
                 return true;
             }
