@@ -64,6 +64,7 @@ public class SoundManager {
 
     private final Engine engine;
     private final Map<String, String> soundPaths = new HashMap<String, String>();
+    private final Map<String, Float> soundVolumes = new HashMap<String, Float>();
     private final Map<String, String> musicPaths = new HashMap<String, String>();
     private final Map<String, Sound> sounds = new HashMap<String, Sound>();
     private float volume = 1.0f;
@@ -97,8 +98,9 @@ public class SoundManager {
         JsonValue sounds = resourcesJson.get("sounds");
         for (JsonValue sound = sounds.child(); sound != null; sound = sound.next()) {
             String soundPath = sound.getString("path");
+            float soundVolume = sound.getFloat("volume", 1.0f);
             assetManager.load(soundPath, Sound.class);
-            add(sound.name(), soundPath);
+            add(sound.name(), soundPath, soundVolume);
         }
         JsonValue allMusic = resourcesJson.get("music");
         for (JsonValue music = allMusic.child(); music != null; music = music.next()) {
@@ -107,7 +109,12 @@ public class SoundManager {
     }
 
     public void add(String name, String soundPath) {
+        add(name, soundPath, 1.0f);
+    }
+
+    public void add(String name, String soundPath, float volume) {
         soundPaths.put(name, soundPath);
+        soundVolumes.put(name, volume);
         dnpTime.put(name, -1f);
     }
 
@@ -133,8 +140,9 @@ public class SoundManager {
                 channels[currentChannel].sound.stop(channels[currentChannel].instance);
             }
             //audioThread.play(sound, this.volume * volume);
+            float soundVolume = soundVolumes.getOrDefault(name, 1.0f);
             channels[currentChannel].sound = sound;
-            channels[currentChannel].instance = sound.play(this.volume * volume);
+            channels[currentChannel].instance = sound.play(this.volume * volume * soundVolume);
             instanceToSound.put(channels[currentChannel].instance, sound);
             dnpTime.put(name, engine.getElapsedTime() + dnpDuration);
             currentChannel++;
