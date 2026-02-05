@@ -51,10 +51,10 @@
         },
         "assets/data/levels/test1.tmx": {
             "scale": 0.5,
-            "selectedLayer": 4,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 3884,
-                "y": 704
+                "x": 2331,
+                "y": 852
             }
         },
         "assets/data/levels/tileset1.tsx": {

@@ -34,11 +34,11 @@
         "tram_collide": {"path": "data/sounds/tram_collide.mp3"},
         "terminal": {"path": "data/sounds/terminal.mp3"},
         "dash": {"path": "data/sounds/dash.mp3"},
-        "laser_fire1": {"path": "data/sounds/laser_fire1.mp3"},
-        "laser_fire2": {"path": "data/sounds/laser_fire2.mp3"},
-        "laser_fire3": {"path": "data/sounds/laser_fire3.mp3"},
-        "laser_hit1": {"path": "data/sounds/laser_hit1.mp3"},
-        "laser_hit2": {"path": "data/sounds/laser_hit2.mp3"}
+        "laser_fire1": {"path": "data/sounds/laser_fire1.mp3", "volume": 0.3 },
+        "laser_fire2": {"path": "data/sounds/laser_fire2.mp3", "volume": 0.3 },
+        "laser_fire3": {"path": "data/sounds/laser_fire3.mp3", "volume": 0.3 },
+        "laser_hit1": {"path": "data/sounds/laser_hit1.mp3", "volume": 0.4 },
+        "laser_hit2": {"path": "data/sounds/laser_hit2.mp3", "volume": 0.4 }
     },
     "music": {
         "logo": {"path": "data/music/logo.mp3"},

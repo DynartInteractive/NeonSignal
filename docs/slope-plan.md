@@ -11,7 +11,7 @@ Implement path-based slopes using Tiled polylines with `type=slope` attribute. W
 
 Component attached to slope entities that holds the path data and provides collision math:
 - Stores the `Path` (polyline vertices)
-- `checkCrossing(lastY, currentY, centerX)` - detects if vertical movement at centerX crosses the slope, returns Y on slope or NaN
+- `checkCrossing(lastPosition, position)` - detects if movement crosses the slope (the position is in the other side of the slope than lastPosition)
 - `getYAtX(x)` - returns Y coordinate on slope at given X
 - Bounds getters (`getMinX`, `getMaxX`, `getMinY`, `getMaxY`) for spatial queries
 
@@ -19,7 +19,7 @@ Component attached to slope entities that holds the path data and provides colli
 **Path:** `core/src/net/dynart/neonsignal/components/SlopeCollisionComponent.java`
 
 Component attached to entities (player, enemies) that should collide with slopes:
-- Subscribes to `VelocityComponent.Y_ADDED` (same pattern as `GridCollisionComponent`)
+- Subscribes to `VelocityComponent.Y_ADDED` and `VelocityComponent.X_ADDED` (same pattern as `GridCollisionComponent`)
 - Queries all slope entities via `EntityManager.getAllByClass(SlopeColliderComponent.class)`
 - On crossing detection: snaps entity to slope, sets `body.setInAir(false)`, `body.setBottomCollision(true)`, zeroes Y velocity
 - Publishes `SLOPE_COLLISION` message
