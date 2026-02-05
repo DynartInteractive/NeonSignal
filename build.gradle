@@ -11,6 +11,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.11.1'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.23'
         classpath "com.google.code.findbugs:jsr305:3.0.2" // because of @NotNull, @Null
+        classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.25.0'
     }
 }
 allprojects {
@@ -35,6 +36,12 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java-library"
+    apply plugin: "com.diffplug.spotless"
+    spotless {
+        java {
+            eclipse().configFile(rootProject.file('eclipse-formatter.xml'))
+        }
+    }
     dependencies {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
@@ -60,6 +67,12 @@ project(":muos") {
 */
 project(":android") {
     apply plugin: "com.android.application"
+    apply plugin: "com.diffplug.spotless"
+    spotless {
+        java {
+            eclipse().configFile(rootProject.file('eclipse-formatter.xml'))
+        }
+    }
     configurations { natives }
     dependencies {
         implementation project(":core")
@@ -90,6 +103,12 @@ project(":ios") {
 */
 project(":core") {
     apply plugin: "java-library"
+    apply plugin: "com.diffplug.spotless"
+    spotless {
+        java {
+            eclipse().configFile(rootProject.file('eclipse-formatter.xml'))
+        }
+    }
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
