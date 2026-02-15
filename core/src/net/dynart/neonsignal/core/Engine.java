@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.controller.GameController;
 import net.dynart.neonsignal.core.controller.GamepadListener;
+import net.dynart.neonsignal.core.controller.GamepadProfile;
+import net.dynart.neonsignal.core.controller.GamepadType;
 import net.dynart.neonsignal.core.controller.KeyboardListener;
 import net.dynart.neonsignal.core.controller.TouchListener;
 import net.dynart.neonsignal.core.listeners.LoadingFinishedListener;
@@ -221,6 +224,23 @@ public class Engine implements LoadingFinishedListener {
         touchListener = new TouchListener(this);
         if (!config.getSection().equals("ios") && !config.getSection().equals("muos")) { // no Controllers support on IOS and MuOS for now
             Controllers.addListener(gamepadListener);
+            gamepadListener.setConnectionListener(new GamepadListener.GamepadConnectionListener() {
+                @Override
+                public void gamepadConnected(Controller controller) {
+                    onGamepadConnected(controller);
+                }
+
+                @Override
+                public void gamepadDisconnected(Controller controller) {
+                    gameController.setActiveGamepadType(GamepadType.UNKNOWN);
+                    Gdx.app.log(LOG_TAG, "Gamepad disconnected: " + controller.getName());
+                }
+            });
+            // Check for already-connected controllers
+            for (Controller controller : Controllers.getControllers()) {
+                gamepadListener.connected(controller);
+                break;
+            }
         }
         inputProcessors.add(new InputAdapter()); // empty for now, will be used by a "Stage"
         inputProcessors.add(keyboardListener);
@@ -228,6 +248,18 @@ public class Engine implements LoadingFinishedListener {
         inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.setProcessors(inputProcessors);
         Gdx.input.setInputProcessor(inputMultiplexer);
+    }
+
+    private void onGamepadConnected(Controller controller) {
+        if (!settings.hasCustomJoyMapping()) {
+            GamepadProfile profile = new GamepadProfile(controller, config.getUnusedButtonCode());
+            gameController.applyGamepadProfile(profile);
+            Gdx.app.log(LOG_TAG, "Auto-detected gamepad: " + controller.getName() + " (" + profile.getGamepadType() + ")");
+        } else {
+            GamepadType type = GamepadType.fromControllerName(controller.getName());
+            gameController.setActiveGamepadType(type);
+            Gdx.app.log(LOG_TAG, "Gamepad connected (custom mappings preserved): " + controller.getName() + " (" + type + ")");
+        }
     }
 
     private void setUpGameScene() {

@@ -19,6 +19,8 @@ public class GameController {
     private final Map<Button, Integer> joyMap = new HashMap<>();
     private final Map<Button, AxisData> axisMap = new HashMap<>();
 
+    private GamepadType activeGamepadType = GamepadType.UNKNOWN;
+
     private float axisX;
     private float axisY;
 
@@ -291,6 +293,24 @@ public class GameController {
         anyPointerDown = !pointersDown.isEmpty();
     }
     
+    public GamepadType getActiveGamepadType() {
+        return activeGamepadType;
+    }
+
+    public void setActiveGamepadType(GamepadType type) {
+        this.activeGamepadType = type;
+    }
+
+    public void applyGamepadProfile(GamepadProfile profile) {
+        for (Map.Entry<Button, Integer> entry : profile.getJoyMap().entrySet()) {
+            joyMap.put(entry.getKey(), entry.getValue());
+        }
+        for (Map.Entry<Button, AxisData> entry : profile.getAxisMap().entrySet()) {
+            axisMap.put(entry.getKey(), entry.getValue());
+        }
+        activeGamepadType = profile.getGamepadType();
+    }
+
     public void reset() {
         setRightDown(false);
         setLeftDown(false);
