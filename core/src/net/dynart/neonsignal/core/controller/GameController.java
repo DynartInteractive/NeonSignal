@@ -302,12 +302,8 @@ public class GameController {
     }
 
     public void applyGamepadProfile(GamepadProfile profile) {
-        for (Map.Entry<Button, Integer> entry : profile.getJoyMap().entrySet()) {
-            joyMap.put(entry.getKey(), entry.getValue());
-        }
-        for (Map.Entry<Button, AxisData> entry : profile.getAxisMap().entrySet()) {
-            axisMap.put(entry.getKey(), entry.getValue());
-        }
+        joyMap.putAll(profile.getJoyMap());
+        axisMap.putAll(profile.getAxisMap());
         activeGamepadType = profile.getGamepadType();
     }
 

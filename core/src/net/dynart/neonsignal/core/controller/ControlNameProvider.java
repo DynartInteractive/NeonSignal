@@ -79,24 +79,24 @@ public class ControlNameProvider {
     private String getGamepadButtonName(Button button) {
         GamepadType type = gameController.getActiveGamepadType();
         if (type == GamepadType.PS4 || type == GamepadType.PS5) {
-            switch (button) {
-                case A: return "Cross";
-                case B: return "Circle";
-                case X: return "Square";
-                case Y: return "Triangle";
-                case MENU: return "Options";
-                default: return null;
-            }
+            return switch (button) {
+                case A -> "Cross";
+                case B -> "Circle";
+                case X -> "Square";
+                case Y -> "Triangle";
+                case MENU -> "Options";
+                default -> null;
+            };
         }
         if (type == GamepadType.XBOX_360 || type == GamepadType.XBOX_ONE) {
-            switch (button) {
-                case A: return "A";
-                case B: return "B";
-                case X: return "X";
-                case Y: return "Y";
-                case MENU: return "Start";
-                default: return null;
-            }
+            return switch (button) {
+                case A -> "A";
+                case B -> "B";
+                case X -> "X";
+                case Y -> "Y";
+                case MENU -> "Start";
+                default -> null;
+            };
         }
         return null;
     }
