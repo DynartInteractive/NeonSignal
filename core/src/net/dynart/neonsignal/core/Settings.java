@@ -109,6 +109,24 @@ public class Settings {
         preferences.putBoolean("touch_sides_switched", value);
     }
 
+    public boolean hasCustomJoyMapping() {
+        for (Button button : Button.values()) {
+            if (preferences.contains("joy_" + button.getName()) ||
+                preferences.contains("axis_" + button.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void clearJoyMappings() {
+        for (Button button : Button.values()) {
+            preferences.remove("joy_" + button.getName());
+            preferences.remove("axis_" + button.getName());
+        }
+        preferences.flush();
+    }
+
     public void save() {
         preferences.flush();
     }

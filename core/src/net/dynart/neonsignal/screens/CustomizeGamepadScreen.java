@@ -1,12 +1,20 @@
 package net.dynart.neonsignal.screens;
 
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import net.dynart.neonsignal.core.controller.AxisData;
 import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.controller.GamepadListener;
+import net.dynart.neonsignal.core.controller.GamepadProfile;
+import net.dynart.neonsignal.core.controller.GamepadType;
 import net.dynart.neonsignal.core.controller.Button;
 import net.dynart.neonsignal.core.listeners.AxisMovedListener;
 import net.dynart.neonsignal.core.listeners.ButtonUpListener;
 import net.dynart.neonsignal.core.ui.MenuButton;
+import net.dynart.neonsignal.core.ui.MenuCursor;
+import net.dynart.neonsignal.core.ui.MenuCursorItem;
 import net.dynart.neonsignal.core.Engine;
 
 public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements ButtonUpListener, AxisMovedListener {
@@ -16,11 +24,43 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
     private int buttonCodeForAssign;
     private int axisCodeForAssign;
     private int axisSignForAssign;
+    private MenuButton resetButton;
 
     public CustomizeGamepadScreen(final Engine engine) {
         super(engine);
         controlNameProvider = engine.getControlNameProvider();
         gamepadListener = engine.getGamepadListener();
+
+        resetButton = new MenuButton(engine, "Reset", styles.getDefaultButtonStyle());
+        resetButton.setSize(200, 80);
+        resetButton.setY(240);
+        resetButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                resetToAutoDetected();
+            }
+        });
+        group.addActor(resetButton);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        MenuCursorItem resetItem = menuCursor.addItem(resetButton);
+        resetItem.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
+        resetItem.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
+            @Override
+            public void handle(MenuCursorItem item) {
+                resetToAutoDetected();
+            }
+        });
+        backButtonItem.setNeighbour(MenuCursor.Neighbour.LEFT, resetButton);
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        resetButton.setX(backButton.getX() - resetButton.getWidth() - 20);
     }
 
     @Override
@@ -110,6 +150,34 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
         menuButton.setText(getControlName(button));
     }
 
+    private void refreshAllButtonTexts() {
+        for (Button button : menuButtonMap.keySet()) {
+            MenuButton menuButton = menuButtonMap.get(button);
+            menuButton.setText(getControlName(button));
+        }
+    }
+
+    private void resetToAutoDetected() {
+        settings.clearJoyMappings();
+        Controller activeController = gamepadListener.getActiveController();
+        if (activeController != null) {
+            GamepadProfile profile = new GamepadProfile(activeController, config.getUnusedButtonCode());
+            gameController.applyGamepadProfile(profile);
+        } else {
+            for (Button button : config.getDefaultJoyMapping().keySet()) {
+                gameController.setJoyCode(button, config.getDefaultJoyMapping().get(button));
+            }
+            for (Button button : config.getDefaultAxisMapping().keySet()) {
+                AxisData data = config.getDefaultAxisMapping().get(button);
+                if (gameController.hasAxisData(button)) {
+                    gameController.setAxisData(button, data.getCode(), data.getSign());
+                }
+            }
+            gameController.setActiveGamepadType(GamepadType.UNKNOWN);
+        }
+        refreshAllButtonTexts();
+    }
+
     @Override
     public void axisMoved(int axisCode, float value) {
         Button button = (Button) menuButtonForSet.getUserObject();
@@ -152,4 +220,3 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
     }
 
 }
-

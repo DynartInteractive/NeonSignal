@@ -2,7 +2,6 @@ package net.dynart.neonsignal.core.controller;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
-//import com.badlogic.gdx.controllers.PovDirection;
 
 import net.dynart.neonsignal.core.listeners.AxisMovedListener;
 import net.dynart.neonsignal.core.listeners.ButtonUpListener;
@@ -11,6 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GamepadListener extends ControllerAdapter {
+
+    public interface GamepadConnectionListener {
+        void gamepadConnected(Controller controller);
+        void gamepadDisconnected(Controller controller);
+    }
 
     private static final Map<Button, Integer> signMap = new HashMap<>() {{
         put(Button.LEFT, -1);
@@ -23,6 +27,8 @@ public class GamepadListener extends ControllerAdapter {
 
     private ButtonUpListener buttonUpListener;
     private AxisMovedListener axisMovedListener;
+    private GamepadConnectionListener connectionListener;
+    private Controller activeController;
 
     public GamepadListener(GameController gameController) {
         this.gameController = gameController;
@@ -34,6 +40,32 @@ public class GamepadListener extends ControllerAdapter {
 
     public void setAxisMovedListener(AxisMovedListener axisMovedListener) {
         this.axisMovedListener = axisMovedListener;
+    }
+
+    public void setConnectionListener(GamepadConnectionListener listener) {
+        this.connectionListener = listener;
+    }
+
+    public Controller getActiveController() {
+        return activeController;
+    }
+
+    @Override
+    public void connected(Controller controller) {
+        activeController = controller;
+        if (connectionListener != null) {
+            connectionListener.gamepadConnected(controller);
+        }
+    }
+
+    @Override
+    public void disconnected(Controller controller) {
+        if (activeController == controller) {
+            activeController = null;
+        }
+        if (connectionListener != null) {
+            connectionListener.gamepadDisconnected(controller);
+        }
     }
 
     @Override
