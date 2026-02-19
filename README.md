@@ -2,6 +2,13 @@
 
 Retro platformer game
 
+## License
+
+This project uses a dual license structure:
+
+- **Source code** is licensed under the [MIT License](LICENSE.md)
+- **Assets** (contents of the `assets/` folder) are proprietary to Dynart Kft. and may only be used for **open source and educational purposes**. Commercial use is not permitted. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) for details.
+
 ## Build settings
 
 Use JDK 17+ in Android Studio, for example: OpenJDK 17, Amazon Corretto 17, ...
