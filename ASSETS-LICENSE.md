@@ -2,7 +2,7 @@
 
 Copyright (c) 2026 Dynart Kft. All rights reserved.
 
-The contents of the `assets/` folder in this repository, including but not limited to images, textures, sprites, audio files, music, level data, and other creative assets, are the exclusive property of Dynart Kft.
+The contents of the `assets/` and `_raw` folders in this repository, including but not limited to images, textures, sprites, audio files, music, level data, and other creative assets, are the exclusive property of Dynart Kft.
 
 ## Permitted Uses
 

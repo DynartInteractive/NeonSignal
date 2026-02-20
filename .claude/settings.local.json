@@ -14,7 +14,8 @@
       "Bash(grep:*)",
       "Bash(export JAVA_HOME=\"/c/Users/gopher/.gradle/jdks/eclipse_adoptium-17-amd64-windows.2\")",
       "Bash(./gradlew desktop:build:*)",
-      "Bash(./gradlew muos:build:*)"
+      "Bash(./gradlew muos:build:*)",
+      "Bash(git push:*)"
     ]
   }
 }

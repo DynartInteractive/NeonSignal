@@ -7,7 +7,7 @@ Retro platformer game
 This project uses a dual license structure:
 
 - **Source code** is licensed under the [MIT License](LICENSE.md)
-- **Assets** (contents of the `assets/` folder) are proprietary to Dynart Kft. and may only be used for **open source and educational purposes**. Commercial use is not permitted. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) for details.
+- **Assets** (contents of the `assets/` and `_raw/` folders) are proprietary to Dynart Kft. and may only be used for **open source and educational purposes**. Commercial use is not permitted. See [ASSETS-LICENSE.md](ASSETS-LICENSE.md) for details.
 
 ## Build settings
 
