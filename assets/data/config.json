@@ -1,5 +1,7 @@
 {
     "all": {
+        "analytics_measurement_id": "G-HDYXGR93SZ",
+        "analytics_api_secret": "46Tv0-P5QAetF38S9e4YLA",
         "name": "NeonSignal",
         "mobile": true,
         "game_virtual_height": 1080,
