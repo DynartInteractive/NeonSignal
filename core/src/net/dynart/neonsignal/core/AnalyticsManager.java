@@ -1,6 +1,10 @@
 package net.dynart.neonsignal.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.HttpRequestBuilder;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
 import net.dynart.neonsignal.VersionUtil;
 import net.dynart.neonsignal.components.PlayerComponent;
@@ -12,7 +16,7 @@ import java.util.Map;
 public class AnalyticsManager {
 
     private static final String ENDPOINT = "https://www.google-analytics.com/mp/collect";
-    private static final String IP_ECHO_URL = "https://api.ipify.org";
+    private static final String GEO_URL = "https://ipapi.co/json/";
     private static final String LOG_TAG = "AnalyticsManager";
 
     private final String measurementId;
@@ -20,14 +24,15 @@ public class AnalyticsManager {
     private final String clientId;
     private final long sessionId;
     private final String platform;
-    private final String language;
-    private final String country;
-
     private final Map<String, Integer> attemptCounts = new HashMap<>();
     private final boolean gaDebug;
     private boolean enabled;
     private long lastEventTime;
-    private volatile String publicIp = null;
+
+    private volatile String geoIp = null;
+    private volatile String geoCountryCode = null;
+    private volatile String geoRegionCode = null;
+    private volatile String geoCity = null;
 
     public AnalyticsManager(EngineConfig config, User user, Settings settings) {
         this.enabled = settings.isAnalyticsEnabled();
@@ -45,39 +50,45 @@ public class AnalyticsManager {
         this.clientId = id;
 
         switch (Gdx.app.getType()) {
-            case Android: platform = "android"; break;
-            case iOS:     platform = "ios"; break;
-            case HeadlessDesktop: platform = "muos"; break;
-            default:      platform = "desktop"; break;
+            case Android:
+                platform = "android"; break;
+            case iOS:
+                platform = "ios"; break;
+            case HeadlessDesktop:
+                platform = "muos"; break;
+            default:
+                platform = "desktop"; break;
         }
 
-        Locale locale = Locale.getDefault();
-        this.language = locale.getLanguage();
-        this.country = locale.getCountry();
-
-        fetchPublicIp();
+        fetchGeoData();
     }
 
-    private void fetchPublicIp() {
-        com.badlogic.gdx.net.HttpRequestBuilder builder = new com.badlogic.gdx.net.HttpRequestBuilder();
-        com.badlogic.gdx.Net.HttpRequest request = builder
+    private void fetchGeoData() {
+        HttpRequestBuilder builder = new HttpRequestBuilder();
+        Net.HttpRequest request = builder
             .newRequest()
-            .method(com.badlogic.gdx.Net.HttpMethods.GET)
-            .url(IP_ECHO_URL)
+            .method(Net.HttpMethods.GET)
+            .url(GEO_URL)
             .build();
-        Gdx.net.sendHttpRequest(request, new com.badlogic.gdx.Net.HttpResponseListener() {
+        Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
             @Override
-            public void handleHttpResponse(com.badlogic.gdx.Net.HttpResponse httpResponse) {
-                String ip = httpResponse.getResultAsString().trim();
-                if (!ip.isEmpty()) {
-                    publicIp = ip;
-                    Gdx.app.log(LOG_TAG, "Public IP: " + ip);
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                try {
+                    JsonValue json = new JsonReader().parse(httpResponse.getResultAsString());
+                    geoIp = json.getString("ip", null);
+                    geoCountryCode = json.getString("country_code", null);
+                    geoRegionCode = json.getString("region_code", null);
+                    geoCity = json.getString("city", null);
+                    Gdx.app.log(LOG_TAG, "Geo: ip=" + geoIp + " country=" + geoCountryCode
+                        + " region=" + geoRegionCode + " city=" + geoCity);
+                } catch (Exception e) {
+                    Gdx.app.log(LOG_TAG, "Failed to parse geo data");
                 }
             }
 
             @Override
             public void failed(Throwable t) {
-                Gdx.app.log(LOG_TAG, "Failed to fetch public IP");
+                Gdx.app.log(LOG_TAG, "Failed to fetch geo data");
             }
 
             @Override
@@ -156,10 +167,7 @@ public class AnalyticsManager {
         params.put("platform", platform);
         params.put("version", VersionUtil.getVersion());
         params.put("engagement_time_msec", now - lastEventTime);
-        params.put("language", language);
-        if (!country.isEmpty()) {
-            params.put("country", country);
-        }
+        params.put("locale", Locale.getDefault().toString());
         if (gaDebug) {
             params.put("debug_mode", 1);
         }
@@ -181,8 +189,17 @@ public class AnalyticsManager {
         paramsJson.append("}");
 
         StringBuilder bodyBuilder = new StringBuilder("{\"client_id\":\"").append(clientId).append("\"");
-        if (publicIp != null) {
-            bodyBuilder.append(",\"ip_override\":\"").append(publicIp).append("\"");
+        if (geoCountryCode != null) {
+            bodyBuilder.append(",\"user_location\":{");
+            if (geoCity != null) bodyBuilder.append("\"city\":\"").append(geoCity).append("\",");
+            bodyBuilder.append("\"country_id\":\"").append(geoCountryCode).append("\"");
+            if (geoRegionCode != null) {
+                bodyBuilder.append(",\"region_id\":\"").append(geoCountryCode).append("-").append(geoRegionCode).append("\"");
+            }
+            bodyBuilder.append("}");
+        }
+        if (geoIp != null) {
+            bodyBuilder.append(",\"ip_override\":\"").append(geoIp).append("\"");
         }
         bodyBuilder.append(",\"events\":[{\"name\":\"").append(eventName).append("\",")
             .append("\"params\":").append(paramsJson).append("}]}");
@@ -190,18 +207,22 @@ public class AnalyticsManager {
 
         String url = ENDPOINT + "?measurement_id=" + measurementId + "&api_secret=" + apiSecret;
 
-        com.badlogic.gdx.net.HttpRequestBuilder builder = new com.badlogic.gdx.net.HttpRequestBuilder();
-        com.badlogic.gdx.Net.HttpRequest request = builder
+        if (gaDebug) {
+            Gdx.app.log(LOG_TAG, body);
+        }
+
+        HttpRequestBuilder builder = new HttpRequestBuilder();
+        Net.HttpRequest request = builder
             .newRequest()
-            .method(com.badlogic.gdx.Net.HttpMethods.POST)
+            .method(Net.HttpMethods.POST)
             .url(url)
             .header("Content-Type", "application/json")
             .content(body)
             .build();
 
-        Gdx.net.sendHttpRequest(request, new com.badlogic.gdx.Net.HttpResponseListener() {
+        Gdx.net.sendHttpRequest(request, new Net.HttpResponseListener() {
             @Override
-            public void handleHttpResponse(com.badlogic.gdx.Net.HttpResponse httpResponse) {
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
                 // fire and forget
             }
 
