@@ -13,6 +13,7 @@ class DesktopArguments {
     private boolean fullscreen = true;
     private boolean vsync = true;
     private boolean debug;
+    private boolean gaDebug;
     private String level;
     private int fps;
     private int display = -1;
@@ -69,6 +70,9 @@ class DesktopArguments {
             case "-debug":
                 debug = true;
                 break;
+            case "-ga_debug":
+                gaDebug = true;
+                break;
             case "-fps":
                 nextIsFps = true;
                 break;
@@ -103,6 +107,10 @@ class DesktopArguments {
 
     public boolean getDebug() {
         return debug;
+    }
+
+    public boolean isGaDebug() {
+        return gaDebug;
     }
 
     public int getFps() {

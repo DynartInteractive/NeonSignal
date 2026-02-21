@@ -20,6 +20,7 @@ public class AnalyticsManager {
     private final String platform;
 
     private final Map<String, Integer> attemptCounts = new HashMap<>();
+    private final boolean gaDebug;
     private boolean enabled;
     private long lastEventTime;
 
@@ -27,6 +28,7 @@ public class AnalyticsManager {
         this.enabled = settings.isAnalyticsEnabled();
         this.measurementId = config.getAnalyticsMeasurementId();
         this.apiSecret = config.getAnalyticsApiSecret();
+        this.gaDebug = config.isGaDebug();
         this.sessionId = System.currentTimeMillis();
         this.lastEventTime = sessionId;
 
@@ -114,7 +116,9 @@ public class AnalyticsManager {
         params.put("platform", platform);
         params.put("version", VersionUtil.getVersion());
         params.put("engagement_time_msec", now - lastEventTime);
-        params.put("debug_mode", 1);
+        if (gaDebug) {
+            params.put("debug_mode", 1);
+        }
         lastEventTime = now;
 
         StringBuilder paramsJson = new StringBuilder("{");

@@ -32,15 +32,17 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     private final String configSection;
     private final String startWithLevel;
     private final boolean debug;
+    private final boolean gaDebug;
 
     private FPSLogger fpsLogger;
     private EngineConfig config;
     private Engine engine;
 
-    public NeonSignal(String configSection, boolean debug, String startWithLevel) {
+    public NeonSignal(String configSection, boolean debug, String startWithLevel, boolean gaDebug) {
         this.configSection = configSection;
         this.startWithLevel = startWithLevel;
         this.debug = debug;
+        this.gaDebug = gaDebug;
     }
 
     @Override
@@ -50,6 +52,7 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
 
         config = new NeonSignalEngineConfig();
         config.load(configSection);
+        config.setGaDebug(gaDebug);
         config.setEntityFactory(new NeonSignalEntityFactory());
         config.setDefaultFadeRenderer(new NeonSignalFadeRenderer());
         config.setScriptLoader(new NeonSignalScriptLoader());

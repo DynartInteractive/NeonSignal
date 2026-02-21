@@ -369,4 +369,14 @@ public class EngineConfig {
     public String getAnalyticsApiSecret() {
         return analyticsApiSecret;
     }
+
+    private boolean gaDebug;
+
+    public void setGaDebug(boolean value) {
+        gaDebug = value;
+    }
+
+    public boolean isGaDebug() {
+        return gaDebug;
+    }
 }

@@ -19,7 +19,7 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = false;
 		config.useCompass = false;
 
-		NeonSignal app = new NeonSignal("android", false, null);
+		NeonSignal app = new NeonSignal("android", false, null, false);
 
 		initialize(app, config);
 	}

@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		setUpConfig(config, arguments);
 
 		// app
-		NeonSignal app = new NeonSignal("desktop", arguments.getDebug(), arguments.getLevel());
+		NeonSignal app = new NeonSignal("desktop", arguments.getDebug(), arguments.getLevel(), arguments.isGaDebug());
 		new Lwjgl3Application(app, config);
 	}
 
