@@ -127,6 +127,14 @@ public class Settings {
         preferences.flush();
     }
 
+    public boolean isAnalyticsEnabled() {
+        return preferences.getBoolean("analytics_enabled", true);
+    }
+
+    public void setAnalyticsEnabled(boolean value) {
+        preferences.putBoolean("analytics_enabled", value);
+    }
+
     public void save() {
         preferences.flush();
     }

@@ -358,4 +358,15 @@ public class EngineConfig {
 
 
     protected Map<String, Vector2> playerGunBarrelPosition = new HashMap<>();
+
+    protected String analyticsMeasurementId = "";
+    protected String analyticsApiSecret = "";
+
+    public String getAnalyticsMeasurementId() {
+        return analyticsMeasurementId;
+    }
+
+    public String getAnalyticsApiSecret() {
+        return analyticsApiSecret;
+    }
 }

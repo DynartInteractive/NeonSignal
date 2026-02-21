@@ -38,6 +38,8 @@ public class SettingsScreen extends MenuScreen {
     private static final int SECOND_COLUMN_X = -200;
     private static final int OFFSET_Y = -110;
 
+    private static final int ANALYTICS_Y = -200;
+
     private final Label soundLabel;
     private final Slider soundSlider;
     private final Label musicLabel;
@@ -46,6 +48,8 @@ public class SettingsScreen extends MenuScreen {
     private final Label selectedControlLabel;
     private final Group controlGroup;
     private final Image controlGroupBg;
+    private final Label analyticsLabel;
+    private final Label analyticsValueLabel;
     private final Map<Actor, Float> xPositions = new HashMap<>();
     private final Action backToMenuAction;
     private final Action backToPauseAction;
@@ -55,6 +59,7 @@ public class SettingsScreen extends MenuScreen {
 
     private long soundLastTime;
     private boolean backToMenu;
+    private boolean analyticsEnabled;
     private ControllerType controllerType;
     private ControllerType originalControllerType;
 
@@ -64,6 +69,7 @@ public class SettingsScreen extends MenuScreen {
         settings = engine.getSettings();
         soundManager = engine.getSoundManager();
 
+        analyticsEnabled = settings.isAnalyticsEnabled();
         controllerType = settings.getControllerType();
 
         group.addActor(menuCursor.getCursorImage());
@@ -171,6 +177,20 @@ public class SettingsScreen extends MenuScreen {
         controlGroup.addActor(rightButton);
         controlGroup.addActor(settingsButton);
 
+        // analytics toggle
+        analyticsLabel = new Label("Analytics", styles.getDefaultLabelStyle());
+        analyticsLabel.setAlignment(Align.bottomRight);
+        analyticsLabel.setWidth(220);
+        analyticsLabel.setX(FIRST_COLUMN_X);
+        analyticsLabel.setHeight(80);
+        analyticsLabel.setY(ANALYTICS_Y + OFFSET_Y);
+        analyticsValueLabel = new Label(analyticsEnabled ? "Enabled" : "Disabled", styles.getDefaultLabelStyle());
+        analyticsValueLabel.setAlignment(Align.left);
+        analyticsValueLabel.setWidth(220);
+        analyticsValueLabel.setX(SECOND_COLUMN_X + 2);
+        analyticsValueLabel.setHeight(80);
+        analyticsValueLabel.setY(ANALYTICS_Y + OFFSET_Y);
+
         // add the actors and store the X positions
         List<Actor> allActors = new LinkedList<Actor>();
         allActors.add(soundLabel);
@@ -180,6 +200,8 @@ public class SettingsScreen extends MenuScreen {
         allActors.add(controlLabel);
         allActors.add(controlGroupBg);
         allActors.add(controlGroup);
+        allActors.add(analyticsLabel);
+        allActors.add(analyticsValueLabel);
         for (Actor actor : allActors) {
             xPositions.put(actor, actor.getX());
             group.addActor(actor);
@@ -198,6 +220,8 @@ public class SettingsScreen extends MenuScreen {
     public void show() {
         super.show();
         originalControllerType = settings.getControllerType();
+        analyticsEnabled = settings.isAnalyticsEnabled();
+        analyticsValueLabel.setText(analyticsEnabled ? "Enabled" : "Disabled");
     }
 
     void setBackToMenu(boolean value) {
@@ -251,6 +275,7 @@ public class SettingsScreen extends MenuScreen {
 
         item = menuCursor.addItem(controlGroup);
         item.setNeighbour(MenuCursor.Neighbour.UP, musicSlider);
+        item.setNeighbour(MenuCursor.Neighbour.DOWN, analyticsValueLabel);
         item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
             @Override
             public void handle(MenuCursorItem item) {
@@ -269,6 +294,32 @@ public class SettingsScreen extends MenuScreen {
                 moveOut(customizeAction);
             }
         });
+
+        item = menuCursor.addItem(analyticsValueLabel);
+        item.setNeighbour(MenuCursor.Neighbour.UP, controlGroup);
+        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
+            @Override
+            public void handle(MenuCursorItem item) {
+                toggleAnalytics();
+            }
+        });
+        item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
+            @Override
+            public void handle(MenuCursorItem item) {
+                toggleAnalytics();
+            }
+        });
+        item.setListener(MenuCursor.Event.RIGHT, new MenuCursor.Listener() {
+            @Override
+            public void handle(MenuCursorItem item) {
+                toggleAnalytics();
+            }
+        });
+    }
+
+    private void toggleAnalytics() {
+        analyticsEnabled = !analyticsEnabled;
+        analyticsValueLabel.setText(analyticsEnabled ? "Enabled" : "Disabled");
     }
 
     private MenuButton createButton(String name) {
@@ -285,6 +336,10 @@ public class SettingsScreen extends MenuScreen {
         settings.setSoundVolume(soundSlider.getValue());
         settings.setMusicVolume(musicSlider.getValue());
         settings.setControllerType(controllerType);
+        settings.setAnalyticsEnabled(analyticsEnabled);
+        if (engine.getAnalyticsManager() != null) {
+            engine.getAnalyticsManager().setEnabled(analyticsEnabled);
+        }
         settings.save();
         menuCursor.adjustInUse();
         if (backToMenu) {
@@ -375,6 +430,8 @@ public class SettingsScreen extends MenuScreen {
         moveInActor(controlLabel, left, 0.05f);
         moveInActor(controlGroupBg, right, 0.05f);
         moveInActor(controlGroup, right, 0.05f);
+        moveInActor(analyticsLabel, left, 0.0f);
+        moveInActor(analyticsValueLabel, right, 0.0f);
         stage.addAction(Actions.sequence(Actions.delay(0.30f), movingFinishedAction));
     }
 
@@ -391,6 +448,8 @@ public class SettingsScreen extends MenuScreen {
         moving = true;
         float right = SECOND_COLUMN_X + stage.getWidth() - 300f;
         float left = SECOND_COLUMN_X - stage.getWidth() + 300f;
+        moveOutActor(analyticsLabel, left, 0.0f);
+        moveOutActor(analyticsValueLabel, right, 0.0f);
         moveOutActor(soundLabel, left, 0.0f);
         moveOutActor(soundSlider, right, 0.0f);
         moveOutActor(musicLabel, left, 0.05f);

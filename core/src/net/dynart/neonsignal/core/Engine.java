@@ -26,6 +26,7 @@ import net.dynart.neonsignal.core.utils.JsonUtil;
 
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Engine implements LoadingFinishedListener {
 
@@ -68,6 +69,7 @@ public class Engine implements LoadingFinishedListener {
     private boolean resetDeltaTime;
     private TutorialTextProvider tutorialTextProvider;
     private ControlNameProvider controlNameProvider;
+    private AnalyticsManager analyticsManager;
 
     public Engine(EngineConfig engineConfig, boolean debug) {
         instance = this;
@@ -155,6 +157,7 @@ public class Engine implements LoadingFinishedListener {
     public ScriptLoader getScriptLoader() { return scriptLoader; }
     public TutorialTextProvider getTutorialTextProvider() { return tutorialTextProvider; }
     public ControlNameProvider getControlNameProvider() { return controlNameProvider; }
+    public AnalyticsManager getAnalyticsManager() { return analyticsManager; }
     public Screen getCurrentScreen() {
         return screen;
     }
@@ -211,6 +214,7 @@ public class Engine implements LoadingFinishedListener {
         setUpGraphicResources();
         setUpGameController();
         setUpGameScene();
+        analyticsManager = new AnalyticsManager(config, user, settings);
     }
 
     private void setUpGraphicResources() {
@@ -342,6 +346,14 @@ public class Engine implements LoadingFinishedListener {
         screen.show();
         if (moveInNextScreen) {
             screen.moveIn();
+        }
+        if (analyticsManager != null) {
+            for (Map.Entry<String, Screen> entry : screens.entrySet()) {
+                if (entry.getValue() == screen) {
+                    analyticsManager.trackScreen(entry.getKey());
+                    break;
+                }
+            }
         }
         nextScreen = null;
     }

@@ -157,6 +157,9 @@ public class CompletedScreen extends MenuScreen {
         super.show();
         GameScene gameScene = gameScreen.getScene();
         PlayerComponent player = gameScene.getPlayer().getComponent(PlayerComponent.class);
+        if (engine.getAnalyticsManager() != null && gameScreen.getCurrentLevel() != null) {
+            engine.getAnalyticsManager().trackLevelCompleted(gameScreen.getCurrentLevel(), player, gameScene);
+        }
 
         knockoutNumberLabel.setText(player.getKnockoutCount());
         secretNumberLabel.setText(player.getSecretCount());

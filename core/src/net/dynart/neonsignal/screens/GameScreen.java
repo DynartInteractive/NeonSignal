@@ -63,6 +63,9 @@ public class GameScreen extends Screen {
         gameSceneLoader.loadLevel(currentLevel.getPath());
         gameStage.setPlayer(gameScene.getPlayer());
         engine.resetDeltaTime();
+        if (engine.getAnalyticsManager() != null) {
+            engine.getAnalyticsManager().trackLevelStart(currentLevel);
+        }
     }
 
     @Override
@@ -144,6 +147,11 @@ public class GameScreen extends Screen {
     }
 
     public void prepareForGameOver() {
+        if (engine.getAnalyticsManager() != null && currentLevel != null) {
+            net.dynart.neonsignal.components.BodyComponent body =
+                gameScene.getPlayer().getComponent(net.dynart.neonsignal.components.BodyComponent.class);
+            engine.getAnalyticsManager().trackDeath(currentLevel, body.getCenterX(), body.getBottom());
+        }
         gameOverCountDown = 0.5f;
         gameStage.startGameOver();
     }

@@ -40,6 +40,10 @@ public class User {
         preferences.putInteger(key, num);
     }
 
+    public Preferences getPreferences() {
+        return preferences;
+    }
+
     public void save() {
         preferences.flush();
     }
