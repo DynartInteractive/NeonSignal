@@ -255,14 +255,23 @@ public class Engine implements LoadingFinishedListener {
     }
 
     private void onGamepadConnected(Controller controller) {
-        if (!settings.hasCustomJoyMapping()) {
+        String name = controller.getName();
+        boolean sameName = name.equals(settings.getGamepadName());
+        if (settings.hasCustomJoyMapping() && !sameName) {
+            Gdx.app.log(LOG_TAG, "Different gamepad connected, resetting custom mappings: " + name);
+            settings.clearJoyMappings();
+        }
+        if (settings.hasCustomJoyMapping()) {
+            GamepadType type = GamepadType.fromControllerName(name);
+            gameController.setActiveGamepadType(type);
+            Gdx.app.log(LOG_TAG, "Gamepad connected (custom mappings preserved): " + name + " (" + type + ")");
+        } else {
             GamepadProfile profile = new GamepadProfile(controller, config.getUnusedButtonCode());
             gameController.applyGamepadProfile(profile);
-            Gdx.app.log(LOG_TAG, "Auto-detected gamepad: " + controller.getName() + " (" + profile.getGamepadType() + ")");
-        } else {
-            GamepadType type = GamepadType.fromControllerName(controller.getName());
-            gameController.setActiveGamepadType(type);
-            Gdx.app.log(LOG_TAG, "Gamepad connected (custom mappings preserved): " + controller.getName() + " (" + type + ")");
+            Gdx.app.log(LOG_TAG, "Auto-detected gamepad: " + name + " (" + profile.getGamepadType() + ")");
+        }
+        if (!sameName) {
+            settings.setGamepadName(name);
         }
     }
 

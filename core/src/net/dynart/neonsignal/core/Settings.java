@@ -127,6 +127,15 @@ public class Settings {
         preferences.flush();
     }
 
+    public String getGamepadName() {
+        return preferences.getString("gamepad_name", "");
+    }
+
+    public void setGamepadName(String name) {
+        preferences.putString("gamepad_name", name);
+        preferences.flush();
+    }
+
     public boolean isAnalyticsEnabled() {
         return preferences.getBoolean("analytics_enabled", true);
     }

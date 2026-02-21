@@ -114,6 +114,7 @@ public class AnalyticsManager {
         params.put("platform", platform);
         params.put("version", VersionUtil.getVersion());
         params.put("engagement_time_msec", now - lastEventTime);
+        params.put("debug_mode", 1);
         lastEventTime = now;
 
         StringBuilder paramsJson = new StringBuilder("{");
