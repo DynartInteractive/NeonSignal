@@ -6,11 +6,13 @@ import net.dynart.neonsignal.VersionUtil;
 import net.dynart.neonsignal.components.PlayerComponent;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AnalyticsManager {
 
     private static final String ENDPOINT = "https://www.google-analytics.com/mp/collect";
+    private static final String IP_ECHO_URL = "https://api.ipify.org";
     private static final String LOG_TAG = "AnalyticsManager";
 
     private final String measurementId;
@@ -18,11 +20,14 @@ public class AnalyticsManager {
     private final String clientId;
     private final long sessionId;
     private final String platform;
+    private final String language;
+    private final String country;
 
     private final Map<String, Integer> attemptCounts = new HashMap<>();
     private final boolean gaDebug;
     private boolean enabled;
     private long lastEventTime;
+    private volatile String publicIp = null;
 
     public AnalyticsManager(EngineConfig config, User user, Settings settings) {
         this.enabled = settings.isAnalyticsEnabled();
@@ -45,6 +50,41 @@ public class AnalyticsManager {
             case HeadlessDesktop: platform = "muos"; break;
             default:      platform = "desktop"; break;
         }
+
+        Locale locale = Locale.getDefault();
+        this.language = locale.getLanguage();
+        this.country = locale.getCountry();
+
+        fetchPublicIp();
+    }
+
+    private void fetchPublicIp() {
+        com.badlogic.gdx.net.HttpRequestBuilder builder = new com.badlogic.gdx.net.HttpRequestBuilder();
+        com.badlogic.gdx.Net.HttpRequest request = builder
+            .newRequest()
+            .method(com.badlogic.gdx.Net.HttpMethods.GET)
+            .url(IP_ECHO_URL)
+            .build();
+        Gdx.net.sendHttpRequest(request, new com.badlogic.gdx.Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(com.badlogic.gdx.Net.HttpResponse httpResponse) {
+                String ip = httpResponse.getResultAsString().trim();
+                if (!ip.isEmpty()) {
+                    publicIp = ip;
+                    Gdx.app.log(LOG_TAG, "Public IP: " + ip);
+                }
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                Gdx.app.log(LOG_TAG, "Failed to fetch public IP");
+            }
+
+            @Override
+            public void cancelled() {
+                // no-op
+            }
+        });
     }
 
     public void setEnabled(boolean value) {
@@ -116,6 +156,10 @@ public class AnalyticsManager {
         params.put("platform", platform);
         params.put("version", VersionUtil.getVersion());
         params.put("engagement_time_msec", now - lastEventTime);
+        params.put("language", language);
+        if (!country.isEmpty()) {
+            params.put("country", country);
+        }
         if (gaDebug) {
             params.put("debug_mode", 1);
         }
@@ -136,9 +180,13 @@ public class AnalyticsManager {
         }
         paramsJson.append("}");
 
-        String body = "{\"client_id\":\"" + clientId + "\","
-            + "\"events\":[{\"name\":\"" + eventName + "\","
-            + "\"params\":" + paramsJson + "}]}";
+        StringBuilder bodyBuilder = new StringBuilder("{\"client_id\":\"").append(clientId).append("\"");
+        if (publicIp != null) {
+            bodyBuilder.append(",\"ip_override\":\"").append(publicIp).append("\"");
+        }
+        bodyBuilder.append(",\"events\":[{\"name\":\"").append(eventName).append("\",")
+            .append("\"params\":").append(paramsJson).append("}]}");
+        String body = bodyBuilder.toString();
 
         String url = ENDPOINT + "?measurement_id=" + measurementId + "&api_secret=" + apiSecret;
 

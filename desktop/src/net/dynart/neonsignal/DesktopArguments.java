@@ -76,7 +76,7 @@ class DesktopArguments {
             case "-fps":
                 nextIsFps = true;
                 break;
-            case "-novsync":
+            case "-no_vsync":
                 vsync = false;
                 break;
             case "-borderless":
