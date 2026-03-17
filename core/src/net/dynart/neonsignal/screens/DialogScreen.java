@@ -83,7 +83,7 @@ public class DialogScreen extends Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (listener != null) {
                     Actor actor = event.getListenerActor();
-                    listener.dialogButtonClicked((Integer)actor.getUserObject());
+                    listener.dialogButtonClicked((Integer) actor.getUserObject());
                 }
             }
         };
@@ -95,7 +95,7 @@ public class DialogScreen extends Screen {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == engine.getGameController().getKeyCode(Button.MENU)
-                        || keycode == engine.getGameController().getKeyCode(Button.B)) {
+                    || keycode == engine.getGameController().getKeyCode(Button.B)) {
                     if (listener != null) {
                         listener.dialogButtonClicked(0);
                     }
@@ -131,7 +131,7 @@ public class DialogScreen extends Screen {
         MenuCursor.Listener selectListener = new MenuCursor.Listener() {
             @Override
             public void handle(MenuCursorItem item) {
-                listener.dialogButtonClicked((Integer)item.getData());
+                listener.dialogButtonClicked((Integer) item.getData());
             }
         };
         for (int i = 0; i < buttons.length; i++) {
@@ -211,15 +211,18 @@ public class DialogScreen extends Screen {
     public void update(float delta) {
         super.update(delta);
         menuCursor.update();
-        if ((engine.getGameController().isMenuPressed() || engine.getGameController().isBPressed()) && listener != null) {
+        if ((engine.getGameController().isMenuPressed() || engine.getGameController().isBPressed())
+            && listener != null) {
             listener.dialogButtonClicked(0);
         }
 
     }
 
     void adjustLayout() {
-        table.setWidth(stage.getWidth() - 100);
-        table.setX(50);
+        float maxWidth = 981;
+        float tableWidth = Math.min(stage.getWidth() - 100, maxWidth);
+        table.setWidth(tableWidth);
+        table.setX((stage.getWidth() - tableWidth) / 2f);
         table.setY((stage.getHeight() - table.getHeight()) / 2f);
         float y = table.getY() - 50;
         float x = (stage.getWidth() - 260 * buttonCount) / 2f + 5f;
@@ -238,10 +241,12 @@ public class DialogScreen extends Screen {
 
     void moveOut() {
         bgImage.addAction(Actions.fadeOut(0.15f));
-        group.addAction(Actions.sequence(
-            Actions.moveTo(0, -table.getHeight() * 2f, 0.15f, Interpolation.pow2In),
-            switchToBackScreenAction
-        ));
+        group.addAction(
+            Actions.sequence(
+                Actions.moveTo(0, -table.getHeight() * 2f, 0.15f, Interpolation.pow2In),
+                switchToBackScreenAction
+            )
+        );
     }
 
 }
