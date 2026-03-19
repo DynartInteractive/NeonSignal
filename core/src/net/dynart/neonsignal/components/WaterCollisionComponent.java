@@ -51,7 +51,7 @@ public class WaterCollisionComponent extends Component {
 
     private void adjustInWater() {
         inWater = false;
-        int startY =  grid.getY(body.getBottom());
+        int startY = grid.getY(body.getBottom());
         int endY = grid.getY(body.getTop());
         int startX = grid.getX(body.getLeft());
         int endX = grid.getX(body.getRight());

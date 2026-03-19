@@ -73,7 +73,7 @@ public class PauseScreen extends MenuScreen {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == engine.getGameController().getKeyCode(Button.MENU)
-                        || keycode == engine.getGameController().getKeyCode(Button.B)) {
+                    || keycode == engine.getGameController().getKeyCode(Button.B)) {
                     moveOut(continueAction);
                     return true;
                 } else {
@@ -174,7 +174,7 @@ public class PauseScreen extends MenuScreen {
         settingsAction = new Action() {
             @Override
             public boolean act(float delta) {
-                SettingsScreen settingsScreen = (SettingsScreen)engine.getScreen("settings");
+                SettingsScreen settingsScreen = (SettingsScreen) engine.getScreen("settings");
                 settingsScreen.setBackToMenu(false);
                 settingsScreen.resetActorPositions();
                 settingsScreen.fadeIn();
@@ -207,7 +207,7 @@ public class PauseScreen extends MenuScreen {
     @Override
     public void init() {
         super.init();
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
     }
 
     protected void addBackground() {
@@ -251,14 +251,18 @@ public class PauseScreen extends MenuScreen {
     }
 
     private void replayClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         prepareDialog();
         dialogType = DialogType.REPLAY;
         dialogScreen.setButtonText(1, "Replay");
     }
 
     private void exitClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         prepareDialog();
         dialogType = DialogType.EXIT;
         dialogScreen.setButtonText(1, "Exit");
@@ -268,8 +272,7 @@ public class PauseScreen extends MenuScreen {
     public void dialogButtonClicked(int index) {
         if (index == 1 && dialogType == DialogType.REPLAY) {
             dialogScreen.fadeOut(replayAction);
-        }
-        else if (index == 1 && dialogType == DialogType.EXIT) {
+        } else if (index == 1 && dialogType == DialogType.EXIT) {
             dialogScreen.fadeOut(exitAction);
         } else {
             dialogScreen.moveOut();
@@ -277,13 +280,17 @@ public class PauseScreen extends MenuScreen {
     }
 
     private void settingsClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         fadeOut(settingsAction);
     }
 
     @Override
     public void moveIn() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
         bgImage.addAction(Actions.fadeIn(0.15f));
         float left = -group.getX() - continueButton.getWidth() - 1f;
@@ -292,7 +299,7 @@ public class PauseScreen extends MenuScreen {
         moveInButton(settingsButton, right, SECOND_COLUMN, 0.05f);
         moveInButton(replayButton, left, FIRST_COLUMN, 0.1f);
         moveInButton(exitButton, right, SECOND_COLUMN, 0.1f);
-        table.setPosition(tableX, -(stage.getHeight()/2 + table.getHeight()));
+        table.setPosition(tableX, -(stage.getHeight() / 2 + table.getHeight()));
         table.addAction(Actions.moveTo(tableX, tableY, 0.15f));
         stage.addAction(Actions.sequence(Actions.delay(0.31f), movingFinishedAction));
     }
@@ -302,7 +309,9 @@ public class PauseScreen extends MenuScreen {
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         bgImage.addAction(Actions.fadeOut(0.15f));
         moving = true;
         float left = -group.getX() - continueButton.getWidth() - 1f;
@@ -311,23 +320,28 @@ public class PauseScreen extends MenuScreen {
         moveOutButton(settingsButton, right, 0.05f);
         moveOutButton(replayButton, left, 0.1f);
         moveOutButton(exitButton, right, 0.1f);
-        table.addAction(Actions.moveTo(tableX, -(stage.getHeight()/2 + table.getHeight()), 0.15f));
+        table
+            .addAction(Actions.moveTo(tableX, -(stage.getHeight() / 2 + table.getHeight()), 0.15f));
         stage.addAction(Actions.sequence(Actions.delay(0.31f), movingFinishedAction, endAction));
     }
 
     private void moveInButton(MenuButton button, float startPos, float endPos, float delay) {
         button.setX(startPos);
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineOut)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineOut)
+            )
+        );
     }
 
     private void moveOutButton(MenuButton button, float endPos, float delay) {
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
+            )
+        );
     }
 
 }

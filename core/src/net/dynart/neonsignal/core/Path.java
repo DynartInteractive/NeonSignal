@@ -13,7 +13,7 @@ public class Path {
         if (realIndex >= vertices.length) {
             return 0; // TODO: log.warn
         }
-        return (int)vertices[realIndex];
+        return (int) vertices[realIndex];
     }
 
     public float getY(int index) {
@@ -21,7 +21,7 @@ public class Path {
         if (realIndex >= vertices.length) {
             return 0; // TODO: log.warn
         }
-        return (int)vertices[realIndex];
+        return (int) vertices[realIndex];
     }
 
     public int getLength() {

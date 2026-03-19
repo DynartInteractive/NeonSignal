@@ -28,7 +28,8 @@ public class TouchListener extends InputAdapter {
 
     private boolean active;
     private final Settings settings;
-    private final Vector2 screenPos = new Vector2(); // temporary variable, don't want to create always
+    private final Vector2 screenPos = new Vector2(); // temporary variable, don't want to create
+                                                     // always
 
     private final int buttonCount;
     private final String[] buttonNames;
@@ -39,7 +40,8 @@ public class TouchListener extends InputAdapter {
 
     private final HashMap<Integer, Vector2> pointerDownPos = new HashMap<>();
     private final HashMap<Integer, Vector2> pointerCurrentPos = new HashMap<>();
-    private final HashMap<Integer, Integer> pointerButton = new HashMap<>(); // pointer -> button association
+    private final HashMap<Integer, Integer> pointerButton = new HashMap<>(); // pointer -> button
+                                                                             // association
     private int pointerSpecialButton = -1;
     private int pointerJoy = -1;
 
@@ -71,7 +73,8 @@ public class TouchListener extends InputAdapter {
         downDrawables = new Drawable[buttonCount];
         for (int buttonIndex = 0; buttonIndex < buttonCount; buttonIndex++) {
             upDrawables[buttonIndex] = skin.getDrawable(buttonNames[buttonIndex] + "_button_up");
-            downDrawables[buttonIndex] = skin.getDrawable(buttonNames[buttonIndex] + "_button_down");
+            downDrawables[buttonIndex] = skin
+                .getDrawable(buttonNames[buttonIndex] + "_button_down");
             buttonImages[buttonIndex] = new Image(upDrawables[buttonIndex]);
             buttonDown[buttonIndex] = false;
             buttons[buttonIndex] = ButtonMap.getByName(buttonNames[buttonIndex]);
@@ -133,7 +136,9 @@ public class TouchListener extends InputAdapter {
                 position.x += gameStage.getWidth();
             }
             Image button = buttonImages[i];
-            button.setPosition(position.x - button.getWidth() / 2f, position.y - button.getHeight() / 2f); // why the fuck the Align.center doesn't work?
+            button.setPosition(
+                position.x - button.getWidth() / 2f, position.y - button.getHeight() / 2f
+            ); // why the fuck the Align.center doesn't work?
             button.setVisible(active && player.hasAbility(abilityByActor.get(name)));
         }
     }
@@ -175,14 +180,16 @@ public class TouchListener extends InputAdapter {
             result = true;
         }
 
-        // if the special button is not down and no button under the pointer and it isn't on the moving side..
+        // if the special button is not down and no button under the pointer and it
+        // isn't on the moving side..
         if (!specialButtonDown && closestButtonIndex == -1 && !isOnMovingSide(pointer)) {
             // ..press it
             pressSpecialButton(pointer);
             result = true;
         }
 
-        // if the joy is not down and no button under the pointer and it is on the moving side..
+        // if the joy is not down and no button under the pointer and it is on the
+        // moving side..
         if (!joyDown && closestButtonIndex == -1 && isOnMovingSide(pointer)) {
             // ..press it
             pressJoy(pointer);
@@ -332,7 +339,7 @@ public class TouchListener extends InputAdapter {
     private int getClosestButtonIndex(int pointer) {
         float x = pointerCurrentPos.get(pointer).x;
         float y = pointerCurrentPos.get(pointer).y;
-        float minD = (float)Math.pow(config.getTouchButtonSize(), 2);
+        float minD = (float) Math.pow(config.getTouchButtonSize(), 2);
         int closestButton = -1;
         float closestD = Float.MAX_VALUE;
         PlayerComponent player = getPlayer();
@@ -344,7 +351,10 @@ public class TouchListener extends InputAdapter {
                 continue;
             }
             Image button = buttonImages[j];
-            float d = (float)Math.pow(x - button.getX() - button.getWidth() / 2f, 2) + (float)Math.pow(y - button.getY() - button.getHeight() / 2f, 2); // why the fuck Align.center doesn't work?
+            float d = (float) Math.pow(x - button.getX() - button.getWidth() / 2f, 2)
+                + (float) Math.pow(y - button.getY() - button.getHeight() / 2f, 2); // why the fuck
+                                                                                    // Align.center
+                                                                                    // doesn't work?
             if (d < minD && d < closestD) {
                 closestD = d;
                 closestButton = j;

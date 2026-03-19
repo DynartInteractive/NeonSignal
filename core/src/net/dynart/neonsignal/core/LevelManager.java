@@ -31,7 +31,8 @@ public class LevelManager {
         return worlds;
     }
 
-    private List<Level> createLevels(Map<String, Level> levelMap, String[] levelNames, String worldName) {
+    private List<Level> createLevels(Map<String, Level> levelMap, String[] levelNames,
+        String worldName) {
         List<Level> levels = new ArrayList<>();
         for (String levelName : levelNames) {
             Level level = levelMap.get(levelName);
@@ -52,7 +53,8 @@ public class LevelManager {
     private Map<String, Level> loadLevels(JsonValue resourcesJson) {
         JsonValue jsonLevels = resourcesJson.get("levels");
         Map<String, Level> levelMap = new HashMap<>();
-        for (JsonValue jsonLevel = jsonLevels.child(); jsonLevel != null; jsonLevel = jsonLevel.next()) {
+        for (JsonValue jsonLevel = jsonLevels.child(); jsonLevel != null; jsonLevel = jsonLevel
+            .next()) {
             String title = jsonLevel.getString("title", null);
             String path = jsonLevel.getString("path");
             Level level = new Level(jsonLevel.name(), path, title);

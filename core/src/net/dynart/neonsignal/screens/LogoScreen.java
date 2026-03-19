@@ -96,14 +96,14 @@ public class LogoScreen extends Screen {
         super.resize(width, height);
         group.setX((stage.getWidth() - 1280) / 2f);
         group.setY((stage.getHeight() - 720) / 2f);
-        //Gdx.input.setCursorCatched(true);
+        // Gdx.input.setCursorCatched(true);
     }
 
     @Override
     public void show() {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException ignored) {}
+        // try {
+        // Thread.sleep(1000);
+        // } catch (InterruptedException ignored) {}
         soundManager.playMusic("logo");
         startTime = engine.getElapsedTime();
         textImage.clearActions();
@@ -114,31 +114,37 @@ public class LogoScreen extends Screen {
         addDotAnimation(gImage, gBigImage, 3.12f);
         addDotAnimation(rImage, rBigImage, 4.1f);
         group.clearActions();
-        group.addAction(Actions.sequence(
-            Actions.delay(6.5f),
-            Actions.fadeOut(3f, Interpolation.linear)
-        ));
+        group.addAction(
+            Actions.sequence(
+                Actions.delay(6.5f),
+                Actions.fadeOut(3f, Interpolation.linear)
+            )
+        );
     }
 
     private void addDotAnimation(Actor actor, Actor bigActor, float delay) {
         actor.clearActions();
         actor.getColor().a = 0;
-        actor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.color(DOT_COLOR),
-            Actions.scaleTo(1.3f, 1.3f, 0.07f, Interpolation.pow2In),
-            Actions.scaleTo(1, 1, 0.07f, Interpolation.pow2Out)
-        ));
+        actor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.color(DOT_COLOR),
+                Actions.scaleTo(1.3f, 1.3f, 0.07f, Interpolation.pow2In),
+                Actions.scaleTo(1, 1, 0.07f, Interpolation.pow2Out)
+            )
+        );
         bigActor.clearActions();
         bigActor.getColor().a = 0;
-        bigActor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.color(BIG_DOT_COLOR),
-            Actions.parallel(
-                Actions.scaleTo(22f, 22f, 0.5f, Interpolation.pow2In),
-                Actions.fadeOut(0.5f, Interpolation.pow2Out)
+        bigActor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.color(BIG_DOT_COLOR),
+                Actions.parallel(
+                    Actions.scaleTo(22f, 22f, 0.5f, Interpolation.pow2In),
+                    Actions.fadeOut(0.5f, Interpolation.pow2Out)
+                )
             )
-        ));
+        );
     }
 
     @Override

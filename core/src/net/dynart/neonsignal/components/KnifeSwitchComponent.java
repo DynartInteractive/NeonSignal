@@ -28,7 +28,7 @@ public class KnifeSwitchComponent extends Component {
         messageHandler.subscribe(SwitchComponent.ON, new MessageListener() {
             @Override
             public void receive(Entity sender, String message) {
-                view.setAnimationTime(0,0);
+                view.setAnimationTime(0, 0);
                 view.setAnimation(0, "switch_blue_on");
                 switchTime = 0.14f;
                 engine.getSoundManager().play("switch");
@@ -37,7 +37,7 @@ public class KnifeSwitchComponent extends Component {
         messageHandler.subscribe(SwitchComponent.OFF, new MessageListener() {
             @Override
             public void receive(Entity sender, String message) {
-                view.setAnimationTime(0,0);
+                view.setAnimationTime(0, 0);
                 view.setAnimation(0, "switch_blue_off");
                 switchTime = 0.14f;
                 engine.getSoundManager().play("switch");

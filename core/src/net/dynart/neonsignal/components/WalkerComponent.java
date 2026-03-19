@@ -20,7 +20,8 @@ public class WalkerComponent extends Component {
     private float stopTime;
     private float noFollowPlayerTime;
 
-    public WalkerComponent(String directionName, float speed, boolean watchEdge, boolean flipView, boolean followPlayer) {
+    public WalkerComponent(String directionName, float speed, boolean watchEdge, boolean flipView,
+        boolean followPlayer) {
         direction = Direction.get(directionName);
         this.speed = speed;
         this.watchEdge = watchEdge;
@@ -93,15 +94,12 @@ public class WalkerComponent extends Component {
         int gridLeftX = grid.getX(body.getLeft());
         int gridRightX = grid.getX(body.getRight());
         int gridY = grid.getY(body.getBottom()) - 1;
-        return (
-                direction == Direction.RIGHT
-                && !grid.get(Grid.Layer.BLOCK, gridRightX, gridY)
-                && !grid.get(Grid.Layer.TOP_BLOCK, gridRightX, gridY)
-            ) || (
-                direction == Direction.LEFT
+        return (direction == Direction.RIGHT
+            && !grid.get(Grid.Layer.BLOCK, gridRightX, gridY)
+            && !grid.get(Grid.Layer.TOP_BLOCK, gridRightX, gridY))
+            || (direction == Direction.LEFT
                 && !grid.get(Grid.Layer.BLOCK, gridLeftX, gridY)
-                && !grid.get(Grid.Layer.TOP_BLOCK, gridLeftX, gridY)
-            );
+                && !grid.get(Grid.Layer.TOP_BLOCK, gridLeftX, gridY));
     }
 
     private void flipDirection() {

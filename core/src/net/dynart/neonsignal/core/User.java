@@ -19,10 +19,10 @@ public class User {
 
     public boolean isLevelUnlocked(Level level) {
         return true;
-        /* TODO: just for testing, remove it later
-        String key = getLevelDataKey(level, "unlocked");
-        return preferences.getBoolean(key, false);
-        */
+        /*
+         * TODO: just for testing, remove it later String key = getLevelDataKey(level,
+         * "unlocked"); return preferences.getBoolean(key, false);
+         */
     }
 
     public void setLevelUnlocked(Level level) {

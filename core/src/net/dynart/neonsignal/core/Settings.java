@@ -20,7 +20,8 @@ public class Settings {
         preferences = Gdx.app.getPreferences(config.getName());
         this.config = config;
         if (!preferences.contains("version")) {
-            preferences.putString("version", VersionUtil.getVersion()); // TODO: use config version, not the game version!
+            preferences.putString("version", VersionUtil.getVersion()); // TODO: use config version,
+                                                                        // not the game version!
         }
         preferences.flush();
     }
@@ -85,13 +86,14 @@ public class Settings {
     }
 
     public boolean mustCatchMouse() {
-        //return false;
+        // return false;
         return getControllerType() != ControllerType.TOUCH;
     }
 
     public Vector2 getTouchPosition(String name, Screen screen) {
         Vector2 defaultPosition = config.getDefaultTouchPositions().get(name);
-        touchPosition.x = preferences.getFloat("button_" + name + "_x", defaultPosition.x - screen.getSideBlackBarWidth());
+        touchPosition.x = preferences
+            .getFloat("button_" + name + "_x", defaultPosition.x - screen.getSideBlackBarWidth());
         touchPosition.y = preferences.getFloat("button_" + name + "_y", defaultPosition.y);
         return touchPosition;
     }

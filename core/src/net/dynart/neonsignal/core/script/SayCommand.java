@@ -15,14 +15,15 @@ public class SayCommand implements Command {
     private final boolean start;
     private final boolean left;
 
-    public SayCommand(Engine engine, String name, String text, boolean start, boolean finish, boolean left) {
+    public SayCommand(Engine engine, String name, String text, boolean start, boolean finish,
+        boolean left) {
         super();
         this.name = name;
         this.text = text;
         this.start = start;
         this.finish = finish;
         this.left = left;
-        cutsceneScreen = (CutsceneScreen)engine.getScreen("cutscene");
+        cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
     }
 
     public boolean act(float delta) {

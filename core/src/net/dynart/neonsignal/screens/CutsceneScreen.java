@@ -52,10 +52,10 @@ public class CutsceneScreen extends MenuScreen {
     private boolean sayFinished;
 
     // text bubble
-    //private final Group textBubble;
-    //private final Image textBubbleBg;
-    //private final List<Label> textBubbleLabels = new ArrayList<>();
-    //private final Label.LabelStyle textBubbleLs;
+    // private final Group textBubble;
+    // private final Image textBubbleBg;
+    // private final List<Label> textBubbleLabels = new ArrayList<>();
+    // private final Label.LabelStyle textBubbleLs;
     private final SequenceCommand commands = new SequenceCommand();
 
     // nexus says box
@@ -81,7 +81,7 @@ public class CutsceneScreen extends MenuScreen {
 
     private final Image nexusDimBg;
 
-    //private final FadeImage characterImage;
+    // private final FadeImage characterImage;
 
     private final TextureManager textureManager;
     private final FontManager fontManager;
@@ -96,30 +96,22 @@ public class CutsceneScreen extends MenuScreen {
 
         textureManager = engine.getTextureManager();
         fontManager = engine.getFontManager();
-/*
-        // text bubble
-        textBubbleBg = new Image(skin.getDrawable("text_bubble"));
-        textBubbleBg.setWidth(510);
-        textBubbleBg.setHeight(153);
-
-        textBubbleLs = new Label.LabelStyle();
-        textBubbleLs.font = fontManager.get("text_bubble");
-
-        textBubble = new Group();
-        textBubble.addActor(textBubbleBg);
-        textBubble.setY(720 - 315);
-
-        float lineHeight = textBubbleLs.font.getLineHeight();
-        for (int i = 0; i < 3; i++) {
-            Label tbLabel = new Label("", textBubbleLs);
-            tbLabel.setColor(0.05f, 0.05f, 0.05f, 1);
-            tbLabel.setAlignment(Align.bottom);
-            tbLabel.setWidth(textBubbleBg.getWidth());
-            tbLabel.setHeight(lineHeight);
-            textBubbleLabels.add(tbLabel);
-            textBubble.addActor(tbLabel);
-        }
-*/
+        /*
+         * // text bubble textBubbleBg = new Image(skin.getDrawable("text_bubble"));
+         * textBubbleBg.setWidth(510); textBubbleBg.setHeight(153);
+         * 
+         * textBubbleLs = new Label.LabelStyle(); textBubbleLs.font =
+         * fontManager.get("text_bubble");
+         * 
+         * textBubble = new Group(); textBubble.addActor(textBubbleBg);
+         * textBubble.setY(720 - 315);
+         * 
+         * float lineHeight = textBubbleLs.font.getLineHeight(); for (int i = 0; i < 3;
+         * i++) { Label tbLabel = new Label("", textBubbleLs); tbLabel.setColor(0.05f,
+         * 0.05f, 0.05f, 1); tbLabel.setAlignment(Align.bottom);
+         * tbLabel.setWidth(textBubbleBg.getWidth()); tbLabel.setHeight(lineHeight);
+         * textBubbleLabels.add(tbLabel); textBubble.addActor(tbLabel); }
+         */
         // nexus says box
         nexusBoxBg = new Image(skin.getDrawable("dialog_bg"));
         nexusBoxBg.setWidth(800);
@@ -163,13 +155,12 @@ public class CutsceneScreen extends MenuScreen {
         nexusDimBg.setVisible(false);
         stage.addActor(nexusDimBg);
 
-//        stage.addActor(textBubble);
+        // stage.addActor(textBubble);
         stage.addActor(nexusBox);
-/*
-        characterImage = new FadeImage(textureManager.getTexture("coolfox"));
-        characterImage.setY(-40);
-        stage.addActor(characterImage);
-*/
+        /*
+         * characterImage = new FadeImage(textureManager.getTexture("coolfox"));
+         * characterImage.setY(-40); stage.addActor(characterImage);
+         */
         skipButton = new MenuButton(engine, "Skip");
         skipButton.setWidth(240);
         skipButton.setHeight(120);
@@ -216,7 +207,7 @@ public class CutsceneScreen extends MenuScreen {
 
     @Override
     public void init() { // do not call the parent init!
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
         gameScene = gameScreen.getScene();
         entityManager = gameScene.getEntityManager();
 
@@ -276,15 +267,11 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setColor(c);
 
         canSkip = false;
-/*
-        setCharacterVisible(false);
-        setTextBubbleVisible(false);
-        characterImage.clearActions();
-        textBubble.clearActions();
-        for (Label l : textBubbleLabels) {
-            l.clearActions();
-        }
-*/
+        /*
+         * setCharacterVisible(false); setTextBubbleVisible(false);
+         * characterImage.clearActions(); textBubble.clearActions(); for (Label l :
+         * textBubbleLabels) { l.clearActions(); }
+         */
         // Reset nexus box state
         nexusSaysFinished = true;
         nexusBox.setVisible(false);
@@ -324,25 +311,27 @@ public class CutsceneScreen extends MenuScreen {
         nexusDimBg.addAction(Actions.fadeOut(0.2f, Interpolation.pow2In));
 
         nexusBox.clearActions();
-        nexusBox.addAction(Actions.sequence(
-            Actions.fadeOut(0.2f, Interpolation.pow2In),
-            new Action() {
-                @Override
-                public boolean act(float delta) {
-                    nexusBox.setVisible(false);
-                    nexusButton.setVisible(false);
-                    nexusDimBg.setVisible(false);
-                    nexusSaysFinished = true;
+        nexusBox.addAction(
+            Actions.sequence(
+                Actions.fadeOut(0.2f, Interpolation.pow2In),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        nexusBox.setVisible(false);
+                        nexusButton.setVisible(false);
+                        nexusDimBg.setVisible(false);
+                        nexusSaysFinished = true;
 
-                    // Re-enable skip button for next command
-                    canSkip = false;
-                    menuCursor.setDisabled(true);
-                    menuCursor.setGlobalAlpha(0);
-                    menuCursor.setCurrentItem(skipButton);
-                    return true;
+                        // Re-enable skip button for next command
+                        canSkip = false;
+                        menuCursor.setDisabled(true);
+                        menuCursor.setGlobalAlpha(0);
+                        menuCursor.setCurrentItem(skipButton);
+                        return true;
+                    }
                 }
-            }
-        ));
+            )
+        );
     }
 
     @Override
@@ -363,19 +352,16 @@ public class CutsceneScreen extends MenuScreen {
         skipButton.setX(stage.getWidth() - skipButton.getWidth() - getSideBlackBarWidth() - 20);
         skipButton.setY(stage.getHeight() - skipButton.getHeight() - 20);
     }
-/*
-    private float getCharacterImageX(boolean left) {
-        return left
-            ? getSideBlackBarWidth() - 50 + characterImage.getWidth()
-            : stage.getWidth() - getSideBlackBarWidth() - characterImage.getWidth() + 50;
-    }
 
-    private float getTextBubbleX(boolean left) {
-        return left
-            ? getSideBlackBarWidth() + 100 + textBubbleBg.getWidth()
-            : stage.getWidth() - getSideBlackBarWidth() - textBubbleBg.getWidth() - 100;
-    }
-*/
+    /*
+     * private float getCharacterImageX(boolean left) { return left ?
+     * getSideBlackBarWidth() - 50 + characterImage.getWidth() : stage.getWidth() -
+     * getSideBlackBarWidth() - characterImage.getWidth() + 50; }
+     * 
+     * private float getTextBubbleX(boolean left) { return left ?
+     * getSideBlackBarWidth() + 100 + textBubbleBg.getWidth() : stage.getWidth() -
+     * getSideBlackBarWidth() - textBubbleBg.getWidth() - 100; }
+     */
     @Override
     public void draw() {
         clear();
@@ -439,122 +425,79 @@ public class CutsceneScreen extends MenuScreen {
         super.update(delta);
     }
 
-
     public void say(String text, String name, boolean start, boolean finish, boolean left) {
-/*
-        String[] lines = text.split("\n");
-        if (lines.length > 3) {
-            throw new RuntimeException("Say text more than 3 lines.");
-        }
-        float textBubbleDelay = 1.0f + (float)lines.length * 0.4f;
-        sayFinished = false;
-
-        for (Label tbLabel : textBubbleLabels) {
-            tbLabel.setText(""); // clear texts
-        }
-
-        characterImage.setDrawable(new TextureRegionDrawable(textureManager.getTexture(name)));
-        characterImage.setScaleX(left ? -1 : 1);
-        textBubbleBg.setScaleX(left ? -1 : 1);
-
-        // text bubble label in/out animation
-        float lineHeight = textBubbleLs.font.getLineHeight();
-        float textBubbleTargetHeight = (lineHeight * (lines.length + 1) + 80f);
-        textBubbleBg.setHeight(textBubbleTargetHeight);
-        float y = 100f + lineHeight * (lines.length-1);
-        for (int i = 0; i < lines.length; i++) {
-            Label tbLabel = textBubbleLabels.get(i);
-            tbLabel.setY(y);
-            y -= lineHeight;
-            tbLabel.setText(lines[i]);
-            Color c = tbLabel.getColor();
-            c.a = 0;
-            tbLabel.setColor(c);
-            tbLabel.setX(left ? -textBubbleBg.getWidth() - 10f : 10f);
-            tbLabel.clearActions();
-            tbLabel.addAction(Actions.sequence(
-                Actions.delay(0.2f + (float)i * 0.2f),
-                Actions.parallel(
-                    Actions.moveTo(left ? -textBubbleBg.getWidth() : 0, tbLabel.getY(), 0.1f),
-                    Actions.fadeIn(0.1f)
-                )
-            ));
-        }
-
-        // text bubble move in/out animation
-        textBubble.setX(getTextBubbleX(left) + (left ? -10f : 10f));
-        textBubble.clearActions();
-        textBubble.addAction(
-            Actions.sequence(
-                Actions.delay(0.1f),
-                Actions.parallel(
-                    Actions.moveTo(getTextBubbleX(left), textBubble.getY(),0.2f, Interpolation.pow2Out),
-                    Actions.fadeIn(0.2f, Interpolation.pow2InInverse)
-                ),
-                Actions.delay(textBubbleDelay),
-                Actions.parallel(
-                    Actions.moveTo(getTextBubbleX(left) + (left ? -10f : 10f), textBubble.getY(),0.1f, Interpolation.pow2OutInverse),
-                    Actions.fadeOut(0.1f, Interpolation.pow2In)
-                )
-            )
-        );
-
-        // character move in/out animation
-        Action startAction = Actions.parallel(
-            Actions.moveTo(getCharacterImageX(left), characterImage.getY(),0.2f, Interpolation.pow2Out),
-            Actions.fadeIn(0.2f, Interpolation.pow2InInverse)
-        );
-
-        Action finishAction = Actions.parallel(
-            Actions.moveTo(getCharacterImageX(left) + (left ? -10f : 10f), characterImage.getY(),0.1f, Interpolation.pow2OutInverse),
-            Actions.fadeOut(0.1f, Interpolation.pow2In)
-        );
-
-        characterImage.clearActions();
-
-        if (start && !finish) {
-            characterImage.setX(getCharacterImageX(left) + (left ? -10f : 10f));
-            characterImage.addAction(
-                Actions.sequence(startAction, Actions.delay(textBubbleDelay + 0.2f), sayEndAction)
-            );
-        }
-
-        if (finish && !start) {
-            characterImage.addAction(
-                Actions.sequence(
-                    Actions.delay(textBubbleDelay + 0.5f), finishAction, sayEndAction
-                )
-            );
-        }
-
-        if (start && finish) {
-            characterImage.setX(getCharacterImageX(left) + (left ? -10f : 10f));
-            characterImage.addAction(
-                Actions.sequence(startAction, Actions.delay(textBubbleDelay + 0.2f), finishAction, sayEndAction)
-            );
-        }
-
-        if (!start && !finish) {
-            characterImage.addAction(
-                Actions.sequence(Actions.delay(textBubbleDelay + 0.5f), sayEndAction)
-            );
-        }
-*/
+        /*
+         * String[] lines = text.split("\n"); if (lines.length > 3) { throw new
+         * RuntimeException("Say text more than 3 lines."); } float textBubbleDelay =
+         * 1.0f + (float)lines.length * 0.4f; sayFinished = false;
+         * 
+         * for (Label tbLabel : textBubbleLabels) { tbLabel.setText(""); // clear texts
+         * }
+         * 
+         * characterImage.setDrawable(new
+         * TextureRegionDrawable(textureManager.getTexture(name)));
+         * characterImage.setScaleX(left ? -1 : 1); textBubbleBg.setScaleX(left ? -1 :
+         * 1);
+         * 
+         * // text bubble label in/out animation float lineHeight =
+         * textBubbleLs.font.getLineHeight(); float textBubbleTargetHeight = (lineHeight
+         * * (lines.length + 1) + 80f); textBubbleBg.setHeight(textBubbleTargetHeight);
+         * float y = 100f + lineHeight * (lines.length-1); for (int i = 0; i <
+         * lines.length; i++) { Label tbLabel = textBubbleLabels.get(i);
+         * tbLabel.setY(y); y -= lineHeight; tbLabel.setText(lines[i]); Color c =
+         * tbLabel.getColor(); c.a = 0; tbLabel.setColor(c); tbLabel.setX(left ?
+         * -textBubbleBg.getWidth() - 10f : 10f); tbLabel.clearActions();
+         * tbLabel.addAction(Actions.sequence( Actions.delay(0.2f + (float)i * 0.2f),
+         * Actions.parallel( Actions.moveTo(left ? -textBubbleBg.getWidth() : 0,
+         * tbLabel.getY(), 0.1f), Actions.fadeIn(0.1f) ) )); }
+         * 
+         * // text bubble move in/out animation textBubble.setX(getTextBubbleX(left) +
+         * (left ? -10f : 10f)); textBubble.clearActions(); textBubble.addAction(
+         * Actions.sequence( Actions.delay(0.1f), Actions.parallel(
+         * Actions.moveTo(getTextBubbleX(left), textBubble.getY(),0.2f,
+         * Interpolation.pow2Out), Actions.fadeIn(0.2f, Interpolation.pow2InInverse) ),
+         * Actions.delay(textBubbleDelay), Actions.parallel(
+         * Actions.moveTo(getTextBubbleX(left) + (left ? -10f : 10f),
+         * textBubble.getY(),0.1f, Interpolation.pow2OutInverse), Actions.fadeOut(0.1f,
+         * Interpolation.pow2In) ) ) );
+         * 
+         * // character move in/out animation Action startAction = Actions.parallel(
+         * Actions.moveTo(getCharacterImageX(left), characterImage.getY(),0.2f,
+         * Interpolation.pow2Out), Actions.fadeIn(0.2f, Interpolation.pow2InInverse) );
+         * 
+         * Action finishAction = Actions.parallel(
+         * Actions.moveTo(getCharacterImageX(left) + (left ? -10f : 10f),
+         * characterImage.getY(),0.1f, Interpolation.pow2OutInverse),
+         * Actions.fadeOut(0.1f, Interpolation.pow2In) );
+         * 
+         * characterImage.clearActions();
+         * 
+         * if (start && !finish) { characterImage.setX(getCharacterImageX(left) + (left
+         * ? -10f : 10f)); characterImage.addAction( Actions.sequence(startAction,
+         * Actions.delay(textBubbleDelay + 0.2f), sayEndAction) ); }
+         * 
+         * if (finish && !start) { characterImage.addAction( Actions.sequence(
+         * Actions.delay(textBubbleDelay + 0.5f), finishAction, sayEndAction ) ); }
+         * 
+         * if (start && finish) { characterImage.setX(getCharacterImageX(left) + (left ?
+         * -10f : 10f)); characterImage.addAction( Actions.sequence(startAction,
+         * Actions.delay(textBubbleDelay + 0.2f), finishAction, sayEndAction) ); }
+         * 
+         * if (!start && !finish) { characterImage.addAction(
+         * Actions.sequence(Actions.delay(textBubbleDelay + 0.5f), sayEndAction) ); }
+         */
     }
 
     public void setCharacterVisible(boolean value) {
         /*
-        Color c = characterImage.getColor();
-        c.a = value ? 1 : 0;
-        characterImage.setColor(c);
+         * Color c = characterImage.getColor(); c.a = value ? 1 : 0;
+         * characterImage.setColor(c);
          */
     }
 
     public void setTextBubbleVisible(boolean value) {
         /*
-        Color c = textBubble.getColor();
-        c.a = value ? 1 : 0;
-        textBubble.setColor(c);
+         * Color c = textBubble.getColor(); c.a = value ? 1 : 0; textBubble.setColor(c);
          */
     }
 
@@ -568,11 +511,15 @@ public class CutsceneScreen extends MenuScreen {
 
     @Override
     public void moveIn() {
-        if (moving) { return; }
+        if (moving) {
+            return;
+        }
         moving = true;
         topBar.setY(stage.getHeight());
         bottomBar.setY(-BAR_HEIGHT);
-        topBar.addAction(Actions.moveTo(0, stage.getHeight() - BAR_HEIGHT, 0.28f, Interpolation.pow2InInverse));
+        topBar.addAction(
+            Actions.moveTo(0, stage.getHeight() - BAR_HEIGHT, 0.28f, Interpolation.pow2InInverse)
+        );
         bottomBar.addAction(Actions.moveTo(0, 0, 0.28f, Interpolation.pow2InInverse));
         stage.addAction(Actions.sequence(Actions.delay(0.3f), movingFinishedAction));
     }
@@ -581,19 +528,27 @@ public class CutsceneScreen extends MenuScreen {
         moving = true;
         topBar.addAction(Actions.moveTo(0, stage.getHeight(), 0.28f, Interpolation.pow2In));
         bottomBar.addAction(Actions.moveTo(0, -BAR_HEIGHT, 0.28f, Interpolation.pow2In));
-        stage.addAction(Actions.sequence(Actions.delay(0.3f), movingFinishedAction, moveOutEndAction));
+        stage.addAction(
+            Actions.sequence(Actions.delay(0.3f), movingFinishedAction, moveOutEndAction)
+        );
     }
 
     /**
      * Display multi-line text with typewriter animation in the nexus box.
      *
-     * @param lines List of NexusLine objects containing text and per-line delays
-     * @param charDelay Seconds between characters during typewriter effect
-     * @param lineDelay Default delay before each line starts (if line.delay is 0)
-     * @param holdTime Seconds to display after typing completes
-     * @param buttonLabel Label for a button to show after animation (null for auto-finish)
+     * @param lines
+     *            List of NexusLine objects containing text and per-line delays
+     * @param charDelay
+     *            Seconds between characters during typewriter effect
+     * @param lineDelay
+     *            Default delay before each line starts (if line.delay is 0)
+     * @param holdTime
+     *            Seconds to display after typing completes
+     * @param buttonLabel
+     *            Label for a button to show after animation (null for auto-finish)
      */
-    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
+    public void nexusSays(List<NexusLine> lines, float charDelay, float lineDelay, float holdTime,
+        String buttonLabel) {
         nexusSaysFinished = false;
         activeTypewriterActions.clear();
 
@@ -675,13 +630,17 @@ public class CutsceneScreen extends MenuScreen {
 
             float startDelay = lineStartTimes[i];
 
-            TypewriterAction typewriter = new TypewriterAction(label, line.text, charDelay, null, soundManager, "terminal");
+            TypewriterAction typewriter = new TypewriterAction(
+                label, line.text, charDelay, null, soundManager, "terminal"
+            );
             activeTypewriterActions.add(typewriter);
 
-            label.addAction(Actions.sequence(
-                Actions.delay(startDelay),
-                typewriter
-            ));
+            label.addAction(
+                Actions.sequence(
+                    Actions.delay(startDelay),
+                    typewriter
+                )
+            );
         }
 
         // Fade in the dim background
@@ -698,9 +657,11 @@ public class CutsceneScreen extends MenuScreen {
         nexusBox.setVisible(true);
 
         if (buttonLabel != null) {
-            // Setup button to appear after typing completes (below the box like DialogScreen)
+            // Setup button to appear after typing completes (below the box like
+            // DialogScreen)
             nexusButton.setText(buttonLabel);
-            nexusButton.setX(nexusBox.getX() + (nexusBoxBg.getWidth() - nexusButton.getWidth()) / 2);
+            nexusButton
+                .setX(nexusBox.getX() + (nexusBoxBg.getWidth() - nexusButton.getWidth()) / 2);
             nexusButton.setY(nexusBox.getY() - nexusButton.getHeight() - 20);
 
             Color btnColor = nexusButton.getColor();
@@ -708,46 +669,52 @@ public class CutsceneScreen extends MenuScreen {
             nexusButton.setColor(btnColor);
 
             // Schedule button appearance and set cursor to it
-            nexusBox.addAction(Actions.sequence(
-                Actions.fadeIn(0.2f, Interpolation.pow2Out),
-                Actions.delay(totalTypingTime),
-                new Action() {
-                    @Override
-                    public boolean act(float delta) {
-                        // Hide skip button while nexus button is active
-                        skipButton.setVisible(false);
-                        canSkip = false;
+            nexusBox.addAction(
+                Actions.sequence(
+                    Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                    Actions.delay(totalTypingTime),
+                    new Action() {
+                        @Override
+                        public boolean act(float delta) {
+                            // Hide skip button while nexus button is active
+                            skipButton.setVisible(false);
+                            canSkip = false;
 
-                        nexusButton.setVisible(true);
-                        nexusButton.addAction(Actions.fadeIn(0.2f, Interpolation.pow2Out));
-                        menuCursor.setDisabled(false);
-                        menuCursor.setGlobalAlpha(1f);
-                        menuCursor.setCurrentItem(nexusButtonItem);
-                        return true;
+                            nexusButton.setVisible(true);
+                            nexusButton.addAction(Actions.fadeIn(0.2f, Interpolation.pow2Out));
+                            menuCursor.setDisabled(false);
+                            menuCursor.setGlobalAlpha(1f);
+                            menuCursor.setCurrentItem(nexusButtonItem);
+                            return true;
+                        }
                     }
-                }
-            ));
+                )
+            );
         } else {
             // Schedule fade out and completion (original behavior)
-            nexusBox.addAction(Actions.sequence(
-                Actions.fadeIn(0.2f, Interpolation.pow2Out),
-                Actions.delay(totalTypingTime + holdTime),
-                Actions.fadeOut(0.2f, Interpolation.pow2In),
-                new Action() {
-                    @Override
-                    public boolean act(float delta) {
-                        nexusBox.setVisible(false);
-                        nexusDimBg.setVisible(false);
-                        nexusSaysFinished = true;
-                        return true;
+            nexusBox.addAction(
+                Actions.sequence(
+                    Actions.fadeIn(0.2f, Interpolation.pow2Out),
+                    Actions.delay(totalTypingTime + holdTime),
+                    Actions.fadeOut(0.2f, Interpolation.pow2In),
+                    new Action() {
+                        @Override
+                        public boolean act(float delta) {
+                            nexusBox.setVisible(false);
+                            nexusDimBg.setVisible(false);
+                            nexusSaysFinished = true;
+                            return true;
+                        }
                     }
-                }
-            ));
+                )
+            );
             // Fade out dim background in parallel
-            nexusDimBg.addAction(Actions.sequence(
-                Actions.delay(0.2f + totalTypingTime + holdTime),
-                Actions.fadeOut(0.2f, Interpolation.pow2In)
-            ));
+            nexusDimBg.addAction(
+                Actions.sequence(
+                    Actions.delay(0.2f + totalTypingTime + holdTime),
+                    Actions.fadeOut(0.2f, Interpolation.pow2In)
+                )
+            );
         }
     }
 
@@ -777,18 +744,20 @@ public class CutsceneScreen extends MenuScreen {
 
         // Clear existing actions and fade out quickly
         nexusBox.clearActions();
-        nexusBox.addAction(Actions.sequence(
-            Actions.fadeOut(0.1f),
-            new Action() {
-                @Override
-                public boolean act(float delta) {
-                    nexusBox.setVisible(false);
-                    nexusDimBg.setVisible(false);
-                    nexusSaysFinished = true;
-                    return true;
+        nexusBox.addAction(
+            Actions.sequence(
+                Actions.fadeOut(0.1f),
+                new Action() {
+                    @Override
+                    public boolean act(float delta) {
+                        nexusBox.setVisible(false);
+                        nexusDimBg.setVisible(false);
+                        nexusSaysFinished = true;
+                        return true;
+                    }
                 }
-            }
-        ));
+            )
+        );
     }
 
     /**

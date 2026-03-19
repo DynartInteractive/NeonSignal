@@ -71,7 +71,8 @@ public class EntityCollisionComponent extends Component {
             return;
         }
 
-        Set<Entity> otherEntities = entityManager.getAllByClassAndArea(ColliderComponent.class, entity);
+        Set<Entity> otherEntities = entityManager
+            .getAllByClassAndArea(ColliderComponent.class, entity);
         for (Entity otherEntity : otherEntities) {
 
             if (otherEntity.hasComponent(excludeComponentClass)) {
@@ -99,13 +100,13 @@ public class EntityCollisionComponent extends Component {
         }
     }
 
-    private boolean skipCheck(Entity otherEntity, BodyComponent otherBody, ColliderComponent otherCollider) {
+    private boolean skipCheck(Entity otherEntity, BodyComponent otherBody,
+        ColliderComponent otherCollider) {
         return entity == otherEntity
             || !otherEntity.isActive()
             || !otherCollider.isActive()
             || !body.isOverlap(otherBody);
     }
-
 
     private void handleCollision(Direction direction, BodyComponent otherBody) {
         switch (direction) {

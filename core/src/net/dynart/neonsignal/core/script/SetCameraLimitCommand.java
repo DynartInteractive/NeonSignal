@@ -5,7 +5,7 @@ import net.dynart.neonsignal.core.Engine;
 import net.dynart.neonsignal.core.Entity;
 import net.dynart.neonsignal.core.EntityManager;
 
-public class SetCameraLimitCommand implements Command  {
+public class SetCameraLimitCommand implements Command {
 
     private final EntityManager entityManager;
     private final String entityName;
@@ -14,7 +14,6 @@ public class SetCameraLimitCommand implements Command  {
         entityManager = engine.getGameScene().getEntityManager();
         this.entityName = entityName;
     }
-
 
     @Override
     public boolean act(float delta) {

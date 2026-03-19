@@ -1,0 +1,13 @@
+{"sequence":[
+  {"nexus_says":{
+    "lines":[
+      {"text":"Minor data inconsistency detected.","delay":0},
+      {"text":"Impact: negligible.","delay":0.55},
+      {"text":"Continue task execution.","delay":0.95}
+    ],
+    "char_delay":0.04,
+    "line_delay":0.55,
+    "hold_time":2.0,
+    "button_label":"Next"
+  }}
+]}

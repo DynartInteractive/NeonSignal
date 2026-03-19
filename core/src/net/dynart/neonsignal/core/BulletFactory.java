@@ -30,14 +30,16 @@ public class BulletFactory {
         body.setY(o.positionY != null ? o.positionY : o.ownerBody.getCenterY());
         body.setSize(o.sizeX != null ? o.sizeX : 16, o.sizeY != null ? o.sizeY : 16);
 
-        GridCollisionComponent gridCollision = bulletEntity.getComponent(GridCollisionComponent.class);
+        GridCollisionComponent gridCollision = bulletEntity
+            .getComponent(GridCollisionComponent.class);
         gridCollision.setActive(o.collideWithGrid);
 
         VelocityComponent velocity = bulletEntity.getComponent(VelocityComponent.class);
         velocity.setX(o.velocityX);
         velocity.setY(o.velocityY);
 
-        OverlapAttackComponent overlapAttack = bulletEntity.getComponent(OverlapAttackComponent.class);
+        OverlapAttackComponent overlapAttack = bulletEntity
+            .getComponent(OverlapAttackComponent.class);
         overlapAttack.setActive(true);
         overlapAttack.setExceptBody(o.ownerBody);
         overlapAttack.setPower(o.power);

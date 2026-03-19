@@ -20,10 +20,11 @@ public class AddPlayerAbilityCommand implements Command {
     @Override
     public boolean act(float delta) {
         // add ability
-        PlayerComponent player = engine.getGameScene().getPlayer().getComponent(PlayerComponent.class);
+        PlayerComponent player = engine.getGameScene().getPlayer()
+            .getComponent(PlayerComponent.class);
         player.addAbility(ability);
         // refresh hud
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         gameScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         return true;
     }

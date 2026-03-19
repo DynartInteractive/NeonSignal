@@ -31,10 +31,7 @@ public class PlayerComponent extends Component {
 
     public enum GunPosition {
 
-        UP("up"),
-        DIAGONAL_UP("diagonal_up"),
-        FORWARD(null),
-        DIAGONAL_DOWN("diagonal_down");
+        UP("up"), DIAGONAL_UP("diagonal_up"), FORWARD(null), DIAGONAL_DOWN("diagonal_down");
 
         private final String name;
 
@@ -99,11 +96,10 @@ public class PlayerComponent extends Component {
     private float attackTime;
     private float lastAttackTime;
     private String currentAnimationName = "player_idle";
-    //private GameSprite weaponSprite;
+    // private GameSprite weaponSprite;
 
     private static final float CROUCH_HEIGHT = 128f;
     private static final float HEIGHT = 190f;
-
 
     private Entity pushedBy = null;
     private boolean headUnderWater;
@@ -131,12 +127,15 @@ public class PlayerComponent extends Component {
 
     private final Set<PlayerAbility> abilities = new HashSet<>();
 
-
     private static final String[] fallDownSounds = { "falldown", "falldown2", "falldown3" };
-    private static final String[] swimSounds = { "swim1", "swim2", "swim3" }; // avosound.com, Sound ID: 80475, Filename: Water,Churn,Heavy,Underwater,Metallic.wav
+    private static final String[] swimSounds = { "swim1", "swim2", "swim3" }; // avosound.com, Sound
+                                                                              // ID: 80475,
+                                                                              // Filename:
+                                                                              // Water,Churn,Heavy,Underwater,Metallic.wav
 
     private static final String[] bulletHitSounds = { "laser_hit1", "laser_hit2" };
-    private static final String[] bulletFireSounds = { "laser_fire1", "laser_fire2", "laser_fire1" };
+    private static final String[] bulletFireSounds = { "laser_fire1", "laser_fire2",
+        "laser_fire1" };
 
     private String animPrefix = "";
 
@@ -223,7 +222,9 @@ public class PlayerComponent extends Component {
         messageHandler.subscribe(EntityCollisionComponent.RIGHT_COLLISION, killCollisionListener);
 
         // set the sliding flag if we touch a sliding block
-        messageHandler.subscribe(GridCollisionComponent.SLIDER_COLLISION, (sender, message) -> sliding = true);
+        messageHandler.subscribe(
+            GridCollisionComponent.SLIDER_COLLISION, (sender, message) -> sliding = true
+        );
 
         // health handling
         messageHandler.subscribe(HealthComponent.DECREASED, (sender, message) -> damage());
@@ -279,7 +280,6 @@ public class PlayerComponent extends Component {
         return score;
     }
 
-
     public int getItemCount() {
         return itemCount;
     }
@@ -299,7 +299,6 @@ public class PlayerComponent extends Component {
     public int getSecretCount() {
         return secretCount;
     }
-
 
     public void jumpOnNextFrame() {
         jumpOnNextFrame = true;
@@ -325,8 +324,11 @@ public class PlayerComponent extends Component {
         switch (currentWeaponIndex) {
             case 0:
             case 2:
-                animPrefix = ""; break;
-            case 1: animPrefix = "crowbar_"; break;
+                animPrefix = "";
+                break;
+            case 1:
+                animPrefix = "crowbar_";
+                break;
         }
     }
 
@@ -401,8 +403,8 @@ public class PlayerComponent extends Component {
 
         // pick up items from the tilemap
         TiledMap map = engine.getGameScene().getTiledMap();
-        TiledMapTileLayer layer1 = (TiledMapTileLayer)map.getLayers().get("Items1");
-        TiledMapTileLayer layer2 = (TiledMapTileLayer)map.getLayers().get("Items2");
+        TiledMapTileLayer layer1 = (TiledMapTileLayer) map.getLayers().get("Items1");
+        TiledMapTileLayer layer2 = (TiledMapTileLayer) map.getLayers().get("Items2");
         if (layer1 == null || layer2 == null) {
             return;
         }
@@ -430,13 +432,12 @@ public class PlayerComponent extends Component {
             }
         }
 
-
     }
 
     private void pickUp(String name, float x, float y) {
 
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
-        GameStage gameStage = (GameStage)gameScreen.getStage();
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
+        GameStage gameStage = (GameStage) gameScreen.getStage();
 
         // mechanics + hud
         switch (name) {
@@ -484,7 +485,7 @@ public class PlayerComponent extends Component {
         lastAttackTime = attackTime;
         lastDashTime = dashTime;
         lastChangeDown = changeDown;
-        lastPoisonedSecond = (int)poisonedTime;
+        lastPoisonedSecond = (int) poisonedTime;
 
     }
 
@@ -529,7 +530,7 @@ public class PlayerComponent extends Component {
     private void adjustUnderWater(float delta) {
         lastHeadUnderWater = headUnderWater;
         lastFootUnderWater = footUnderWater;
-        //boolean isInWater = waterCollision.isInWater();
+        // boolean isInWater = waterCollision.isInWater();
         headUnderWater = grid.get(Grid.Layer.WATER, body.getCenterX(), body.getBottom() + 15f);
         footUnderWater = grid.get(Grid.Layer.WATER, body.getCenterX(), body.getBottom() + 6f);
         if (headUnderWater) {
@@ -614,7 +615,7 @@ public class PlayerComponent extends Component {
         // Check for dash input
         boolean bDown = gameController.isBDown();
         if (hasAbility(PlayerAbility.DASH) && bDown && !lastBDown
-                && dashTime <= 0 && dashCooldownTime <= 0 && !headUnderWater) {
+            && dashTime <= 0 && dashCooldownTime <= 0 && !headUnderWater) {
             // Start dash
             dashTime = DASH_DURATION;
             dashDirection = flipX ? -1 : 1;
@@ -701,20 +702,23 @@ public class PlayerComponent extends Component {
             Entity parent = entity.getParent();
             if (parent != null) {
                 VelocityComponent parentVelocity = parent.getComponent(VelocityComponent.class);
-                if (body.isSideCollided() && Math.signum(parentVelocity.getX()) != Math.signum(xAxis)) {
+                if (body.isSideCollided()
+                    && Math.signum(parentVelocity.getX()) != Math.signum(xAxis)) {
                     multiplier = 100f;
                 }
             }
             if (pushedBy != null) {
                 VelocityComponent pushedByVelocity = pushedBy.getComponent(VelocityComponent.class);
-                if (body.isSideCollided() && Math.signum(pushedByVelocity.getGlobalX()) == Math.signum(xAxis)) {
+                if (body.isSideCollided()
+                    && Math.signum(pushedByVelocity.getGlobalX()) == Math.signum(xAxis)) {
                     multiplier = 100f;
                 }
                 pushedBy = null;
             }
             //
             float a = Math.signum(xAxis) * baseAcceleration * multiplier;
-            if (body.isSideCollided() || !lastHorizontalDown || Math.signum(a) != Math.signum(velocity.getAcceleration())) {
+            if (body.isSideCollided() || !lastHorizontalDown
+                || Math.signum(a) != Math.signum(velocity.getAcceleration())) {
                 velocity.setAcceleration(a);
                 velocity.setInitialX();
             }
@@ -760,7 +764,8 @@ public class PlayerComponent extends Component {
                 jumpReleased = true;
             }
             int maxJumpCount = hasAbility(PlayerAbility.DOUBLE_JUMP) ? 2 : 1;
-            if (gameController.isADown() && jumpReleased && (jumpCounter < maxJumpCount || headUnderWater)) {
+            if (gameController.isADown() && jumpReleased
+                && (jumpCounter < maxJumpCount || headUnderWater)) {
                 // Cancel dash if jumping during dash (restore gravity first)
                 if (dashTime > 0) {
                     velocity.setGravity(gravityBeforeDash);
@@ -768,14 +773,16 @@ public class PlayerComponent extends Component {
                     dashTime = 0;
                     dashCooldownTime = DASH_COOLDOWN;
                 }
-                float vy = headUnderWater ? config.getPlayerJumpVelocity() / 2.8f : config.getPlayerJumpVelocity();
+                float vy = headUnderWater
+                    ? config.getPlayerJumpVelocity() / 2.8f
+                    : config.getPlayerJumpVelocity();
                 velocity.setY(vy);
                 jumpCounter++;
                 jumpReleased = false;
                 if (headUnderWater) {
                     soundManager.playRandom(swimSounds);
                 }
-                //soundManager.play("jump");
+                // soundManager.play("jump");
                 addDust();
             }
         }
@@ -789,7 +796,8 @@ public class PlayerComponent extends Component {
             }
         }
 
-        // if we moving and we just pressed a horizontal button or we are in animation set the flipX
+        // if we moving and we just pressed a horizontal button or we are in animation
+        // set the flipX
         if (velocity.getX() != 0 && !inPain) {
             if (entityManager.isInAnimation()) {
                 flipX = velocity.getX() < 0;
@@ -797,7 +805,7 @@ public class PlayerComponent extends Component {
 
                 // wonderful solution for the joystick "bounce" issue
                 float axisX = gameController.getAxisX();
-                int axisXSignCurrent = (int)Math.signum(axisX);
+                int axisXSignCurrent = (int) Math.signum(axisX);
                 if (axisXSign == 0) {
                     axisXSign = axisXSignCurrent;
                     flipX = axisX < 0;
@@ -873,8 +881,14 @@ public class PlayerComponent extends Component {
                         soundManager.playRandom(fallDownSounds);
                     }
                 } else {
-                    // set the "idle" or "run" animation regarding the velocity, controller and animation state
-                    setAnimation((velocity.getX() == 0 || (!lastHorizontalDown && !entityManager.isInAnimation())) ? "idle" : "run");
+                    // set the "idle" or "run" animation regarding the velocity, controller and
+                    // animation state
+                    setAnimation(
+                        (velocity.getX() == 0
+                            || (!lastHorizontalDown && !entityManager.isInAnimation()))
+                                ? "idle"
+                                : "run"
+                    );
                     // if not in air and started to move horizontally, reset the animation time
                     if (velocity.getX() != 0 && velocity.getLastX() == 0) {
                         setAnimationTime(0);
@@ -914,7 +928,7 @@ public class PlayerComponent extends Component {
         // if poisoned, set blend to green if needed
         if (poisonedTime > 0) {
             for (int i = 0; i < miniBar.getViewIndex(); i++) {
-                float c = .5f + .5f * (float)Math.sin(poisonedTime * 15.7f);
+                float c = .5f + .5f * (float) Math.sin(poisonedTime * 15.7f);
                 view.setColor(i, c, 1, c);
             }
         }
@@ -923,7 +937,7 @@ public class PlayerComponent extends Component {
     private void handlePoisonedState(float delta) {
         if (poisonedTime > 0) {
             poisonedTime -= delta;
-            if ((int)poisonedTime != lastPoisonedSecond) {
+            if ((int) poisonedTime != lastPoisonedSecond) {
                 poisonDamage = true;
                 health.decrease(0.05f, null);
             }
@@ -989,7 +1003,7 @@ public class PlayerComponent extends Component {
 
         soundManager.play("die");
         entity.setParent(null);
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         gameScreen.prepareForGameOver();
     }
 
@@ -1028,7 +1042,9 @@ public class PlayerComponent extends Component {
         if (gunBPos == null) {
             return null;
         }
-        return new Vector2(body.getCenterX() + (flipX ? -1 : 1) * gunBPos.x, body.getBottom() + gunBPos.y);
+        return new Vector2(
+            body.getCenterX() + (flipX ? -1 : 1) * gunBPos.x, body.getBottom() + gunBPos.y
+        );
     }
 
     private void fire() {
@@ -1053,7 +1069,7 @@ public class PlayerComponent extends Component {
         bo.sparkEffect = "bullet_sparks";
         bo.hitSounds = bulletHitSounds;
 
-        //bo.sprite = "player_bullet1";
+        // bo.sprite = "player_bullet1";
 
         soundManager.playRandom(bulletFireSounds);
 

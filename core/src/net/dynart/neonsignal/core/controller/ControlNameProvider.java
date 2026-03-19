@@ -25,7 +25,8 @@ public class ControlNameProvider {
     }
 
     /**
-     * Gets the control name for a button based on the current controller type setting.
+     * Gets the control name for a button based on the current controller type
+     * setting.
      */
     public String getControlName(Button button) {
         ControllerType type = settings.getControllerType();
@@ -61,7 +62,8 @@ public class ControlNameProvider {
 
         if (joyCode != unusedButtonCode) {
             String name = getGamepadButtonName(button);
-            if (name != null) return name;
+            if (name != null)
+                return name;
             return joyCode.toString();
         }
 

@@ -23,7 +23,7 @@ public class MainMenuScreen extends MenuScreen {
     private final SoundManager soundManager;
     private final Image logoImage;
 
-    private MenuButton playButton ;
+    private MenuButton playButton;
     private MenuButton settingsButton;
     private Action quitAction;
     private Action playAction;
@@ -38,11 +38,11 @@ public class MainMenuScreen extends MenuScreen {
         soundManager = engine.getSoundManager();
 
         // logo
-        //Skin uiPixelSkin = engine.getTextureManager().getSkin("ui_pixel");
+        // Skin uiPixelSkin = engine.getTextureManager().getSkin("ui_pixel");
         logoImage = new Image(skin.getDrawable("logo"));
         logoImage.setOrigin(Align.center);
-        //logoImage.setScale(4.5f);
-        logoImage.setPosition(-logoImage.getWidth()/2f - 0.01f, LOGO_Y);
+        // logoImage.setScale(4.5f);
+        logoImage.setPosition(-logoImage.getWidth() / 2f - 0.01f, LOGO_Y);
 
         createActions();
         setUpButtons();
@@ -76,7 +76,7 @@ public class MainMenuScreen extends MenuScreen {
         settingsAction = new Action() {
             @Override
             public boolean act(float delta) {
-                SettingsScreen settingsScreen = (SettingsScreen)engine.getScreen("settings");
+                SettingsScreen settingsScreen = (SettingsScreen) engine.getScreen("settings");
                 settingsScreen.setBackToMenu(true);
                 engine.moveToScreen("settings");
                 return true;
@@ -119,14 +119,20 @@ public class MainMenuScreen extends MenuScreen {
 
         backButton.setIcon(new Image(skin.getDrawable("icon_exit")));
 
-        creditsButton = new MenuButton(engine, "      Credits", styles.getSecondaryButtonStyle(), styles.getSecondaryButtonStyle());
+        creditsButton = new MenuButton(
+            engine, "      Credits", styles.getSecondaryButtonStyle(),
+            styles.getSecondaryButtonStyle()
+        );
         creditsButton.setWidth(380);
         creditsButton.setHeight(60);
         creditsButton.setY(-290);
         creditsButton.setX(-190);
         creditsButton.setIcon(new Image(skin.getDrawable("icon_credits")));
 
-        privacyPolicyButton = new MenuButton(engine, "      Privacy Policy", styles.getSecondaryButtonStyle(), styles.getSecondaryButtonStyle());
+        privacyPolicyButton = new MenuButton(
+            engine, "      Privacy Policy", styles.getSecondaryButtonStyle(),
+            styles.getSecondaryButtonStyle()
+        );
         privacyPolicyButton.setWidth(380);
         privacyPolicyButton.setHeight(60);
         privacyPolicyButton.setY(-350);
@@ -156,7 +162,7 @@ public class MainMenuScreen extends MenuScreen {
         item = menuCursor.addItem(backButton);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, playButton);
         item.setListener(MenuCursor.Event.DOWN, backFromBackButton);
-        item.setListener(MenuCursor.Event.ENTER,  new MenuCursor.Listener() {
+        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
             @Override
             public void handle(MenuCursorItem item) {
                 menuCursor.setCurrentItem(playButton);
@@ -204,7 +210,9 @@ public class MainMenuScreen extends MenuScreen {
 
     @Override
     public void backClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         dialogScreen.setHeight(200);
         dialogScreen.setText("Quit the game?");
         dialogScreen.setButtonCount(2);
@@ -223,7 +231,9 @@ public class MainMenuScreen extends MenuScreen {
 
     @Override
     public void moveIn() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         soundManager.playMusic("main");
         moving = true;
         logoImage.setPosition(logoImage.getX(), stage.getHeight());
@@ -236,9 +246,13 @@ public class MainMenuScreen extends MenuScreen {
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
-        logoImage.addAction(Actions.moveTo(logoImage.getX(), stage.getHeight(), 0.2f, Interpolation.pow2In));
+        logoImage.addAction(
+            Actions.moveTo(logoImage.getX(), stage.getHeight(), 0.2f, Interpolation.pow2In)
+        );
         float left = -group.getX() - playButton.getWidth() - 1f;
         float right = group.getX() + playButton.getWidth() + 1f;
         moveOutButton(playButton, right, 0.05f);
@@ -248,17 +262,21 @@ public class MainMenuScreen extends MenuScreen {
 
     private void moveInButton(MenuButton button, float startPos, float delay) {
         button.setX(startPos);
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(-button.getWidth() / 2f, button.getY(), 0.20f, Interpolation.sineOut)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(-button.getWidth() / 2f, button.getY(), 0.20f, Interpolation.sineOut)
+            )
+        );
     }
 
     private void moveOutButton(MenuButton button, float endPos, float delay) {
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
+            )
+        );
     }
 
 }

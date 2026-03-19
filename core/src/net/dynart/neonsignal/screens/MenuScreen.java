@@ -41,8 +41,8 @@ abstract class MenuScreen extends Screen implements DialogListener {
         movingFinishedAction = new Action() {
             @Override
             public boolean act(float delta) {
-            moving = false;
-            return true;
+                moving = false;
+                return true;
             }
         };
         menuCursor = new MenuCursor(engine);
@@ -54,9 +54,9 @@ abstract class MenuScreen extends Screen implements DialogListener {
         backButton.setHeight(110);
         backButton.setY(220);
         backButton.setIcon(new Image(skin.getDrawable("icon_back")));
-        backButton.addListener(new ClickListener () {
+        backButton.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 backClicked();
             }
         });
@@ -71,7 +71,8 @@ abstract class MenuScreen extends Screen implements DialogListener {
     private void createVersionLabel() {
         Label.LabelStyle ls = new Label.LabelStyle();
         ls.font = new BitmapFont();
-        ls.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ls.font.getRegion().getTexture()
+            .setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         versionLabel = new Label(config.getName() + " " + VersionUtil.getVersion(), ls);
         stage.addActor(versionLabel);
     }
@@ -79,7 +80,7 @@ abstract class MenuScreen extends Screen implements DialogListener {
     @Override
     public void init() {
         addBackground();
-        dialogScreen = (DialogScreen)engine.getScreen("dialog");
+        dialogScreen = (DialogScreen) engine.getScreen("dialog");
     }
 
     protected void addBackground() {
@@ -122,5 +123,6 @@ abstract class MenuScreen extends Screen implements DialogListener {
     }
 
     @Override
-    public void dialogButtonClicked(int index) {}
+    public void dialogButtonClicked(int index) {
+    }
 }

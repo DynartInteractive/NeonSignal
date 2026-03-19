@@ -11,7 +11,8 @@ public class SetMovementActive implements Command, SkippableCommand {
     private final MovableComponent movable;
     private final Entity entity;
 
-    public SetMovementActive(Engine engine, String entityName, boolean active, boolean finishOnSkip, int finishIndex) {
+    public SetMovementActive(Engine engine, String entityName, boolean active, boolean finishOnSkip,
+        int finishIndex) {
         this.active = active;
         this.finishOnSkip = finishOnSkip;
         EntityManager entityManager = engine.getGameScene().getEntityManager();

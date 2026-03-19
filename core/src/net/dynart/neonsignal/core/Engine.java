@@ -121,8 +121,10 @@ public class Engine implements LoadingFinishedListener {
 
         // load the resources.json
         JsonReader jsonReader = new JsonReader();
-        JsonValue internalJson = JsonUtil.tryToLoad(jsonReader, Gdx.files.internal("data/resources.json"));
-        JsonValue externalJson = JsonUtil.tryToLoad(jsonReader, Gdx.files.local("data/resources-custom.json"));
+        JsonValue internalJson = JsonUtil
+            .tryToLoad(jsonReader, Gdx.files.internal("data/resources.json"));
+        JsonValue externalJson = JsonUtil
+            .tryToLoad(jsonReader, Gdx.files.local("data/resources-custom.json"));
         resourcesJson = JsonUtil.mergeJson(internalJson, externalJson);
 
         // add resources to the load queue
@@ -136,28 +138,94 @@ public class Engine implements LoadingFinishedListener {
         styles = new Styles(this);
     }
 
-    public EngineConfig getConfig() { return config; }
-    public GameController getGameController() { return gameController; }
-    public SoundManager getSoundManager() { return soundManager; }
-    public SpriteAnimationManager getSpriteAnimationManager() { return spriteAnimationManager; }
-    public TextureManager getTextureManager() { return textureManager; }
-    public FontManager getFontManager() { return fontManager; }
-    public TouchListener getTouchListener() { return touchListener; }
-    public GamepadListener getGamepadListener() { return gamepadListener; }
-    public Styles getStyles() { return styles; }
-    public AssetManager getAssetManager() { return assetManager; }
-    public Settings getSettings() { return settings; }
-    public GameScene getGameScene() { return gameScene; }
-    public GameSceneLoader getGameSceneLoader() { return gameSceneLoader; }
-    public LevelManager getLevelManager() { return levelManager; }
-    public User getUser() { return user; }
-    public Fade getFade() { return fade; }
-    public Stencil getStencil() { return stencil; }
-    public FadeRenderer getFadeRenderer() { return fadeRenderer; }
-    public ScriptLoader getScriptLoader() { return scriptLoader; }
-    public TutorialTextProvider getTutorialTextProvider() { return tutorialTextProvider; }
-    public ControlNameProvider getControlNameProvider() { return controlNameProvider; }
-    public AnalyticsManager getAnalyticsManager() { return analyticsManager; }
+    public EngineConfig getConfig() {
+        return config;
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public SpriteAnimationManager getSpriteAnimationManager() {
+        return spriteAnimationManager;
+    }
+
+    public TextureManager getTextureManager() {
+        return textureManager;
+    }
+
+    public FontManager getFontManager() {
+        return fontManager;
+    }
+
+    public TouchListener getTouchListener() {
+        return touchListener;
+    }
+
+    public GamepadListener getGamepadListener() {
+        return gamepadListener;
+    }
+
+    public Styles getStyles() {
+        return styles;
+    }
+
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public GameScene getGameScene() {
+        return gameScene;
+    }
+
+    public GameSceneLoader getGameSceneLoader() {
+        return gameSceneLoader;
+    }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Fade getFade() {
+        return fade;
+    }
+
+    public Stencil getStencil() {
+        return stencil;
+    }
+
+    public FadeRenderer getFadeRenderer() {
+        return fadeRenderer;
+    }
+
+    public ScriptLoader getScriptLoader() {
+        return scriptLoader;
+    }
+
+    public TutorialTextProvider getTutorialTextProvider() {
+        return tutorialTextProvider;
+    }
+
+    public ControlNameProvider getControlNameProvider() {
+        return controlNameProvider;
+    }
+
+    public AnalyticsManager getAnalyticsManager() {
+        return analyticsManager;
+    }
+
     public Screen getCurrentScreen() {
         return screen;
     }
@@ -226,7 +294,12 @@ public class Engine implements LoadingFinishedListener {
         KeyboardListener keyboardListener = new KeyboardListener(gameController);
         gamepadListener = new GamepadListener(gameController);
         touchListener = new TouchListener(this);
-        if (!config.getSection().equals("ios") && !config.getSection().equals("muos")) { // no Controllers support on IOS and MuOS for now
+        if (!config.getSection().equals("ios") && !config.getSection().equals("muos")) { // no
+                                                                                         // Controllers
+                                                                                         // support
+                                                                                         // on IOS
+                                                                                         // and MuOS
+                                                                                         // for now
             Controllers.addListener(gamepadListener);
             gamepadListener.setConnectionListener(new GamepadListener.GamepadConnectionListener() {
                 @Override
@@ -264,11 +337,16 @@ public class Engine implements LoadingFinishedListener {
         if (settings.hasCustomJoyMapping()) {
             GamepadType type = GamepadType.fromControllerName(name);
             gameController.setActiveGamepadType(type);
-            Gdx.app.log(LOG_TAG, "Gamepad connected (custom mappings preserved): " + name + " (" + type + ")");
+            Gdx.app.log(
+                LOG_TAG,
+                "Gamepad connected (custom mappings preserved): " + name + " (" + type + ")"
+            );
         } else {
             GamepadProfile profile = new GamepadProfile(controller, config.getUnusedButtonCode());
             gameController.applyGamepadProfile(profile);
-            Gdx.app.log(LOG_TAG, "Auto-detected gamepad: " + name + " (" + profile.getGamepadType() + ")");
+            Gdx.app.log(
+                LOG_TAG, "Auto-detected gamepad: " + name + " (" + profile.getGamepadType() + ")"
+            );
         }
         if (!sameName) {
             settings.setGamepadName(name);

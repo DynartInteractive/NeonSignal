@@ -17,19 +17,24 @@ public class JsonUtil {
                 Gdx.app.log("Resources", "JSON file not found: " + fileHandle.path());
             }
         } catch (Exception e) {
-            Gdx.app.error("Resources", "Error reading JSON " + fileHandle.path() + ": " + e.getMessage());
+            Gdx.app.error(
+                "Resources", "Error reading JSON " + fileHandle.path() + ": " + e.getMessage()
+            );
         }
         return null;
     }
 
     /**
-     * Merges two JsonValue objects. If a key exists in both, externalJson's value takes precedence.
-     * Returns a new JsonValue object representing the merged result.
+     * Merges two JsonValue objects. If a key exists in both, externalJson's value
+     * takes precedence. Returns a new JsonValue object representing the merged
+     * result.
      */
     public static JsonValue mergeJson(JsonValue internalJson, JsonValue externalJson) {
         // If no external JSON, return a copy of internal JSON (or empty object if null)
         if (externalJson == null) {
-            return internalJson != null ? deepCopy(internalJson) : new JsonValue(JsonValue.ValueType.object);
+            return internalJson != null
+                ? deepCopy(internalJson)
+                : new JsonValue(JsonValue.ValueType.object);
         }
 
         // If no internal JSON, return a copy of external JSON
@@ -64,7 +69,6 @@ public class JsonUtil {
 
         return mergedJson;
     }
-
 
     /**
      * Creates a deep copy of a JsonValue object.

@@ -47,8 +47,10 @@ public class OverlapAttackComponent extends Component {
 
     @Override
     public void update(float delta) {
-        for (Entity otherEntity : entityManager.getAllByClassAndArea(OverlapAttackableComponent.class, entity)) {
-            OverlapAttackableComponent overlapAttackable = otherEntity.getComponent(OverlapAttackableComponent.class);
+        for (Entity otherEntity : entityManager
+            .getAllByClassAndArea(OverlapAttackableComponent.class, entity)) {
+            OverlapAttackableComponent overlapAttackable = otherEntity
+                .getComponent(OverlapAttackableComponent.class);
             if (overlapAttackable.isActive()) {
                 processOverlap(otherEntity);
             }
@@ -67,7 +69,8 @@ public class OverlapAttackComponent extends Component {
         if (health != null) {
             health.decrease(power, entity);
         }
-        OverlapAttackableComponent attackable = otherEntity.getComponent(OverlapAttackableComponent.class);
+        OverlapAttackableComponent attackable = otherEntity
+            .getComponent(OverlapAttackableComponent.class);
         attackable.attacked(entity);
         attackedBody = otherBody;
         messageHandler.send(ATTACK);

@@ -26,7 +26,7 @@ public class LevelButton extends Group {
         setHeight(139);
 
         levelButton = new MenuButton(engine, String.valueOf(i), styles.getDefaultButtonStyle());
-        //levelButton.setY(0);
+        // levelButton.setY(0);
         levelButton.setWidth(126);
         levelButton.setHeight(139);
         levelButton.setUserObject(level);
@@ -41,7 +41,7 @@ public class LevelButton extends Group {
             starImages[j].setX(j * 35 + 9);
             starImages[j].setY(-14);
             starImages[j].setVisible(false);
-            //addActor(starImages[j]);
+            // addActor(starImages[j]);
         }
     }
 
@@ -66,7 +66,7 @@ public class LevelButton extends Group {
 
     public void setDisabled(boolean disabled) {
         levelButton.setDisabled(disabled);
-        levelButton.setTouchable(disabled ?  Touchable.disabled : Touchable.enabled);
+        levelButton.setTouchable(disabled ? Touchable.disabled : Touchable.enabled);
     }
 
 }

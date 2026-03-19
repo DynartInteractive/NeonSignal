@@ -34,9 +34,9 @@ public class MoveOnSegmentUtil {
         this.targetY = targetY;
         float x = startX - targetX;
         float y = startY - targetY;
-        lastDirectionSignX = (int)Math.signum(x);
-        lastDirectionSignY = (int)Math.signum(y);
-        fullDistance = (float)Math.sqrt(x * x + y * y);
+        lastDirectionSignX = (int) Math.signum(x);
+        lastDirectionSignY = (int) Math.signum(y);
+        fullDistance = (float) Math.sqrt(x * x + y * y);
         directionX = fullDistance == 0 ? 0 : -x / fullDistance;
         directionY = fullDistance == 0 ? 0 : -y / fullDistance;
         calcSpeedRatio();
@@ -65,8 +65,8 @@ public class MoveOnSegmentUtil {
             return false;
         }
         calcSpeedRatio();
-        int signX = (int)Math.signum(currentX - targetX);
-        int signY = (int)Math.signum(currentY - targetY);
+        int signX = (int) Math.signum(currentX - targetX);
+        int signY = (int) Math.signum(currentY - targetY);
         currentX += getVelocityX() * delta;
         currentY += getVelocityY() * delta;
         boolean result = lastDirectionSignX == signX && lastDirectionSignY == signY;
@@ -80,15 +80,17 @@ public class MoveOnSegmentUtil {
     private void calcSpeedRatio() {
         float distanceX = currentX - targetX;
         float distanceY = currentY - targetY;
-        float distance = (float)Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+        float distance = (float) Math.sqrt(distanceX * distanceX + distanceY * distanceY);
         if (slowing) {
-            float distanceToSlow = distanceToSlowIsDivider ? fullDistance / this.distanceToSlow : this.distanceToSlow;
+            float distanceToSlow = distanceToSlowIsDivider
+                ? fullDistance / this.distanceToSlow
+                : this.distanceToSlow;
             if (distance > fullDistance - distanceToSlow) {
                 speedRatio = (fullDistance - distance) / distanceToSlow;
             } else if (distance < distanceToSlow) {
                 speedRatio = 1f - (distanceToSlow - distance) / distanceToSlow;
             }
-            speedRatio = (float)Math.sqrt(speedRatio);
+            speedRatio = (float) Math.sqrt(speedRatio);
             if (speedRatio < 0.05f) {
                 speedRatio = 0.05f;
             }

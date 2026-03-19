@@ -23,7 +23,8 @@ public class Stencil {
     private Batch batch;
 
     public Stencil() {
-        mesh = new Mesh(true, 4, 6,
+        mesh = new Mesh(
+            true, 4, 6,
             new VertexAttribute(VertexAttributes.Usage.Position, 3, "a_position"),
             new VertexAttribute(VertexAttributes.Usage.TextureCoordinates, 2, "a_texCoord0")
         );
@@ -50,7 +51,7 @@ public class Stencil {
         frameBuffer.end();
     }
 
-     public void resize(int width, int height) {
+    public void resize(int width, int height) {
         if (width != 0 && height != 0) {
             frameBuffer = new FrameBuffer(Pixmap.Format.RGB888, width, height, false);
         }
@@ -71,10 +72,10 @@ public class Stencil {
         float w = viewport.getWorldWidth();
         float h = viewport.getWorldHeight();
         float[] vertices = {
-                /* Position: */ x, y, 0, /* UV: */ 0, 0,
-                /* Position: */ w, y, 0, /* UV: */ 1, 0,
-                /* Position: */ x, h, 0, /* UV: */ 0, 1,
-                /* Position: */ w, h, 0, /* UV: */ 1, 1
+            /* Position: */ x, y, 0, /* UV: */ 0, 0,
+            /* Position: */ w, y, 0, /* UV: */ 1, 0,
+            /* Position: */ x, h, 0, /* UV: */ 0, 1,
+            /* Position: */ w, h, 0, /* UV: */ 1, 1
         };
         short[] indices = { 0, 1, 2, 1, 3, 2 };
         mesh.setVertices(vertices);

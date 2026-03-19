@@ -19,7 +19,7 @@ public class UfoComponent extends Component {
     @Override
     public void update(float delta) {
         elapsed += delta;
-        float oy = (float)Math.sin(elapsed * 10f);
+        float oy = (float) Math.sin(elapsed * 10f);
         view.setOffsetY(oy);
     }
 

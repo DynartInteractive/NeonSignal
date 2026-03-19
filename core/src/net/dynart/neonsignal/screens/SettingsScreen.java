@@ -162,7 +162,10 @@ public class SettingsScreen extends MenuScreen {
                 moveOut(customizeAction);
             }
         });
-        selectedControlLabel = new Label(StringUtil.camelize(settings.getControllerType().getName()), styles.getDefaultLabelStyle());
+        selectedControlLabel = new Label(
+            StringUtil.camelize(settings.getControllerType().getName()),
+            styles.getDefaultLabelStyle()
+        );
         selectedControlLabel.setAlignment(Align.center);
         selectedControlLabel.setWidth(339);
         selectedControlLabel.setHeight(110);
@@ -184,7 +187,9 @@ public class SettingsScreen extends MenuScreen {
         analyticsLabel.setX(FIRST_COLUMN_X);
         analyticsLabel.setHeight(80);
         analyticsLabel.setY(ANALYTICS_Y + OFFSET_Y);
-        analyticsValueLabel = new Label(analyticsEnabled ? "Enabled" : "Disabled", styles.getDefaultLabelStyle());
+        analyticsValueLabel = new Label(
+            analyticsEnabled ? "Enabled" : "Disabled", styles.getDefaultLabelStyle()
+        );
         analyticsValueLabel.setAlignment(Align.left);
         analyticsValueLabel.setWidth(220);
         analyticsValueLabel.setX(SECOND_COLUMN_X + 2);
@@ -332,7 +337,9 @@ public class SettingsScreen extends MenuScreen {
 
     @Override
     public void backClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         settings.setSoundVolume(soundSlider.getValue());
         settings.setMusicVolume(musicSlider.getValue());
         settings.setControllerType(controllerType);
@@ -350,7 +357,9 @@ public class SettingsScreen extends MenuScreen {
     }
 
     private void soundVolumeChanged() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         soundManager.setVolume(soundSlider.getValue());
         if (TimeUtils.millis() - 300 > soundLastTime) {
             soundLastTime = TimeUtils.millis();
@@ -359,7 +368,9 @@ public class SettingsScreen extends MenuScreen {
     }
 
     private void musicVolumeChanged() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         soundManager.setMusicVolume(musicSlider.getValue());
     }
 
@@ -387,13 +398,14 @@ public class SettingsScreen extends MenuScreen {
     }
 
     private void changeControllerType(int direction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         int index = getControllerTypeIndex();
         index += direction;
         if (index < 0) {
             index = ControllerTypeMap.values().size() - 1;
-        }
-        else if (index == ControllerTypeMap.values().size()) {
+        } else if (index == ControllerTypeMap.values().size()) {
             index = 0;
         }
         controllerType = getControllerTypeByIndex(index);
@@ -437,14 +449,18 @@ public class SettingsScreen extends MenuScreen {
 
     private void moveInActor(Actor actor, float x, float delay) {
         actor.setX(x);
-        actor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(xPositions.get(actor), actor.getY(),0.15f, Interpolation.sineOut)
-        ));
+        actor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(xPositions.get(actor), actor.getY(), 0.15f, Interpolation.sineOut)
+            )
+        );
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
         float right = SECOND_COLUMN_X + stage.getWidth() - 300f;
         float left = SECOND_COLUMN_X - stage.getWidth() + 300f;
@@ -457,20 +473,22 @@ public class SettingsScreen extends MenuScreen {
         moveOutActor(controlLabel, left, 0.10f);
         moveOutActor(controlGroupBg, right, 0.10f);
         moveOutActor(controlGroup, right, 0.10f);
-        stage.addAction(Actions.sequence(
-            Actions.delay(0.31f),
-            movingFinishedAction,
-            endAction
-        ));
+        stage.addAction(
+            Actions.sequence(
+                Actions.delay(0.31f),
+                movingFinishedAction,
+                endAction
+            )
+        );
     }
 
     private void moveOutActor(Actor actor, float x, float delay) {
-        actor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(x, actor.getY(),0.15f, Interpolation.sineIn)
-        ));
+        actor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineIn)
+            )
+        );
     }
 
-
 }
-

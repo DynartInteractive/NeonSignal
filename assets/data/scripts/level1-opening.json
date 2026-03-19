@@ -1,0 +1,15 @@
+{"sequence":[
+  {"set_camera_limit":{"entity":"camera_limit"}},
+  {"nexus_says":{
+    "lines":[
+      {"text":"Welcome to <#00ffff>Neon Signal</#ffffff>!","delay":0,"margin_bottom":18,"font":"default"},
+      {"text":"AX-7 unit initialized.","delay":0.5},
+      {"text":"The signal is <#00ffff>strong</#ffffff> tonight.","delay":0.9},
+      {"text":"Proceed to assigned sector.","delay":1.3}
+    ],
+    "char_delay":0.04,
+    "line_delay":0.55,
+    "hold_time":2.0,
+    "button_label":"Next"
+  }}
+]}

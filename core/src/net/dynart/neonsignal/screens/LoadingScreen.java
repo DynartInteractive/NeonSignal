@@ -19,7 +19,7 @@ public class LoadingScreen extends Screen {
     private LoadingFinishedListener finishedListener;
     private final Label label;
 
-    private final String[] texts = {"Loading.", "Loading..", "Loading..."};
+    private final String[] texts = { "Loading.", "Loading..", "Loading..." };
     private int currentTextIndex = 0;
     private float currentDelta = 0;
 

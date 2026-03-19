@@ -61,7 +61,7 @@ public class ScriptLoader {
         try {
             Method method = getClass().getMethod(methodName, JsonValue.class);
             Object objectResult = method.invoke(this, value);
-            result = (Command)objectResult;
+            result = (Command) objectResult;
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Can't create command (no such method): " + fullMethodName);
         } catch (IllegalAccessException e) {
@@ -71,7 +71,7 @@ public class ScriptLoader {
             throw new RuntimeException("Can't create command (runtime error): " + fullMethodName);
         }
         if (result instanceof SkippableCommand) {
-            skippableCommandList.add((SkippableCommand)result);
+            skippableCommandList.add((SkippableCommand) result);
         }
         return result;
     }
@@ -91,13 +91,15 @@ public class ScriptLoader {
     }
 
     public Command createDelay(JsonValue value) {
-        return new DelayCommand(engine,
+        return new DelayCommand(
+            engine,
             value.getFloat("duration")
         );
     }
 
     public Command createWalkTo(JsonValue value) {
-        return new WalkToCommand(engine,
+        return new WalkToCommand(
+            engine,
             value.getString("entity"),
             value.getString("target"),
             value.getBoolean("exact")
@@ -105,7 +107,8 @@ public class ScriptLoader {
     }
 
     public Command createSetAnimation(JsonValue value) {
-        SetAnimationCommand result = new SetAnimationCommand(engine,
+        SetAnimationCommand result = new SetAnimationCommand(
+            engine,
             value.getString("entity"),
             value.getString("animation")
         );
@@ -125,21 +128,24 @@ public class ScriptLoader {
     }
 
     public Command createSetCameraTarget(JsonValue value) {
-        return new SetCameraTargetCommand(engine,
+        return new SetCameraTargetCommand(
+            engine,
             value.getString("target"),
             value.has("smooth") && value.getBoolean("smooth")
         );
     }
 
     public Command createMoveCameraTo(JsonValue value) {
-        return new MoveCameraToCommand(engine,
+        return new MoveCameraToCommand(
+            engine,
             value.getString("target"),
             value.getFloat("speed", 256) // TODO: default camera speed
         );
     }
 
     public Command createSay(JsonValue value) {
-        return new SayCommand(engine,
+        return new SayCommand(
+            engine,
             value.getString("name", "neonsignal"),
             value.getString("text"),
             value.getBoolean("start", false),
@@ -149,7 +155,8 @@ public class ScriptLoader {
     }
 
     public Command createTrigger(JsonValue value) {
-        return new TriggerCommand(engine,
+        return new TriggerCommand(
+            engine,
             value.getString("name", "")
         );
     }
@@ -166,20 +173,23 @@ public class ScriptLoader {
     }
 
     public Command createSetVisible(JsonValue value) {
-        return new SetVisibleCommand(engine,
+        return new SetVisibleCommand(
+            engine,
             value.getString("entity"),
             value.getBoolean("visible")
         );
     }
 
     public Command createPlayMusic(JsonValue value) {
-        return new PlayMusicCommand(engine,
+        return new PlayMusicCommand(
+            engine,
             value.getString("name")
         );
     }
 
     public Command createSetMovementActive(JsonValue value) {
-        return new SetMovementActive(engine,
+        return new SetMovementActive(
+            engine,
             value.getString("entity"),
             value.getBoolean("active"),
             value.getBoolean("finish_on_skip", true),
@@ -188,7 +198,8 @@ public class ScriptLoader {
     }
 
     public Command createSetParent(JsonValue value) {
-        return new SetParentCommand(engine,
+        return new SetParentCommand(
+            engine,
             value.getString("entity"),
             value.getString("parent")
         );

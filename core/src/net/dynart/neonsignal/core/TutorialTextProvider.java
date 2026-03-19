@@ -9,9 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Resolves tutorial text variables like {movement_text} and {jump_text},
- * as well as button references like [A] and [LEFT],
- * based on the current controller type and settings.
+ * Resolves tutorial text variables like {movement_text} and {jump_text}, as
+ * well as button references like [A] and [LEFT], based on the current
+ * controller type and settings.
  */
 public class TutorialTextProvider {
 
@@ -25,11 +25,12 @@ public class TutorialTextProvider {
     }
 
     /**
-     * Resolves all variables and button references in the given text.
-     * Variables are in the format {variable_name}.
-     * Button references are in the format [BUTTON_NAME] (e.g., [A], [LEFT]).
+     * Resolves all variables and button references in the given text. Variables are
+     * in the format {variable_name}. Button references are in the format
+     * [BUTTON_NAME] (e.g., [A], [LEFT]).
      *
-     * @param text The text containing variables/buttons to resolve
+     * @param text
+     *            The text containing variables/buttons to resolve
      * @return The text with all variables and buttons replaced
      */
     public String resolveVariables(String text) {
@@ -67,10 +68,11 @@ public class TutorialTextProvider {
     }
 
     /**
-     * Gets the control name for a button reference.
-     * Wraps keyboard and gamepad names in square brackets, touch names are plain text.
+     * Gets the control name for a button reference. Wraps keyboard and gamepad
+     * names in square brackets, touch names are plain text.
      *
-     * @param buttonName The button name in uppercase (e.g., "A", "LEFT")
+     * @param buttonName
+     *            The button name in uppercase (e.g., "A", "LEFT")
      * @return The resolved control name, or the original [name] if unknown
      */
     private String getButtonControlName(String buttonName) {
@@ -92,7 +94,8 @@ public class TutorialTextProvider {
     /**
      * Gets the value for a specific variable based on controller type and settings.
      *
-     * @param name The variable name (without braces)
+     * @param name
+     *            The variable name (without braces)
      * @return The resolved value, or the original {name} if unknown
      */
     public String getVariableValue(String name) {

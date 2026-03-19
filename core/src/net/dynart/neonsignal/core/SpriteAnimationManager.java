@@ -22,12 +22,16 @@ public class SpriteAnimationManager {
 
     public void init(TextureManager textureManager, JsonValue resourcesJson) {
         JsonValue animations = resourcesJson.get("sprite_animations");
-        for (JsonValue animation = animations.child(); animation != null; animation = animation.next()) {
+        for (JsonValue animation = animations.child(); animation != null; animation = animation
+            .next()) {
             TextureAtlas atlas = textureManager.getAtlas(animation.getString("atlas"));
             String region = animation.getString("region");
             Array<TextureAtlas.AtlasRegion> regions = atlas.findRegions(region);
-            float frameDuration = regions.size > 0 ? animation.getFloat("duration") / regions.size : 1;
-            Animation.PlayMode mode = Animation.PlayMode.valueOf(animation.getString("mode", "normal").toUpperCase());
+            float frameDuration = regions.size > 0
+                ? animation.getFloat("duration") / regions.size
+                : 1;
+            Animation.PlayMode mode = Animation.PlayMode
+                .valueOf(animation.getString("mode", "normal").toUpperCase());
             Animation anim = new Animation(frameDuration, regions, mode);
             add(animation.name(), anim);
         }

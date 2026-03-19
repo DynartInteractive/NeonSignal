@@ -28,7 +28,7 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
     @Override
     public void init() {
         super.init();
-        dialogStage = (DialogStage)dialogScreen.getStage();
+        dialogStage = (DialogStage) dialogScreen.getStage();
     }
 
     @Override
@@ -45,7 +45,9 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
 
     @Override
     void menuButtonClicked(MenuButton menuButton) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         keysToIgnore.clear();
         for (int i = 0; i < 256; i++) {
             if (Gdx.input.isKeyPressed(i)) {
@@ -63,7 +65,7 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
         }
         dialogStage.setKeyUpListener(null);
         keyCodeForAssign = keyCode;
-        Button buttonForSet = (Button)menuButtonForSet.getUserObject();
+        Button buttonForSet = (Button) menuButtonForSet.getUserObject();
         for (Button button : Button.values()) {
             if (gameController.getKeyCode(button) == keyCode && button != buttonForSet) {
                 menuButtonForWarning = getButtonByKeyCode(keyCodeForAssign);
@@ -84,12 +86,12 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
     }
 
     private void assignKey() {
-        Button button = (Button)menuButtonForSet.getUserObject();
+        Button button = (Button) menuButtonForSet.getUserObject();
         gameController.setKeyCode(button, keyCodeForAssign);
         menuButtonForSet.setText(Input.Keys.toString(keyCodeForAssign));
         if (menuButtonForWarning != null) {
             menuButtonForWarning.setText("?");
-            Button otherButton = (Button)menuButtonForWarning.getUserObject();
+            Button otherButton = (Button) menuButtonForWarning.getUserObject();
             gameController.setKeyCode(otherButton, config.getUnusedButtonCode());
         }
         hideDialog();
@@ -98,8 +100,12 @@ public class CustomizeKeyboardScreen extends CustomizeButtonsScreen implements K
     @Override
     public void dialogButtonClicked(int index) {
         switch (index) {
-            case 0: hideDialog(); break;
-            case 1: assignKey(); break;
+            case 0:
+                hideDialog();
+                break;
+            case 1:
+                assignKey();
+                break;
         }
     }
 

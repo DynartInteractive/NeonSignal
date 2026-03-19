@@ -10,7 +10,12 @@ import net.dynart.neonsignal.core.SoundManager;
 
 public class SplashComponent extends Component {
 
-    private static final String[] sounds = { "splash1", "splash2", "splash3" }; // avosound.com Sounds ID: 171123, WaterLiquid-SloshSlap-Wat_5.wav; Sound ID: 171120, WaterLiquid-SloshSlap-Wat_2.wav
+    private static final String[] sounds = { "splash1", "splash2", "splash3" }; // avosound.com
+                                                                                // Sounds ID:
+                                                                                // 171123,
+                                                                                // WaterLiquid-SloshSlap-Wat_5.wav;
+                                                                                // Sound ID: 171120,
+                                                                                // WaterLiquid-SloshSlap-Wat_2.wav
 
     private WaterCollisionComponent waterCollision;
     private EntityManager entityManager;

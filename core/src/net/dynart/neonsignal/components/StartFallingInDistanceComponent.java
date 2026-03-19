@@ -31,7 +31,8 @@ public class StartFallingInDistanceComponent extends Component {
 
     private void calculateGroundDistance(Grid grid) {
         int gridX = grid.getX(body.getCenterX());
-        for (int i = grid.getY(body.getTop()); i >= 0 && !grid.get(Grid.Layer.BLOCK, gridX, i) && !grid.get(Grid.Layer.TOP_BLOCK, gridX, i); i--) {
+        for (int i = grid.getY(body.getTop()); i >= 0 && !grid.get(Grid.Layer.BLOCK, gridX, i)
+            && !grid.get(Grid.Layer.TOP_BLOCK, gridX, i); i--) {
             groundDistance += config.getTileHeight();
         }
     }

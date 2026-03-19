@@ -37,7 +37,8 @@ public class NexusSaysCommand implements Command, SkippableCommand {
 
     private boolean first = true;
 
-    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay, float holdTime, String buttonLabel) {
+    public NexusSaysCommand(Engine engine, List<NexusLine> lines, float charDelay, float lineDelay,
+        float holdTime, String buttonLabel) {
         this.cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
         this.lines = lines;
         this.charDelay = charDelay;

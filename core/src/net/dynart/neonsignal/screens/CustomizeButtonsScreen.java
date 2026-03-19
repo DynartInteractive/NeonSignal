@@ -56,7 +56,9 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
     }
 
     abstract void savePreferences();
+
     abstract void menuButtonClicked(MenuButton button);
+
     abstract String getControlName(Button button);
 
     void showDialog(String subject, MenuButton menuButton) {
@@ -101,7 +103,9 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
 
     @Override
     public void backClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         savePreferences();
         settings.save();
         moveOut(backAction);
@@ -126,7 +130,7 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         MenuCursor.Listener selectListener = new MenuCursor.Listener() {
             @Override
             public void handle(MenuCursorItem item) {
-                menuButtonClicked((MenuButton)item.getActor());
+                menuButtonClicked((MenuButton) item.getActor());
             }
         };
 
@@ -161,8 +165,7 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
             item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
             backButtonItem.setNeighbour(MenuCursor.Neighbour.LEFT, menuButton);
             item.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
-        }
-        else if (i == 0) {
+        } else if (i == 0) {
             item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
         }
         if (i < LEFT_COLUMN_COUNT && i + LEFT_COLUMN_COUNT < buttonOrder.length) {
@@ -189,7 +192,7 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
         ClickListener buttonClickListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                menuButtonClicked((MenuButton)event.getListenerActor());
+                menuButtonClicked((MenuButton) event.getListenerActor());
             }
         };
         Button[] buttonOrder = config.getButtonOrder();
@@ -232,20 +235,24 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
     public void moveIn() {
         moving = true;
         float delay = moveInButtons();
-        stage.addAction(Actions.sequence(
-            Actions.sequence(Actions.delay(delay + 0.16f)),
+        stage.addAction(
+            Actions.sequence(
+                Actions.sequence(Actions.delay(delay + 0.16f)),
                 movingFinishedAction
-        ));
+            )
+        );
     }
 
     private void moveOut(Action endAction) {
         moving = true;
         float delay = moveOutButtons();
-        stage.addAction(Actions.sequence(
-            Actions.sequence(Actions.delay(delay + 0.16f)),
+        stage.addAction(
+            Actions.sequence(
+                Actions.sequence(Actions.delay(delay + 0.16f)),
                 movingFinishedAction,
-            endAction
-        ));
+                endAction
+            )
+        );
     }
 
     private float moveInButtons() {
@@ -261,10 +268,12 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
             if (i == 8) {
                 delay = 0f;
             }
-            actor.addAction(Actions.sequence(
-                Actions.delay(delay),
-                Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineOut)
-            ));
+            actor.addAction(
+                Actions.sequence(
+                    Actions.delay(delay),
+                    Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineOut)
+                )
+            );
             if (actor instanceof Label) {
                 delay += 0.025f;
             }
@@ -285,10 +294,12 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
             if (i == 8) {
                 delay = 0f;
             }
-            actor.addAction(Actions.sequence(
-                Actions.delay(delay),
-                Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineIn)
-            ));
+            actor.addAction(
+                Actions.sequence(
+                    Actions.delay(delay),
+                    Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineIn)
+                )
+            );
             if (actor instanceof Label) {
                 delay += 0.025f;
             }

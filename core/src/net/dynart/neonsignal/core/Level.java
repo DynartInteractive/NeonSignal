@@ -37,4 +37,3 @@ public class Level {
         path = value;
     }
 }
-

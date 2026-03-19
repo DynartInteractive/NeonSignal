@@ -7,7 +7,8 @@ import net.dynart.neonsignal.components.BodyComponent;
 
 public class EntityGrid {
 
-    private static class EntitySet extends LinkedList<Entity> { }
+    private static class EntitySet extends LinkedList<Entity> {
+    }
 
     private static class Position {
 
@@ -27,18 +28,26 @@ public class EntityGrid {
 
         private void init(EntitySet[][] map, Entity e) {
             BodyComponent body = e.getComponent(BodyComponent.class);
-            bottom = (int)(body.getBottom() / dividerY);
-            if (bottom < 0) bottom = 0;
-            if (bottom >= map.length) bottom = map.length - 1;
-            top = (int)(body.getTop() / dividerY);
-            if (top < 0) top = 0;
-            if (top >= map.length) top = map.length - 1;
-            left = (int)(body.getLeft() / dividerX);
-            if (left < 0) left = 0;
-            if (left >= map[0].length) left = map[0].length - 1;
-            right = (int)(body.getRight() / dividerX);
-            if (right < 0) right = 0;
-            if (right >= map[0].length) right = map[0].length - 1;
+            bottom = (int) (body.getBottom() / dividerY);
+            if (bottom < 0)
+                bottom = 0;
+            if (bottom >= map.length)
+                bottom = map.length - 1;
+            top = (int) (body.getTop() / dividerY);
+            if (top < 0)
+                top = 0;
+            if (top >= map.length)
+                top = map.length - 1;
+            left = (int) (body.getLeft() / dividerX);
+            if (left < 0)
+                left = 0;
+            if (left >= map[0].length)
+                left = map[0].length - 1;
+            right = (int) (body.getRight() / dividerX);
+            if (right < 0)
+                right = 0;
+            if (right >= map[0].length)
+                right = map[0].length - 1;
         }
     }
 
@@ -48,8 +57,8 @@ public class EntityGrid {
 
     public EntityGrid(EngineConfig config) {
         position = new Position(config);
-        int maxWidth = (int)(config.getTilemapMaxWidth() / 8f);
-        int maxHeight = (int)(config.getTilemapMaxHeight() / 8f);
+        int maxWidth = (int) (config.getTilemapMaxWidth() / 8f);
+        int maxHeight = (int) (config.getTilemapMaxHeight() / 8f);
         map = new EntitySet[maxHeight][maxWidth];
         for (int j = 0; j < maxHeight; j++) {
             for (int i = 0; i < maxWidth; i++) {

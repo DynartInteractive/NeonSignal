@@ -6,8 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import net.dynart.neonsignal.core.SoundManager;
 
 /**
- * Scene2D Action that reveals text character-by-character with typewriter effect.
- * Handles LibGDX color markup tags by skipping over [...] during reveal.
+ * Scene2D Action that reveals text character-by-character with typewriter
+ * effect. Handles LibGDX color markup tags by skipping over [...] during
+ * reveal.
  */
 public class TypewriterAction extends Action {
 
@@ -33,7 +34,8 @@ public class TypewriterAction extends Action {
         this(label, fullText, charDelay, onComplete, null, null);
     }
 
-    public TypewriterAction(Label label, String fullText, float charDelay, Runnable onComplete, SoundManager soundManager, String soundName) {
+    public TypewriterAction(Label label, String fullText, float charDelay, Runnable onComplete,
+        SoundManager soundManager, String soundName) {
         this.label = label;
         this.fullText = fullText;
         this.charDelay = charDelay;
@@ -159,8 +161,8 @@ public class TypewriterAction extends Action {
     }
 
     /**
-     * Get substring of text up to the given visible character count,
-     * preserving complete markup tags.
+     * Get substring of text up to the given visible character count, preserving
+     * complete markup tags.
      */
     private String getTextUpToVisibleChar(int targetVisibleChars) {
         StringBuilder result = new StringBuilder();

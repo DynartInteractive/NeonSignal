@@ -51,13 +51,17 @@ public class AnalyticsManager {
 
         switch (Gdx.app.getType()) {
             case Android:
-                platform = "android"; break;
+                platform = "android";
+                break;
             case iOS:
-                platform = "ios"; break;
+                platform = "ios";
+                break;
             case HeadlessDesktop:
-                platform = "muos"; break;
+                platform = "muos";
+                break;
             default:
-                platform = "desktop"; break;
+                platform = "desktop";
+                break;
         }
 
         fetchGeoData();
@@ -79,8 +83,10 @@ public class AnalyticsManager {
                     geoCountryCode = json.getString("country_code", null);
                     geoRegionCode = json.getString("region_code", null);
                     geoCity = json.getString("city", null);
-                    Gdx.app.log(LOG_TAG, "Geo: ip=" + geoIp + " country=" + geoCountryCode
-                        + " region=" + geoRegionCode + " city=" + geoCity);
+                    Gdx.app.log(
+                        LOG_TAG, "Geo: ip=" + geoIp + " country=" + geoCountryCode
+                            + " region=" + geoRegionCode + " city=" + geoCity
+                    );
                 } catch (Exception e) {
                     Gdx.app.log(LOG_TAG, "Failed to parse geo data");
                 }
@@ -122,7 +128,11 @@ public class AnalyticsManager {
         String levelName = level.getName();
         int attempt = attemptCounts.containsKey(levelName) ? attemptCounts.get(levelName) + 1 : 1;
         attemptCounts.put(levelName, attempt);
-        Gdx.app.log(LOG_TAG, "player_death: level=" + levelName + " x=" + (int)x + " y=" + (int)y + " attempt=" + attempt);
+        Gdx.app.log(
+            LOG_TAG,
+            "player_death: level=" + levelName + " x=" + (int) x + " y=" + (int) y + " attempt="
+                + attempt
+        );
         Map<String, Object> params = new HashMap<>();
         params.put("level_name", levelName);
         params.put("death_x", (int) x);
@@ -132,7 +142,10 @@ public class AnalyticsManager {
     }
 
     public void trackCheckpoint(Level level, float x, float y) {
-        Gdx.app.log(LOG_TAG, "checkpoint_reached: level=" + level.getName() + " x=" + (int)x + " y=" + (int)y);
+        Gdx.app.log(
+            LOG_TAG,
+            "checkpoint_reached: level=" + level.getName() + " x=" + (int) x + " y=" + (int) y
+        );
         Map<String, Object> params = new HashMap<>();
         params.put("level_name", level.getName());
         params.put("checkpoint_x", (int) x);
@@ -141,11 +154,13 @@ public class AnalyticsManager {
     }
 
     public void trackLevelCompleted(Level level, PlayerComponent player, GameScene scene) {
-        Gdx.app.log(LOG_TAG, "level_completed: level=" + level.getName()
-            + " enemies=" + player.getKnockoutCount() + "/" + scene.getEnemyCount()
-            + " secrets=" + player.getSecretCount() + "/" + scene.getSecretCount()
-            + " items=" + player.getItemCount() + "/" + scene.getItemCount()
-            + " score=" + player.getScore());
+        Gdx.app.log(
+            LOG_TAG, "level_completed: level=" + level.getName()
+                + " enemies=" + player.getKnockoutCount() + "/" + scene.getEnemyCount()
+                + " secrets=" + player.getSecretCount() + "/" + scene.getSecretCount()
+                + " items=" + player.getItemCount() + "/" + scene.getItemCount()
+                + " score=" + player.getScore()
+        );
         Map<String, Object> params = new HashMap<>();
         params.put("level_name", level.getName());
         params.put("enemies_defeated", player.getKnockoutCount());
@@ -176,7 +191,8 @@ public class AnalyticsManager {
         StringBuilder paramsJson = new StringBuilder("{");
         boolean first = true;
         for (Map.Entry<String, Object> entry : params.entrySet()) {
-            if (!first) paramsJson.append(",");
+            if (!first)
+                paramsJson.append(",");
             paramsJson.append("\"").append(entry.getKey()).append("\":");
             Object value = entry.getValue();
             if (value instanceof Number) {
@@ -188,13 +204,16 @@ public class AnalyticsManager {
         }
         paramsJson.append("}");
 
-        StringBuilder bodyBuilder = new StringBuilder("{\"client_id\":\"").append(clientId).append("\"");
+        StringBuilder bodyBuilder = new StringBuilder("{\"client_id\":\"").append(clientId)
+            .append("\"");
         if (geoCountryCode != null) {
             bodyBuilder.append(",\"user_location\":{");
-            if (geoCity != null) bodyBuilder.append("\"city\":\"").append(geoCity).append("\",");
+            if (geoCity != null)
+                bodyBuilder.append("\"city\":\"").append(geoCity).append("\",");
             bodyBuilder.append("\"country_id\":\"").append(geoCountryCode).append("\"");
             if (geoRegionCode != null) {
-                bodyBuilder.append(",\"region_id\":\"").append(geoCountryCode).append("-").append(geoRegionCode).append("\"");
+                bodyBuilder.append(",\"region_id\":\"").append(geoCountryCode).append("-")
+                    .append(geoRegionCode).append("\"");
             }
             bodyBuilder.append("}");
         }

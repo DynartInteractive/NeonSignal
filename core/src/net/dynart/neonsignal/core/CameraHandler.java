@@ -62,7 +62,7 @@ public class CameraHandler {
 
         mosUtil = new MoveOnSegmentUtil();
         mosUtil.setSpeed(96f);
-        mosUtil.setDistanceToSlow(4,true, true);
+        mosUtil.setDistanceToSlow(4, true, true);
 
         fadeEndAction = new Action() {
             @Override
@@ -103,7 +103,7 @@ public class CameraHandler {
         if (fadeToLimit) {
             if (!fading) {
                 fading = true;
-                GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+                GameScreen gameScreen = (GameScreen) engine.getScreen("game");
                 gameScreen.fadeOut(fadeEndAction);
             }
             return;
@@ -180,15 +180,13 @@ public class CameraHandler {
             x = max;
         }
         /*
-        // set camera position to the "exact" virtual pixels
-        float gw = Gdx.graphics.getWidth();
-        float ratioX = gw / (float)viewport.getWorldWidth();
-        x = ((int)(x * ratioX)) / ratioX - 0.001f; // that 0.001 is needed for the display fix
-        //
-        */
+         * // set camera position to the "exact" virtual pixels float gw =
+         * Gdx.graphics.getWidth(); float ratioX = gw / (float)viewport.getWorldWidth();
+         * x = ((int)(x * ratioX)) / ratioX - 0.001f; // that 0.001 is needed for the
+         * display fix //
+         */
         return x;
     }
-
 
     private float adjustY(float y, boolean useNew) {
         // don't go outside of the grid
@@ -204,11 +202,10 @@ public class CameraHandler {
             y = min;
         }
         /*
-        // set camera position to the "exact" virtual pixels
-        float gh = Gdx.graphics.getHeight();
-        float ratioY = gh / (float)viewport.getWorldHeight();
-        y = ((int)(y * ratioY)) / ratioY - 0.001f; // that 0.001 is needed for the display fix
-        //
+         * // set camera position to the "exact" virtual pixels float gh =
+         * Gdx.graphics.getHeight(); float ratioY = gh /
+         * (float)viewport.getWorldHeight(); y = ((int)(y * ratioY)) / ratioY - 0.001f;
+         * // that 0.001 is needed for the display fix //
          */
         return y;
     }
@@ -226,12 +223,12 @@ public class CameraHandler {
         }
         float r = (quakeDuration - quakeElapsedTime) / quakeDuration;
         float offset = r * quakeOffset;
-        float rnd = (float)Math.random();
+        float rnd = (float) Math.random();
         float rndOffset = rnd * offset;
-        offsetX = offset/2 - rndOffset;
-        rnd = (float)Math.random();
+        offsetX = offset / 2 - rndOffset;
+        rnd = (float) Math.random();
         rndOffset = rnd * offset;
-        offsetY = -offset/2 - rndOffset;
+        offsetY = -offset / 2 - rndOffset;
     }
 
     public void moveTo(Entity entity, float speed) {

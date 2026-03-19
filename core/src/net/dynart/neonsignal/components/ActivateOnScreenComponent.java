@@ -23,7 +23,10 @@ public class ActivateOnScreenComponent extends Component {
             if (entity.getName() != null && !entity.getName().isEmpty()) {
                 Gdx.app.log("ActivateOnScreenComponent", "Activating entity: " + entity.getName());
                 BodyComponent body = entity.getComponent(BodyComponent.class);
-                Gdx.app.log("ActivateOnScreenComponent", "Entity position: " + body.getCenterX() + ", " + body.getCenterY());
+                Gdx.app.log(
+                    "ActivateOnScreenComponent",
+                    "Entity position: " + body.getCenterX() + ", " + body.getCenterY()
+                );
             }
             if (entity.getGroup() == null || entity.getGroup().isEmpty()) {
                 entity.setActive(true);

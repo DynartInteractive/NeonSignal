@@ -1,0 +1,13 @@
+{"sequence":[
+  {"nexus_says":{
+    "lines":[
+      {"text":"Calibration required.","delay":0},
+      {"text":"Move to the marked zone.","delay":0.6},
+      {"text":"Maintain stability.","delay":1.0}
+    ],
+    "char_delay":0.035,
+    "line_delay":0.55,
+    "hold_time":1.6,
+    "button_label":"Next"
+  }}
+]}

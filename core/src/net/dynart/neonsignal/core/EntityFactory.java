@@ -74,7 +74,7 @@ public class EntityFactory {
                 Gdx.app.log(LOG_TAG, "  " + k + ": " + parameters.get(k));
             }
             Method method = getClass().getMethod(methodName, Parameters.class);
-            entity = (Entity)method.invoke(this, parameters);
+            entity = (Entity) method.invoke(this, parameters);
         } catch (NoSuchMethodException e) {
             throw new RuntimeException("Can't create entity (no such method): " + type);
         } catch (IllegalAccessException e) {
@@ -111,7 +111,8 @@ public class EntityFactory {
         return createBody(parameters, width, height, Align.CENTER_BOTTOM);
     }
 
-    protected BodyComponent createBody(Parameters parameters, float width, float height, Align align) {
+    protected BodyComponent createBody(Parameters parameters, float width, float height,
+        Align align) {
         float editorWidth = parameters.getFloat("width");
         float editorHeight = parameters.getFloat("height");
         float editorX = parameters.getFloat("x");
@@ -198,10 +199,8 @@ public class EntityFactory {
             createBody(parameters, 15.99f, 15.99f),
             createGravity(config.getDefaultGravity()),
             /*
-            new PlatformComponent(),
-            new MountableComponent(),
-            new PusherComponent(),
-            */
+             * new PlatformComponent(), new MountableComponent(), new PusherComponent(),
+             */
             new GridCollisionComponent(),
             new EntityCollisionComponent(),
             new BlockComponent(),
@@ -209,7 +208,7 @@ public class EntityFactory {
             new ColliderComponent(),
             new CrushComponent("box", "box_crush"),
             new BoxComponent(parameters.get("item", null)),
-            //new ActivateOnScreenComponent(),
+            // new ActivateOnScreenComponent(),
             createSprite("box")
         );
 
@@ -264,7 +263,9 @@ public class EntityFactory {
         Entity result = new Entity(engine);
         boolean visible = parameters.getBoolean("visible", true);
         String animPrefix = parameters.get("sprite", "dplatform");
-        ViewComponent viewComponent = createAnimation(visible ? animPrefix + "_in" : animPrefix + "_out");
+        ViewComponent viewComponent = createAnimation(
+            visible ? animPrefix + "_in" : animPrefix + "_out"
+        );
         GameSprite sprite = viewComponent.getSprite(0);
         sprite.setOffsetY(sprite.getOffsetY() + parameters.getInteger("offset", 0));
         result.addComponents(
@@ -346,7 +347,7 @@ public class EntityFactory {
         parameters.set("active", true);
         Entity result = new Entity(engine);
         ViewComponent view = createSprite("spike", Align.LEFT_BOTTOM);
-        view.setRepeatX((int)(parameters.getFloat("width") / config.getTileWidth()));
+        view.setRepeatX((int) (parameters.getFloat("width") / config.getTileWidth()));
         result.addComponents(
             createBody(parameters, Align.LEFT_BOTTOM),
             view,
@@ -410,7 +411,9 @@ public class EntityFactory {
             createBody(20, 5, parameters.getFloat("x") + 10f, parameters.getFloat("y") + 8f),
             new VelocityComponent(),
             new PlatformComponent(),
-            new SpringboardComponent(spring, parameters.getFloat("speed", config.getPlayerJumpVelocity() * 2f)),
+            new SpringboardComponent(
+                spring, parameters.getFloat("speed", config.getPlayerJumpVelocity() * 2f)
+            ),
             new ActivateOnScreenComponent(),
             createSprite("springboard_top")
         );

@@ -23,7 +23,7 @@ public class FadeImage extends Image {
         super(texture);
     }
 
-    public void draw (Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         batch.setColor(1, 1, 1, parentAlpha);
     }

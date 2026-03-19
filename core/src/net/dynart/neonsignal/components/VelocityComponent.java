@@ -74,7 +74,8 @@ public class VelocityComponent extends Component {
             // if it is under the maximum velocity
             if (Math.abs(y) < maxY) {
                 // calculate the distance and set the initial body position
-                distanceY = initialY * elapsedTimeY + (1/2f * gravity * elapsedTimeY * elapsedTimeY);
+                distanceY = initialY * elapsedTimeY
+                    + (1 / 2f * gravity * elapsedTimeY * elapsedTimeY);
                 bodyY = initialBodyY;
                 calculated = true;
             } else {
@@ -108,7 +109,8 @@ public class VelocityComponent extends Component {
             // if it is under the maximum velocity
             if (Math.abs(x) < maxX) {
                 // calculate the distance and set the initial body position
-                distanceX = initialX * elapsedTimeX + (1/2f * acceleration * elapsedTimeX * elapsedTimeX);
+                distanceX = initialX * elapsedTimeX
+                    + (1 / 2f * acceleration * elapsedTimeX * elapsedTimeX);
                 bodyX = initialBodyX;
                 calculated = true;
             } else {
@@ -118,7 +120,8 @@ public class VelocityComponent extends Component {
         }
         // if it wasn't calculated
         if (!calculated) {
-            // calculate the distance with linear velocity and set the current body position as initial
+            // calculate the distance with linear velocity and set the current body position
+            // as initial
             distanceX = x * delta;
             bodyX = body.getX();
         }
@@ -185,7 +188,9 @@ public class VelocityComponent extends Component {
         return lastY;
     }
 
-    public float getX() { return x; }
+    public float getX() {
+        return x;
+    }
 
     public float getLastX() {
         return lastX;
@@ -222,6 +227,5 @@ public class VelocityComponent extends Component {
     public float getAcceleration() {
         return acceleration;
     }
-
 
 }

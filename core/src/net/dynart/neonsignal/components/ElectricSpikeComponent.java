@@ -16,7 +16,8 @@ public class ElectricSpikeComponent extends Component {
     private float currentActiveTime;
     private OverlapAttackComponent overlapAttack;
 
-    public ElectricSpikeComponent(final ViewComponent spikeView, float inactiveTime, float activeTime, boolean currentlyActive, boolean start, float currentTime) {
+    public ElectricSpikeComponent(final ViewComponent spikeView, float inactiveTime,
+        float activeTime, boolean currentlyActive, boolean start, float currentTime) {
         this.spikeView = spikeView;
         this.inactiveTime = inactiveTime;
         this.activeTime = activeTime;

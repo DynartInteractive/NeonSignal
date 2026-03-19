@@ -9,8 +9,8 @@ import net.dynart.neonsignal.core.ParticleEffectManager;
 import net.dynart.neonsignal.core.utils.Align;
 
 /**
- * Attaches a particle effect to an entity position.
- * Can be continuous (always emitting) or triggered on demand.
+ * Attaches a particle effect to an entity position. Can be continuous (always
+ * emitting) or triggered on demand.
  */
 public class ParticleEmitterComponent extends Component {
 
@@ -32,8 +32,8 @@ public class ParticleEmitterComponent extends Component {
     private boolean lastFlipX;
 
     public ParticleEmitterComponent(String effectName, boolean continuous, boolean behind,
-                                    Align align, float offsetX, float offsetY,
-                                    boolean flipWithEntity, float prewarmTime, float rotation) {
+        Align align, float offsetX, float offsetY,
+        boolean flipWithEntity, float prewarmTime, float rotation) {
         this.effectName = effectName;
         this.continuous = continuous;
         this.behind = behind;
@@ -75,7 +75,8 @@ public class ParticleEmitterComponent extends Component {
 
     private float getEmitX() {
         float flipMultiplier = (flipWithEntity && view != null && view.isFlipX()) ? -1 : 1;
-        return body.getCenterX() + (align.getLeftMultiplier() * body.getHalfWidth() + offsetX) * flipMultiplier;
+        return body.getCenterX()
+            + (align.getLeftMultiplier() * body.getHalfWidth() + offsetX) * flipMultiplier;
     }
 
     private float getEmitY() {
@@ -99,12 +100,14 @@ public class ParticleEmitterComponent extends Component {
     }
 
     /**
-     * Spawns a one-shot effect at the current emit position.
-     * Use this for triggered effects like jumps, attacks, etc.
+     * Spawns a one-shot effect at the current emit position. Use this for triggered
+     * effects like jumps, attacks, etc.
      */
     public void emit() {
-        if (particleManager == null) return;
-        PooledEffect spawned = particleManager.spawn(effectName, getEmitX(), getEmitY(), behind, rotation);
+        if (particleManager == null)
+            return;
+        PooledEffect spawned = particleManager
+            .spawn(effectName, getEmitX(), getEmitY(), behind, rotation);
         if (spawned != null && flipWithEntity && view != null && view.isFlipX()) {
             spawned.setFlip(true, false);
         }

@@ -59,7 +59,8 @@ public class TramComponent extends Component {
             engine.getSoundManager().play("tram"); // TODO: tram_starts
             playSoundTime = 0.8f;
         });
-        messageHandler.subscribe(PlatformComponent.DISMOUNTED, (sender, message) -> playSoundTime = 0);
+        messageHandler
+            .subscribe(PlatformComponent.DISMOUNTED, (sender, message) -> playSoundTime = 0);
 
     }
 

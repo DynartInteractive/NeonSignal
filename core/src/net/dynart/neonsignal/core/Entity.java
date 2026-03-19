@@ -98,7 +98,7 @@ public class Entity {
         classList.add(component.getClass());
     }
 
-    public void addComponents(Component ... components) {
+    public void addComponents(Component... components) {
         for (Component component : components) {
             addComponent(component);
         }
@@ -191,7 +191,9 @@ public class Entity {
         float volume = 0;
         Entity player = engine.getGameScene().getPlayer();
         BodyComponent playerBody = player.getComponent(BodyComponent.class);
-        Vector2 v = new Vector2(body.getCenterX() - playerBody.getCenterX(), body.getCenterY() - playerBody.getCenterY());
+        Vector2 v = new Vector2(
+            body.getCenterX() - playerBody.getCenterX(), body.getCenterY() - playerBody.getCenterY()
+        );
         float distance = v.len();
         float audioMaxDistance = engine.getConfig().getAudioMaxDistance();
         if (distance < audioMaxDistance) {

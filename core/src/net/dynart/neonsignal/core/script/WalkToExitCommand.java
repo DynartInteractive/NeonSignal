@@ -31,11 +31,11 @@ public class WalkToExitCommand implements Command {
         body = player.getComponent(BodyComponent.class);
     }
 
-
     public boolean act(float delta) {
         float speed = config.getPlayerMaxRunningVelocity();
         float levelWidth = grid.getWidth() * config.getTileWidth();
-        boolean done = (!left && body.getLeft() > levelWidth + 10) || (left && body.getRight() < -10);
+        boolean done = (!left && body.getLeft() > levelWidth + 10)
+            || (left && body.getRight() < -10);
         entityManager.setInAnimation(true);
         velocity.setX(left ? -speed : speed);
         if (done) {

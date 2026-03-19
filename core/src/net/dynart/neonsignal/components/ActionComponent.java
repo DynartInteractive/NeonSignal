@@ -17,7 +17,6 @@ public class ActionComponent extends Component {
     private String path;
     private boolean cutscene;
 
-
     public ActionComponent(String path, boolean cutscene, boolean once) {
         super();
         this.path = path;
@@ -59,11 +58,11 @@ public class ActionComponent extends Component {
             mustLeaveBody = playerBody;
         }
         if (cutscene) {
-            CutsceneScreen cutsceneScreen = (CutsceneScreen)engine.getScreen("cutscene");
+            CutsceneScreen cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
             cutsceneScreen.load(path);
             engine.moveToScreen("cutscene");
         } else {
-            GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+            GameScreen gameScreen = (GameScreen) engine.getScreen("game");
             gameScreen.runScript(path);
         }
     }

@@ -22,7 +22,8 @@ public class BulletOptions {
     public String sparkEffect = null;
     public String[] hitSounds = new String[] {};
 
-    public BulletOptions() {}
+    public BulletOptions() {
+    }
 
     public BulletOptions(BodyComponent ownerBody,
         float velocityX,
@@ -32,8 +33,7 @@ public class BulletOptions {
         boolean collideWithGrid,
         float lifeTime,
         float rotation,
-        boolean enemyFire
-    ) {
+        boolean enemyFire) {
         this.ownerBody = ownerBody;
         this.velocityX = velocityX;
         this.velocityY = velocityY;

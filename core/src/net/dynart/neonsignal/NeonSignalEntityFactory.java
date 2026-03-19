@@ -98,16 +98,13 @@ public class NeonSignalEntityFactory extends EntityFactory {
             new EnemyComponent("fly"),
             new ActivateOnScreenComponent(),
             new HealthComponent(1.0f),
-            //new MiniBarComponent(true),
+            // new MiniBarComponent(true),
             new OverlapAttackComponent(flyType.getPower(), true),
             new OverlapAttackableComponent(),
             /*
-            new WalkerComponent(
-                parameters.get("direction", "left"),
-                parameters.getFloat("speed", flyType.getDefaultSpeed()),
-                parameters.getBoolean("watch_edge", true),
-                false, true
-            ),
+             * new WalkerComponent( parameters.get("direction", "left"),
+             * parameters.getFloat("speed", flyType.getDefaultSpeed()),
+             * parameters.getBoolean("watch_edge", true), false, true ),
              */
             createAnimation(flyType.getAnimPrefix() + "fly_idle")
         );
@@ -235,7 +232,6 @@ public class NeonSignalEntityFactory extends EntityFactory {
         return result;
     }
 
-
     public Entity createPurplePiranha(Parameters parameters) {
         Entity result = new Entity(engine);
         result.addComponents(
@@ -332,7 +328,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
             new OverlapAttackableComponent(),
             new OverlapAttackComponent(0.5f, true),
             new CrushComponent("coconut", "crush"),
-            new FallingComponent(config.getDefaultGravity(),0.33f, null, false),
+            new FallingComponent(config.getDefaultGravity(), 0.33f, null, false),
             new ActivateOnScreenComponent(),
             new StartFallingInDistanceComponent(
                 parameters.getFloat("distance", 64f)
@@ -340,7 +336,6 @@ public class NeonSignalEntityFactory extends EntityFactory {
         );
         return result;
     }
-
 
     public Entity createTram(Parameters parameters) {
 
@@ -427,27 +422,27 @@ public class NeonSignalEntityFactory extends EntityFactory {
         spikeView.setLayer(200);
         ViewComponent topView = createSprite("electric_top");
         topView.setLayer(200);
-        BodyComponent topBody = createBody(16 , 16, 0, 0);
+        BodyComponent topBody = createBody(16, 16, 0, 0);
         ViewComponent bottomView = createSprite("electric_bottom");
         bottomView.setLayer(200);
-        BodyComponent bottomBody = createBody(16 , 16, 0, 0);
+        BodyComponent bottomBody = createBody(16, 16, 0, 0);
 
         // horizontal
         if (w > h) {
             h = 12;
             y += 2;
-            spikeBody = createBody(w-32, h, -w/2+16, 0, Align.LEFT_BOTTOM);
+            spikeBody = createBody(w - 32, h, -w / 2 + 16, 0, Align.LEFT_BOTTOM);
 
             spikeView.setAlign(0, Align.LEFT_BOTTOM);
-            spikeView.setRepeatX((int)(w / 16f) - 2);
+            spikeView.setRepeatX((int) (w / 16f) - 2);
             spikeView.setOffsetY(-2);
 
-            topBody.setX(w/2 - 8);
+            topBody.setX(w / 2 - 8);
             topBody.setY(2);
             topBody.setHeight(8);
             topView.setOffsetY(-4);
 
-            bottomBody.setX(-w/2 + 8);
+            bottomBody.setX(-w / 2 + 8);
             bottomBody.setHeight(8);
             bottomBody.setY(2);
             bottomView.setOffsetY(-4);
@@ -467,7 +462,7 @@ public class NeonSignalEntityFactory extends EntityFactory {
             x += 2;
             spikeBody = createBody(w, h - 32, 0, 0);
             spikeBody.setY(16);
-            spikeView.setRepeatY((int)(h / 16f) - 2);
+            spikeView.setRepeatY((int) (h / 16f) - 2);
             topBody.setY(h - 16);
             topBody.setWidth(8);
             bottomBody.setWidth(8);
@@ -601,4 +596,3 @@ public class NeonSignalEntityFactory extends EntityFactory {
     }
 
 }
-

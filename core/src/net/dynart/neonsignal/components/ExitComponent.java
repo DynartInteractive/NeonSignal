@@ -24,7 +24,7 @@ public class ExitComponent extends Component {
         GameScene gameScene = engine.getGameScene();
         entityManager = gameScene.getEntityManager();
         body = entity.getComponent(BodyComponent.class);
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
     }
 
     @Override
@@ -34,8 +34,8 @@ public class ExitComponent extends Component {
             if (body.isOverlap(otherBody)) {
                 setActive(false);
                 engine.moveToScreen("completed");
-                //grid.open();
-                //gameScreen.runCommand(new WalkToExitCommand(engine, left));
+                // grid.open();
+                // gameScreen.runCommand(new WalkToExitCommand(engine, left));
                 break;
             }
         }

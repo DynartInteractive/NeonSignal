@@ -1,0 +1,13 @@
+{"sequence":[
+  {"nexus_says":{
+    "lines":[
+      {"text":"Malfunctioning unit detected.","delay":0},
+      {"text":"Neutralization authorized.","delay":0.55},
+      {"text":"Recover any dropped components.","delay":0.95}
+    ],
+    "char_delay":0.04,
+    "line_delay":0.55,
+    "hold_time":1.6,
+    "button_label":"Next"
+  }}
+]}

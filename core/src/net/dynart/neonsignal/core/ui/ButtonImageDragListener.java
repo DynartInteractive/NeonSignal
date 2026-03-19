@@ -40,8 +40,8 @@ public class ButtonImageDragListener extends InputListener {
         }
         Actor actor = event.getListenerActor();
         Stage stage = actor.getStage();
-        int newX = (int)(actor.getX() + x - takeX);
-        int newY = (int)(actor.getY() + y - takeY);
+        int newX = (int) (actor.getX() + x - takeX);
+        int newY = (int) (actor.getY() + y - takeY);
         if (newX < 0) {
             newX = 0;
         }
@@ -51,18 +51,21 @@ public class ButtonImageDragListener extends InputListener {
         float w = actor.getWidth();
         float h = actor.getHeight();
         if (newX + w > stage.getWidth()) {
-            newX = (int)(stage.getWidth() - w);
+            newX = (int) (stage.getWidth() - w);
         }
         if (newX < 0) {
             newX = 0;
         }
         if (newY + h > stage.getHeight()) {
-            newY = (int)(stage.getHeight() - h);
+            newY = (int) (stage.getHeight() - h);
         }
         if (newY < 0) {
             newY = 0;
         }
         actor.setPosition(newX, newY);
-        position.set((newX > stage.getWidth() / 2f ? newX - stage.getWidth() : newX) + actor.getWidth() / 2f, newY + actor.getHeight() / 2f);
+        position.set(
+            (newX > stage.getWidth() / 2f ? newX - stage.getWidth() : newX) + actor.getWidth() / 2f,
+            newY + actor.getHeight() / 2f
+        );
     }
 }

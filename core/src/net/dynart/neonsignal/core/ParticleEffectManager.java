@@ -23,8 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Manages LibGDX particle effects loaded from .p files created with GDX Particle Editor.
- * Effects are pooled using ParticleEffectPool for efficient reuse.
+ * Manages LibGDX particle effects loaded from .p files created with GDX
+ * Particle Editor. Effects are pooled using ParticleEffectPool for efficient
+ * reuse.
  */
 public class ParticleEffectManager {
 
@@ -84,7 +85,8 @@ public class ParticleEffectManager {
     }
 
     /**
-     * Spawns a particle effect at the given position, rendered in front of entities.
+     * Spawns a particle effect at the given position, rendered in front of
+     * entities.
      */
     public PooledEffect spawn(String name, float x, float y) {
         return spawn(name, x, y, false);
@@ -92,7 +94,9 @@ public class ParticleEffectManager {
 
     /**
      * Spawns a particle effect at the given position.
-     * @param behind true to render behind entities, false for in front
+     * 
+     * @param behind
+     *            true to render behind entities, false for in front
      */
     public PooledEffect spawn(String name, float x, float y, boolean behind) {
         return spawn(name, x, y, behind, 0);
@@ -100,8 +104,11 @@ public class ParticleEffectManager {
 
     /**
      * Spawns a particle effect at the given position with rotation.
-     * @param behind true to render behind entities, false for in front
-     * @param rotation rotation in degrees to add to emitter angles
+     * 
+     * @param behind
+     *            true to render behind entities, false for in front
+     * @param rotation
+     *            rotation in degrees to add to emitter angles
      */
     public PooledEffect spawn(String name, float x, float y, boolean behind, float rotation) {
         ParticleEffectPool pool = pools.get(name);
@@ -110,7 +117,8 @@ public class ParticleEffectManager {
             return null;
         }
         PooledEffect effect = pool.obtain();
-        // Set angles before position and start (don't call reset() - it might reset angles)
+        // Set angles before position and start (don't call reset() - it might reset
+        // angles)
         resetAndRotateEffect(name, effect, rotation);
         effect.setPosition(x, y);
         effect.start();
@@ -119,13 +127,18 @@ public class ParticleEffectManager {
     }
 
     /**
-     * Spawns a particle effect rotated to match a velocity direction.
-     * Useful for impact effects that should spray opposite to the direction of travel.
-     * @param velocityX the X velocity of the impacting object
-     * @param velocityY the Y velocity of the impacting object
-     * @param behind true to render behind entities, false for in front
+     * Spawns a particle effect rotated to match a velocity direction. Useful for
+     * impact effects that should spray opposite to the direction of travel.
+     * 
+     * @param velocityX
+     *            the X velocity of the impacting object
+     * @param velocityY
+     *            the Y velocity of the impacting object
+     * @param behind
+     *            true to render behind entities, false for in front
      */
-    public PooledEffect spawnWithVelocity(String name, float x, float y, float velocityX, float velocityY, boolean behind) {
+    public PooledEffect spawnWithVelocity(String name, float x, float y, float velocityX,
+        float velocityY, boolean behind) {
         // Calculate angle from velocity (atan2 returns radians, convert to degrees)
         // Add 180 to make particles spray in the opposite direction (impact effect)
         float angle = MathUtils.atan2(velocityY, velocityX) * MathUtils.radiansToDegrees + 180;
@@ -135,7 +148,8 @@ public class ParticleEffectManager {
     /**
      * Spawns a particle effect rotated to match a velocity direction.
      */
-    public PooledEffect spawnWithVelocity(String name, float x, float y, Vector2 velocity, boolean behind) {
+    public PooledEffect spawnWithVelocity(String name, float x, float y, Vector2 velocity,
+        boolean behind) {
         return spawnWithVelocity(name, x, y, velocity.x, velocity.y, behind);
     }
 
@@ -144,7 +158,8 @@ public class ParticleEffectManager {
      */
     private void resetAndRotateEffect(String name, PooledEffect effect, float degrees) {
         float[][] angles = originalAngles.get(name);
-        if (angles == null) return;
+        if (angles == null)
+            return;
 
         Array<ParticleEmitter> emitters = effect.getEmitters();
         for (int i = 0; i < emitters.size && i < angles.length; i++) {
@@ -209,13 +224,14 @@ public class ParticleEffectManager {
             }
         }
 
-        // Reset blend function to default after particles (they may use additive blending)
+        // Reset blend function to default after particles (they may use additive
+        // blending)
         batch.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
 
     /**
-     * Clears all active effects without disposing pools.
-     * Called when changing levels.
+     * Clears all active effects without disposing pools. Called when changing
+     * levels.
      */
     public void clear() {
         for (PooledEffect effect : backEffects) {

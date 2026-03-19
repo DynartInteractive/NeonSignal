@@ -58,7 +58,7 @@ public class LevelScreen extends MenuScreen {
         LevelManager levelManager = engine.getLevelManager();
         user = engine.getUser();
         worlds = levelManager.getWorlds();
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
 
         group.addActor(menuCursor.getCursorImage());
 
@@ -110,7 +110,9 @@ public class LevelScreen extends MenuScreen {
             List<Level> levels = world.getLevels();
             for (int levelIndex = 0; levelIndex < levels.size(); levelIndex++) {
                 Level level = levels.get(levelIndex);
-                LevelButton levelButton = createLevelButton(level, worldIndex * WORLD_WIDTH, levelIndex, levels.size());
+                LevelButton levelButton = createLevelButton(
+                    level, worldIndex * WORLD_WIDTH, levelIndex, levels.size()
+                );
                 worldGroup.addActor(levelButton);
                 levelButtons.put(getLevelHash(worldIndex, levelIndex), levelButton);
             }
@@ -137,8 +139,10 @@ public class LevelScreen extends MenuScreen {
         levelSelectListener = new MenuCursor.Listener() {
             @Override
             public void handle(MenuCursorItem item) {
-                if (isAnimating()) { return; }
-                MenuCursorItemLevelData data = (MenuCursorItemLevelData)item.getData();
+                if (isAnimating()) {
+                    return;
+                }
+                MenuCursorItemLevelData data = (MenuCursorItemLevelData) item.getData();
                 Level level = data.getLevel();
                 if (user.isLevelUnlocked(level)) {
                     levelToStart = level;
@@ -260,7 +264,7 @@ public class LevelScreen extends MenuScreen {
     }
 
     private void moveCursorTo(MenuCursorItem item, int direction) {
-        MenuCursorItemLevelData data = (MenuCursorItemLevelData)item.getData();
+        MenuCursorItemLevelData data = (MenuCursorItemLevelData) item.getData();
         int worldIndex = data.getWorldIndex();
         int nextWorldIndex = worldIndex + direction;
         if (nextWorldIndex < worlds.size() && nextWorldIndex > -1) {
@@ -330,7 +334,8 @@ public class LevelScreen extends MenuScreen {
         }
     }
 
-    private LevelButton createLevelButton(final Level level, float offsetX, int levelIndex, int totalLevels) {
+    private LevelButton createLevelButton(final Level level, float offsetX, int levelIndex,
+        int totalLevels) {
         LevelButton levelButton = new LevelButton(engine, level, levelIndex + 1);
 
         // Calculate layout dimensions
@@ -349,7 +354,7 @@ public class LevelScreen extends MenuScreen {
         } else {
             // Two rows (4-10 levels) - distribute evenly, top row gets more if odd
             buttonsInRow1 = (totalLevels + 1) / 2; // Ceiling of half
-            buttonsInRow2 = totalLevels / 2;       // Floor of half
+            buttonsInRow2 = totalLevels / 2; // Floor of half
 
             if (levelIndex < buttonsInRow1) {
                 row = 0;
@@ -384,7 +389,9 @@ public class LevelScreen extends MenuScreen {
         levelButton.setStars(user.getStars(level));
         levelButton.addClickListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if (isAnimating()) { return; }
+                if (isAnimating()) {
+                    return;
+                }
                 levelToStart = level;
                 fadeOut(startLevelAction);
             }
@@ -393,7 +400,9 @@ public class LevelScreen extends MenuScreen {
     }
 
     private void startLevel() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         gameScreen.loadLevel(levelToStart);
         gameScreen.fadeIn();
         engine.moveToScreen("game");
@@ -403,7 +412,9 @@ public class LevelScreen extends MenuScreen {
         return new DragListener() {
             @Override
             public void dragStart(InputEvent event, float x, float y, int pointer) {
-                if (isAnimating()) { return; }
+                if (isAnimating()) {
+                    return;
+                }
                 startDragX = x - worldGroup.getX();
                 lastX = startDragX;
                 worldGroup.clearActions();
@@ -415,9 +426,11 @@ public class LevelScreen extends MenuScreen {
 
             @Override
             public void drag(InputEvent event, float x, float y, int pointer) {
-                if (isAnimating()) { return; }
+                if (isAnimating()) {
+                    return;
+                }
                 if (lastX != worldGroup.getX()) {
-                    lastDir = (int)Math.signum(worldGroup.getX() - lastX);
+                    lastDir = (int) Math.signum(worldGroup.getX() - lastX);
                 }
                 lastX = worldGroup.getX();
                 worldGroup.setX(x - startDragX);
@@ -425,7 +438,9 @@ public class LevelScreen extends MenuScreen {
 
             @Override
             public void dragStop(InputEvent event, float x, float y, int pointer) {
-                if (isAnimating()) { return; }
+                if (isAnimating()) {
+                    return;
+                }
                 for (LevelButton levelButton : levelButtons.values()) {
                     levelButton.setDisabled(false);
                 }
@@ -467,18 +482,24 @@ public class LevelScreen extends MenuScreen {
 
     @Override
     public void backClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moveOut(backAction);
     }
 
     private void moveTo(int nextWorldIndex) {
         if (nextWorldIndex < 0) {
             nextWorldIndex = 0;
-        } else if (nextWorldIndex >= worlds.size()){
+        } else if (nextWorldIndex >= worlds.size()) {
             nextWorldIndex = worlds.size() - 1;
         }
         currentWorldIndex = nextWorldIndex;
-        worldGroup.addAction(Actions.moveTo(-currentWorldIndex * WORLD_WIDTH, worldGroup.getY(), 0.2f, Interpolation.pow2Out));
+        worldGroup.addAction(
+            Actions.moveTo(
+                -currentWorldIndex * WORLD_WIDTH, worldGroup.getY(), 0.2f, Interpolation.pow2Out
+            )
+        );
         slideLeftButton.setVisible(currentWorldIndex != 0);
         slideRightButton.setVisible(currentWorldIndex != worlds.size() - 1);
         headerLabel.setText(worlds.get(currentWorldIndex).getTitle());
@@ -498,7 +519,8 @@ public class LevelScreen extends MenuScreen {
 
     private void updateArrowPositions() {
         // Calculate center Y of level button area
-        // Level buttons are positioned around -127.5f (single row) or -45 to -210 (two rows)
+        // Level buttons are positioned around -127.5f (single row) or -45 to -210 (two
+        // rows)
         float centerY = -60f;
 
         float arrowY = centerY - slideLeftButton.getHeight() / 2f;
@@ -510,36 +532,53 @@ public class LevelScreen extends MenuScreen {
 
     private float getLeftButtonX() {
         // Group origin is at screen center, so left edge is at -stage.getWidth()/2f
-        return -stage.getWidth()/2f + 20f + getSideBlackBarWidth();
+        return -stage.getWidth() / 2f + 20f + getSideBlackBarWidth();
     }
 
     private float getRightButtonX() {
         // Group origin is at screen center, so right edge is at +stage.getWidth()/2f
-        return stage.getWidth()/2f - slideRightButton.getWidth() - 20f - getSideBlackBarWidth();
+        return stage.getWidth() / 2f - slideRightButton.getWidth() - 20f - getSideBlackBarWidth();
     }
 
     @Override
     public void moveIn() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
         headerTable.setY(450);
-        headerTable.addAction(Actions.moveTo(headerTable.getX(), 170, 0.15f, Interpolation.sineOut));
+        headerTable
+            .addAction(Actions.moveTo(headerTable.getX(), 170, 0.15f, Interpolation.sineOut));
         worldGroup.setY(-450);
         worldGroup.addAction(Actions.moveTo(worldGroup.getX(), 0, 0.15f, Interpolation.sineOut));
         slideLeftButton.setX(getLeftButtonX() - 100f);
-        slideLeftButton.addAction(Actions.moveTo(getLeftButtonX(), slideLeftButton.getY(), 0.15f, Interpolation.sineOut));
+        slideLeftButton.addAction(
+            Actions.moveTo(getLeftButtonX(), slideLeftButton.getY(), 0.15f, Interpolation.sineOut)
+        );
         slideRightButton.setX(getRightButtonX() + 100f);
-        slideRightButton.addAction(Actions.moveTo(getRightButtonX(), slideRightButton.getY(), 0.15f, Interpolation.sineOut));
+        slideRightButton.addAction(
+            Actions.moveTo(getRightButtonX(), slideRightButton.getY(), 0.15f, Interpolation.sineOut)
+        );
         stage.addAction(Actions.sequence(Actions.delay(0.16f), movingFinishedAction));
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
         headerTable.addAction(Actions.moveTo(headerTable.getX(), 450, 0.15f, Interpolation.sineIn));
         worldGroup.addAction(Actions.moveTo(worldGroup.getX(), -450, 0.15f, Interpolation.sineIn));
-        slideLeftButton.addAction(Actions.moveTo(getLeftButtonX() - 100f, slideLeftButton.getY(), 0.15f, Interpolation.sineIn));
-        slideRightButton.addAction(Actions.moveTo(getRightButtonX() + 100f, slideRightButton.getY(), 0.15f, Interpolation.sineIn));
+        slideLeftButton.addAction(
+            Actions.moveTo(
+                getLeftButtonX() - 100f, slideLeftButton.getY(), 0.15f, Interpolation.sineIn
+            )
+        );
+        slideRightButton.addAction(
+            Actions.moveTo(
+                getRightButtonX() + 100f, slideRightButton.getY(), 0.15f, Interpolation.sineIn
+            )
+        );
         stage.addAction(Actions.sequence(Actions.delay(0.16f), movingFinishedAction, endAction));
     }
 

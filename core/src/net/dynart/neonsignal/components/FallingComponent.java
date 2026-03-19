@@ -38,8 +38,14 @@ public class FallingComponent extends Component {
         view = entity.getComponent(ViewComponent.class);
         startY = body.getY();
         if (crushComponent != null) {
-            messageHandler.subscribe(GridCollisionComponent.BOTTOM_COLLISION, (sender, message) -> crushComponent.setActive(true));
-            messageHandler.subscribe(EntityCollisionComponent.BOTTOM_COLLISION, (sender, message) -> crushComponent.setActive(true));
+            messageHandler.subscribe(
+                GridCollisionComponent.BOTTOM_COLLISION,
+                (sender, message) -> crushComponent.setActive(true)
+            );
+            messageHandler.subscribe(
+                EntityCollisionComponent.BOTTOM_COLLISION,
+                (sender, message) -> crushComponent.setActive(true)
+            );
         }
     }
 
@@ -60,7 +66,7 @@ public class FallingComponent extends Component {
                     view.setOffsetY(0);
                     view.setOffsetX(0);
                 } else { // .. or in progress
-                    boolean v = (int)(repeatWaitTime * 10f) % 2 != 0;
+                    boolean v = (int) (repeatWaitTime * 10f) % 2 != 0;
                     view.setAlpha(0, v ? 0.3f : 1f);
                 }
             }
@@ -70,8 +76,8 @@ public class FallingComponent extends Component {
         // if must vibrate
         vibratingTime -= delta;
         if (vibratingTime > 0) {
-            view.setOffsetY((float)Math.sin(vibratingTime * 80000f)/2f + 0.5f);
-            view.setOffsetX((float)Math.cos(vibratingTime * 80000f)/3f + 0.5f);
+            view.setOffsetY((float) Math.sin(vibratingTime * 80000f) / 2f + 0.5f);
+            view.setOffsetX((float) Math.cos(vibratingTime * 80000f) / 3f + 0.5f);
         } else {
             velocity.setGravity(gravity);
         }

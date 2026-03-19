@@ -57,11 +57,13 @@ public class EngineConfig {
     protected int unusedButtonCode = -999;
     protected boolean mobile;
     protected ControllerType defaultControllerType = ControllerType.TOUCH;
-    protected String[] touchButtonNames = {"left", "right", "a", "b"};
+    protected String[] touchButtonNames = { "left", "right", "a", "b" };
     protected float touchButtonSize = 200;
     protected Map<String, Vector2> defaultTouchPositions = new HashMap<>();
-    protected Button[] buttonOrder = { Button.LEFT, Button.RIGHT, Button.UP, Button.DOWN, Button.A, Button.B, Button.X, Button.Y, Button.MENU};
-    protected String[] buttonLabels = { "Left", "Right", "Up", "Down", "Jump", "Dash", "Fire", "Switch", "Pause" };
+    protected Button[] buttonOrder = { Button.LEFT, Button.RIGHT, Button.UP, Button.DOWN, Button.A,
+        Button.B, Button.X, Button.Y, Button.MENU };
+    protected String[] buttonLabels = { "Left", "Right", "Up", "Down", "Jump", "Dash", "Fire",
+        "Switch", "Pause" };
     protected Map<Button, Integer> defaultKeyMapping = new HashMap<>();
     protected Map<Button, Integer> defaultJoyMapping = new HashMap<>();
     protected Map<Button, AxisData> defaultAxisMapping = new HashMap<>();
@@ -93,8 +95,10 @@ public class EngineConfig {
     public void load(String section) {
         this.section = section;
         JsonReader jsonReader = new JsonReader();
-        JsonValue internalJson = JsonUtil.tryToLoad(jsonReader, Gdx.files.internal("data/config.json"));
-        JsonValue externalJson = JsonUtil.tryToLoad(jsonReader, Gdx.files.local("data/config-custom.json"));
+        JsonValue internalJson = JsonUtil
+            .tryToLoad(jsonReader, Gdx.files.internal("data/config.json"));
+        JsonValue externalJson = JsonUtil
+            .tryToLoad(jsonReader, Gdx.files.local("data/config-custom.json"));
         JsonValue configJson = JsonUtil.mergeJson(internalJson, externalJson);
         loadFromJson(configJson.get("all"));
         loadFromJson(configJson.get(section));
@@ -130,7 +134,7 @@ public class EngineConfig {
     private void setField(String propertyName, JsonValue child, Field field) {
         try {
             if (field.getType() == int.class && child.isLong()) {
-                field.setInt(this, (int)child.asLong());
+                field.setInt(this, (int) child.asLong());
             } else if (field.getType() == float.class && child.isNumber()) {
                 field.setFloat(this, child.asFloat());
             } else if (field.getType() == String.class && child.isString()) {
@@ -140,8 +144,7 @@ public class EngineConfig {
             } else {
                 callLoadMethodForField(child, propertyName);
             }
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new RuntimeException("Can't access field: " + getPropertyFullName(propertyName));
         }
     }
@@ -153,12 +156,18 @@ public class EngineConfig {
             Method method = getClass().getMethod(methodName, JsonValue.class);
             method.invoke(this, child);
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Can't load config value (no such method): " + fullMethodName);
+            throw new RuntimeException(
+                "Can't load config value (no such method): " + fullMethodName
+            );
         } catch (IllegalAccessException e) {
-            throw new RuntimeException("Can't load config value (illegal access): " + fullMethodName);
+            throw new RuntimeException(
+                "Can't load config value (illegal access): " + fullMethodName
+            );
         } catch (InvocationTargetException e) {
             e.getCause().printStackTrace();
-            throw new RuntimeException("Can't load config value (runtime error): " + fullMethodName);
+            throw new RuntimeException(
+                "Can't load config value (runtime error): " + fullMethodName
+            );
         }
     }
 
@@ -206,7 +215,9 @@ public class EngineConfig {
     public void loadDefaultAxisMapping(JsonValue data) {
         defaultAxisMapping.clear();
         for (JsonValue child = data.child(); child != null; child = child.next()) {
-            defaultAxisMapping.put(ButtonMap.getByName(child.name), new AxisData(child.getInt(0), child.getInt(1)));
+            defaultAxisMapping.put(
+                ButtonMap.getByName(child.name), new AxisData(child.getInt(0), child.getInt(1))
+            );
         }
     }
 
@@ -322,7 +333,9 @@ public class EngineConfig {
         return touchButtonNames;
     }
 
-    public float getTouchButtonSize() { return touchButtonSize; }
+    public float getTouchButtonSize() {
+        return touchButtonSize;
+    }
 
     public Map<String, Vector2> getDefaultTouchPositions() {
         return defaultTouchPositions;
@@ -355,7 +368,6 @@ public class EngineConfig {
     public boolean isMobile() {
         return mobile;
     }
-
 
     protected Map<String, Vector2> playerGunBarrelPosition = new HashMap<>();
 

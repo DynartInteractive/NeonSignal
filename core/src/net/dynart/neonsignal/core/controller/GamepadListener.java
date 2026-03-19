@@ -13,15 +13,18 @@ public class GamepadListener extends ControllerAdapter {
 
     public interface GamepadConnectionListener {
         void gamepadConnected(Controller controller);
+
         void gamepadDisconnected(Controller controller);
     }
 
-    private static final Map<Button, Integer> signMap = new HashMap<>() {{
-        put(Button.LEFT, -1);
-        put(Button.RIGHT, 1);
-        put(Button.UP, 1);
-        put(Button.DOWN, -1);
-    }};
+    private static final Map<Button, Integer> signMap = new HashMap<>() {
+        {
+            put(Button.LEFT, -1);
+            put(Button.RIGHT, 1);
+            put(Button.UP, 1);
+            put(Button.DOWN, -1);
+        }
+    };
 
     private final GameController gameController;
 

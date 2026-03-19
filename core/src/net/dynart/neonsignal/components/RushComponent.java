@@ -24,7 +24,7 @@ public class RushComponent extends Component {
         super.postConstruct(entity);
 
         // TODO: better solution for "Watcher"
-        watchBody = new BodyComponent(16*5, 16);
+        watchBody = new BodyComponent(16 * 5, 16);
         watchBody.postConstruct(entity);
         //
 

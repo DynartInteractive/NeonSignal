@@ -26,8 +26,8 @@ public class FrogComponent extends Component {
     private ViewComponent view;
     private boolean jumpEnd;
 
-
-    public FrogComponent(float jumpVelocity, float forwardVelocity, float waitToJump, String direction, FrogType frogType) {
+    public FrogComponent(float jumpVelocity, float forwardVelocity, float waitToJump,
+        String direction, FrogType frogType) {
         left = direction.equals("left");
         this.waitToJump = waitToJump;
         this.jumpVelocity = jumpVelocity;
@@ -84,9 +84,12 @@ public class FrogComponent extends Component {
                 if (timeToJump < 0) {
 
                     // turn to the player at jump
-                    BodyComponent playerBody = engine.getGameScene().getPlayer().getComponent(BodyComponent.class);
+                    BodyComponent playerBody = engine.getGameScene().getPlayer()
+                        .getComponent(BodyComponent.class);
                     if (Math.abs(body.getY() - playerBody.getY()) < 32) {
-                        forwardVelocity = body.getDirection(true, playerBody) == Direction.RIGHT ? Math.abs(forwardVelocity) : -Math.abs(forwardVelocity);
+                        forwardVelocity = body.getDirection(true, playerBody) == Direction.RIGHT
+                            ? Math.abs(forwardVelocity)
+                            : -Math.abs(forwardVelocity);
                         view.flipX(forwardVelocity > 0);
                     }
 
@@ -106,6 +109,5 @@ public class FrogComponent extends Component {
             }
         }
     }
-
 
 }

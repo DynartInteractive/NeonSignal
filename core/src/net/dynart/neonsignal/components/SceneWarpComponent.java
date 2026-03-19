@@ -9,7 +9,8 @@ public class SceneWarpComponent extends Component {
 
     private static String LOG_TAG = "SceneWrapComponent";
 
-    // Warp just before fade completes (while screen is black), before CameraHandler switches screens
+    // Warp just before fade completes (while screen is black), before CameraHandler
+    // switches screens
     private static final float FADE_DELAY = 0.45f;
 
     private BodyComponent body;
@@ -61,9 +62,11 @@ public class SceneWarpComponent extends Component {
             ViewComponent view = entityForMove.getComponent(ViewComponent.class);
             view.setPaused(false);
             entityBody.setBottom(targetBody.getBottom());
-            entityBody.setX(body.getCenterX() - entityBody.getCenterX() > 0
-                ? targetBody.getRight() + 10 + entityBody.getHalfWidth()
-                : targetBody.getLeft() - 10 - entityBody.getHalfWidth());
+            entityBody.setX(
+                body.getCenterX() - entityBody.getCenterX() > 0
+                    ? targetBody.getRight() + 10 + entityBody.getHalfWidth()
+                    : targetBody.getLeft() - 10 - entityBody.getHalfWidth()
+            );
             velocity.setInitialX();
             velocity.setInitialY();
             entityForMove = null;

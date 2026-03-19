@@ -77,8 +77,8 @@ public class GameScene {
     public void init() {
         batch = new SpriteBatch();
         viewport = new ExtendViewport(
-            config.getGameVirtualHeight() + 1, config.getGameVirtualHeight()//,
-            //config.getGameMaxVirtualWidth(), config.getGameVirtualHeight()
+            config.getGameVirtualHeight() + 1, config.getGameVirtualHeight()// ,
+            // config.getGameMaxVirtualWidth(), config.getGameVirtualHeight()
         );
         camera = viewport.getCamera();
         shapeRenderer = new ShapeRenderer();
@@ -219,7 +219,8 @@ public class GameScene {
         backgroundFrontTexture = texture;
     }
 
-    public void createBackAndFrontLayers(List<Integer> backLayerList, List<Integer> frontLayerList) {
+    public void createBackAndFrontLayers(List<Integer> backLayerList,
+        List<Integer> frontLayerList) {
         backLayers = new int[backLayerList.size()];
         frontLayers = new int[frontLayerList.size()];
         for (int i = 0; i < backLayerList.size(); i++) {
@@ -245,8 +246,8 @@ public class GameScene {
 
     public void draw() {
         resetAlpha();
-        //animateItemLayers();
-        tiledMapRenderer.setView((OrthographicCamera)camera);
+        // animateItemLayers();
+        tiledMapRenderer.setView((OrthographicCamera) camera);
         drawBackgrounds();
         tiledMapRenderer.render(backLayers);
         drawParticlesBack();
@@ -260,8 +261,8 @@ public class GameScene {
     }
 
     private void animateItemLayers() {
-        TiledMapTileLayer items1Layer = (TiledMapTileLayer)tiledMap.getLayers().get("Items1");
-        TiledMapTileLayer items2Layer = (TiledMapTileLayer)tiledMap.getLayers().get("Items2");
+        TiledMapTileLayer items1Layer = (TiledMapTileLayer) tiledMap.getLayers().get("Items1");
+        TiledMapTileLayer items2Layer = (TiledMapTileLayer) tiledMap.getLayers().get("Items2");
         if (items1Layer != null && items2Layer != null) {
             float offsetY1 = (float) Math.sin(engine.getElapsedTime() * 10f) * 2f + 1f;
             float offsetY2 = (float) Math.cos(engine.getElapsedTime() * 10f) * 2f + 1f;
@@ -283,33 +284,25 @@ public class GameScene {
 
     public void revive() {
         /*
-        Vector2 startPosition = new Vector2(getStartPosition());
-        Entity revive = ReviveComponent.getCurrent();
-        if (revive != null) {
-            BodyComponent body = revive.getComponent(BodyComponent.class);
-            startPosition.set(body.getCenterX(), body.getBottom());
-        }
-        Entity playerEntity = getPlayer();
-        PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-        playerComponent.revive(startPosition);
-        List<Entity> emptyList = new ArrayList<>();
-        List<Entity> oxygenList = entityManager.getListByClass(OxygenComponent.class);
-        List<Entity> fallingList = entityManager.getListByClass(FallingComponent.class);
-        List<Entity> movableList = entityManager.getListByClass(MovableComponent.class);
-        for (Entity e : oxygenList == null ? emptyList : oxygenList) {
-            OxygenComponent oxygen = e.getComponent(OxygenComponent.class);
-            oxygen.reset();
-        }
-        for (Entity e : fallingList == null ? emptyList : fallingList) {
-            FallingComponent falling = e.getComponent(FallingComponent.class);
-            falling.reset();
-        }
-        for (Entity e : movableList == null ? emptyList : movableList) {
-            MovableComponent mop = e.getComponent(MovableComponent.class);
-            mop.reset();
-            mop.setActive(mop.isStart());
-        }
-        */
+         * Vector2 startPosition = new Vector2(getStartPosition()); Entity revive =
+         * ReviveComponent.getCurrent(); if (revive != null) { BodyComponent body =
+         * revive.getComponent(BodyComponent.class);
+         * startPosition.set(body.getCenterX(), body.getBottom()); } Entity playerEntity
+         * = getPlayer(); PlayerComponent playerComponent =
+         * playerEntity.getComponent(PlayerComponent.class);
+         * playerComponent.revive(startPosition); List<Entity> emptyList = new
+         * ArrayList<>(); List<Entity> oxygenList =
+         * entityManager.getListByClass(OxygenComponent.class); List<Entity> fallingList
+         * = entityManager.getListByClass(FallingComponent.class); List<Entity>
+         * movableList = entityManager.getListByClass(MovableComponent.class); for
+         * (Entity e : oxygenList == null ? emptyList : oxygenList) { OxygenComponent
+         * oxygen = e.getComponent(OxygenComponent.class); oxygen.reset(); } for (Entity
+         * e : fallingList == null ? emptyList : fallingList) { FallingComponent falling
+         * = e.getComponent(FallingComponent.class); falling.reset(); } for (Entity e :
+         * movableList == null ? emptyList : movableList) { MovableComponent mop =
+         * e.getComponent(MovableComponent.class); mop.reset();
+         * mop.setActive(mop.isStart()); }
+         */
     }
 
     private void drawParticlesBack() {
@@ -325,7 +318,8 @@ public class GameScene {
     }
 
     private void drawSecretLayer() {
-        if (secretLayer[0] < 0) return;
+        if (secretLayer[0] < 0)
+            return;
         batch.setColor(1f, 1f, 1f, secretManager.getAlpha());
         tiledMapRenderer.render(secretLayer);
         batch.setColor(1f, 1f, 1f, 1f);
@@ -368,23 +362,28 @@ public class GameScene {
 
             Color col = entity.hasComponent(PlayerComponent.class)
                 ? Color.GREEN
-                : entity.hasComponent(EnemyComponent.class) || entity.hasComponent(ElectricSpikeComponent.class)
-                    ? Color.RED
-                    : Color.YELLOW;
+                : entity.hasComponent(EnemyComponent.class)
+                    || entity.hasComponent(ElectricSpikeComponent.class)
+                        ? Color.RED
+                        : Color.YELLOW;
 
             if (colliders.contains(entity)) {
                 col = Color.ORANGE;
             }
 
-            if (col == null) continue;
+            if (col == null)
+                continue;
 
             shapeRenderer.setColor(col);
 
             BodyComponent body = entity.getComponent(BodyComponent.class);
-            shapeRenderer.rect(body.getLeft(), body.getBottom(), body.getHalfWidth() * 2, body.getHalfHeight() * 2);
+            shapeRenderer.rect(
+                body.getLeft(), body.getBottom(), body.getHalfWidth() * 2, body.getHalfHeight() * 2
+            );
             if (entity.hasComponent(PlatformComponent.class)) {
                 PlatformComponent platform = entity.getComponent(PlatformComponent.class);
-                shapeRenderer.setColor(platform.getMountedEntities().isEmpty() ? Color.CYAN : Color.RED);
+                shapeRenderer
+                    .setColor(platform.getMountedEntities().isEmpty() ? Color.CYAN : Color.RED);
                 shapeRenderer.rect(body.getLeft(), body.getTop(), body.getWidth(), 0);
             }
             if (entity.hasComponent(PlayerComponent.class)) {
@@ -411,7 +410,6 @@ public class GameScene {
         shapeRenderer.end();
     }
 
-
     private void drawEntityLayer(int layer) {
         for (Entity entity : entityManager.getAllByLayer(layer)) {
             ViewComponent viewComponent = entity.getComponent(ViewComponent.class);
@@ -428,7 +426,8 @@ public class GameScene {
         float x = camera.position.x - viewport.getWorldWidth() / 2f;
         float y = camera.position.y - viewport.getWorldHeight() / 2f;
         float scrollX = x / (texture.getWidth() * scrollRatio);
-        batch.draw(texture,
+        batch.draw(
+            texture,
             x, y, viewport.getWorldWidth(), viewport.getWorldHeight(),
             scrollX, scrollY + v, scrollX + u, scrollY
         );

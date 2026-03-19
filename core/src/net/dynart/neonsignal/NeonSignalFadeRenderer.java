@@ -54,7 +54,8 @@ public class NeonSignalFadeRenderer implements FadeRenderer {
         int cols = (int) Math.ceil(w / TILE_SIZE) + 1;
         int rows = (int) Math.ceil(h / TILE_SIZE) + 1;
         int maxDiagonal = (cols - 1) + (rows - 1);
-        float waveSpread = 0.5f; // portion of time spent on wave delay (0 = no wave, 1 = max spread)
+        float waveSpread = 0.5f; // portion of time spent on wave delay (0 = no wave, 1 = max
+                                 // spread)
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {

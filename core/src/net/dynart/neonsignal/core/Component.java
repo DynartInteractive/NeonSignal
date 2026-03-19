@@ -27,8 +27,13 @@ public abstract class Component {
         return active;
     }
 
-    public void preUpdate(float delta) {}
-    public void update(float delta) {}
-    public void postUpdate(float delta) {}
+    public void preUpdate(float delta) {
+    }
+
+    public void update(float delta) {
+    }
+
+    public void postUpdate(float delta) {
+    }
 
 }

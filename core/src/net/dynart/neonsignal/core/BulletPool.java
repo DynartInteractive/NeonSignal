@@ -20,7 +20,7 @@ public class BulletPool extends Pool<Entity> {
     public Entity newObject() {
         Entity result = new Entity(engine);
         ViewComponent viewComponent = new ViewComponent(engine);
-        viewComponent.addSprite(new GameSprite(),"fireball");
+        viewComponent.addSprite(new GameSprite(), "fireball");
         BodyComponent body = new BodyComponent(16f, 16f);
         result.addComponents(
             body,

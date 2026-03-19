@@ -19,7 +19,8 @@ public class Grid {
         public static final int POISON = 32;
         public static final int DEATH = 64;
 
-        public static final int[] values = { BLOCK, TOP_BLOCK, SLIDER, WATER, SPIKE, POISON, DEATH };
+        public static final int[] values = { BLOCK, TOP_BLOCK, SLIDER, WATER, SPIKE, POISON,
+            DEATH };
 
         public static int[] values() {
             return values;
@@ -87,7 +88,7 @@ public class Grid {
         boolean xOutLeft = x < 0;
         boolean xOutRight = x >= width;
         boolean xOut = xOutLeft || xOutRight;
-        boolean blockLayer = layer == BLOCK  || layer == Layer.TOP_BLOCK;
+        boolean blockLayer = layer == BLOCK || layer == Layer.TOP_BLOCK;
         if (!blockLayer && xOut) {
             return false;
         }
@@ -100,8 +101,7 @@ public class Grid {
         }
         if (y >= height) {
             return get(layer, x, height - 1);
-        }
-        else if (y < 0) {
+        } else if (y < 0) {
             return get(layer, x, 0);
         }
         return (data[y][x] & layer) == layer;
@@ -112,7 +112,7 @@ public class Grid {
     }
 
     public int getX(float worldX) {
-        int result = (int)(worldX / config.getTileWidth());
+        int result = (int) (worldX / config.getTileWidth());
         if (worldX < 0) {
             result--;
         }
@@ -124,7 +124,7 @@ public class Grid {
     }
 
     public int getY(float worldY) {
-        int result = (int)(worldY / config.getTileHeight());
+        int result = (int) (worldY / config.getTileHeight());
         if (result < 0) {
             result--;
         }
@@ -156,15 +156,16 @@ public class Grid {
 
         // World -> grid space
         Vector2 start = new Vector2(a.x / tileW, a.y / tileH);
-        Vector2 end   = new Vector2(b.x / tileW, b.y / tileH);
+        Vector2 end = new Vector2(b.x / tileW, b.y / tileH);
         Vector2 rayDir = new Vector2(end.x - start.x, end.y - start.y);
 
-        if (rayDir.len() == 0f) return false;
+        if (rayDir.len() == 0f)
+            return false;
 
         rayDir.nor();
 
-        int mapX = (int)Math.floor(start.x);
-        int mapY = (int)Math.floor(start.y);
+        int mapX = (int) Math.floor(start.x);
+        int mapY = (int) Math.floor(start.y);
 
         float deltaDistX = (rayDir.x == 0f) ? Float.MAX_VALUE : Math.abs(1f / rayDir.x);
         float deltaDistY = (rayDir.y == 0f) ? Float.MAX_VALUE : Math.abs(1f / rayDir.y);
@@ -173,12 +174,12 @@ public class Grid {
         int stepY = (rayDir.y < 0f) ? -1 : 1;
 
         float sideDistX = (rayDir.x < 0f)
-                ? (start.x - mapX) * deltaDistX
-                : (mapX + 1f - start.x) * deltaDistX;
+            ? (start.x - mapX) * deltaDistX
+            : (mapX + 1f - start.x) * deltaDistX;
 
         float sideDistY = (rayDir.y < 0f)
-                ? (start.y - mapY) * deltaDistY
-                : (mapY + 1f - start.y) * deltaDistY;
+            ? (start.y - mapY) * deltaDistY
+            : (mapY + 1f - start.y) * deltaDistY;
 
         // Length of the segment in grid units
         float rayLength = start.dst(end);
@@ -194,7 +195,8 @@ public class Grid {
             float nextDist = Math.min(sideDistX, sideDistY);
 
             // If stepping to the next boundary would exceed the segment, stop: no grid hit
-            if (nextDist > rayLength + EPS) break;
+            if (nextDist > rayLength + EPS)
+                break;
 
             // Take the step that hits first
             if (sideDistX < sideDistY) {
@@ -213,7 +215,8 @@ public class Grid {
             if (get(BLOCK, mapX, mapY)) {
                 hit = true;
             } else if (get(TOP_BLOCK, mapX, mapY)) {
-                // Only block if hit from above (crossing a horizontal boundary while moving downward)
+                // Only block if hit from above (crossing a horizontal boundary while moving
+                // downward)
                 if (hitFromHorizontal && stepY == -1) {
                     hit = true;
                 }

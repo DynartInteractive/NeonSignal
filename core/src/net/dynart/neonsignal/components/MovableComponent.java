@@ -37,8 +37,9 @@ public class MovableComponent extends Component {
     private boolean finished = false;
     private final Vector2 startPosition = new Vector2();
     private int finishIndex;
- 
-    public MovableComponent(String pathName, float speed, boolean slowing, int startSegmentIndex, String moveType, float waitTime, boolean flipView, boolean start) {
+
+    public MovableComponent(String pathName, float speed, boolean slowing, int startSegmentIndex,
+        String moveType, float waitTime, boolean flipView, boolean start) {
         this.pathName = pathName;
         this.speed = speed;
         this.slowing = slowing;
@@ -156,7 +157,7 @@ public class MovableComponent extends Component {
                         velocity.setY(0);
                         goesNextSegment = false;
                         break;
-                    case FORWARD_ONCE:  // finish movement
+                    case FORWARD_ONCE: // finish movement
                         finished = true;
                         velocity.setX(0);
                         velocity.setY(0);
@@ -177,7 +178,10 @@ public class MovableComponent extends Component {
             }
         }
         if (goesNextSegment) {
-            mosUtil.init(body.getGlobalX(), body.getGlobalY(), path.getX(segmentIndex), path.getY(segmentIndex));
+            mosUtil.init(
+                body.getGlobalX(), body.getGlobalY(), path.getX(segmentIndex),
+                path.getY(segmentIndex)
+            );
         }
         return goesNextSegment;
     }

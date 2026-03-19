@@ -71,13 +71,15 @@ public class TextureManager {
 
     public void init(JsonValue resourcesJson) {
         JsonValue textures = resourcesJson.get("textures");
-        for (JsonValue textureJson = textures.child(); textureJson != null; textureJson = textureJson.next()) {
+        for (JsonValue textureJson = textures
+            .child(); textureJson != null; textureJson = textureJson.next()) {
             Texture texture = getTexture(textureJson.name());
             setFilter(texture, textureJson);
             setWrap(texture, textureJson);
         }
         JsonValue atlases = resourcesJson.get("atlases");
-        for (JsonValue atlasJson = atlases.child(); atlasJson != null; atlasJson = atlasJson.next()) {
+        for (JsonValue atlasJson = atlases.child(); atlasJson != null; atlasJson = atlasJson
+            .next()) {
             TextureAtlas a = getAtlas(atlasJson.name());
             for (Texture texture : a.getTextures()) {
                 setFilter(texture, atlasJson);
@@ -87,7 +89,9 @@ public class TextureManager {
 
     public static void setFilter(Texture texture, JsonValue textureJson) {
         String filterName = StringUtil.camelize(textureJson.getString("filter", "linear"));
-        Gdx.app.debug("TextureManager", "Set `" + filterName + "` filter for " + textureJson.get("path"));
+        Gdx.app.debug(
+            "TextureManager", "Set `" + filterName + "` filter for " + textureJson.get("path")
+        );
         Texture.TextureFilter filter = Texture.TextureFilter.valueOf(filterName);
         texture.setFilter(filter, filter);
     }

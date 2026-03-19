@@ -29,7 +29,7 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
     private final Settings settings;
     private final Map<String, FadeImage> buttonImages = new HashMap<>();
     private final Map<String, Vector2> buttonPositions = new HashMap<>();
-    /*private MenuButton resetButton;*/
+    /* private MenuButton resetButton; */
     private final MenuButton switchSidesButton;
     private final Label dragLabel;
     private final Label movingLabel;
@@ -55,13 +55,12 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
             }
         };
 
-/*        // reset button
-        resetButton = new MenuButton(engine, "Reset", styles.getDefaultButtonStyle());
-        resetButton.setWidth(420);
-        resetButton.setHeight(120);
-        resetButton.setY(60);
-        resetButton.setX(-210);
-        xPositions.put(resetButton, resetButton.getX());*/
+        /*
+         * // reset button resetButton = new MenuButton(engine, "Reset",
+         * styles.getDefaultButtonStyle()); resetButton.setWidth(420);
+         * resetButton.setHeight(120); resetButton.setY(60); resetButton.setX(-210);
+         * xPositions.put(resetButton, resetButton.getX());
+         */
 
         // switch sides button
         switchSidesButton = new MenuButton(engine, "Switch sides", styles.getDefaultButtonStyle());
@@ -72,7 +71,9 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         xPositions.put(switchSidesButton, switchSidesButton.getX());
 
         // drag label
-        dragLabel = new Label("Drag the buttons\nfor a new position!", styles.getSecondaryLabelStyle());
+        dragLabel = new Label(
+            "Drag the buttons\nfor a new position!", styles.getSecondaryLabelStyle()
+        );
         dragLabel.setX(-200);
         dragLabel.setY(220);
         dragLabel.setWidth(400);
@@ -106,8 +107,6 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         jumpingBg.setPosition(getLabelPositionX(1), getLabelPositionY(1));
         xPositions.put(jumpingBg, jumpingBg.getX());
 
-
-
         // stage
         group.addActor(movingBg);
         group.addActor(jumpingBg);
@@ -116,7 +115,7 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         group.addActor(menuCursor.getCursorImage());
         group.addActor(dragLabel);
         group.addActor(backButton);
-        //group.addActor(resetButton);
+        // group.addActor(resetButton);
         group.addActor(switchSidesButton);
 
         addSideBlackBars(stage);
@@ -132,13 +131,11 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
             stage.addActor(buttonImage);
         }
         /*
-        resetButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                resetClicked();
-            }
-        });
-        */
+         * resetButton.addListener(new ClickListener() {
+         * 
+         * @Override public void clicked(InputEvent event, float x, float y) {
+         * resetClicked(); } });
+         */
 
         switchSidesButton.addListener(new ClickListener() {
             @Override
@@ -185,7 +182,7 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
     public float getLabelPositionY(int index) {
         float halfHeight = stage.getHeight() / 2;
         int[] order = getOrder();
-        float[] positionsY = { -halfHeight + 8f, -halfHeight + 8f};
+        float[] positionsY = { -halfHeight + 8f, -halfHeight + 8f };
         return positionsY[order[index]];
     }
 
@@ -209,64 +206,72 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
             Vector2 position = buttonPositions.get(name);
             float x = position.x + (position.x < 0 ? stage.getWidth() : 0);
             Image button = buttonImages.get(name);
-            button.setPosition(x - button.getWidth() / 2f, position.y - button.getHeight() / 2f); // why the fuck the Align.center doesn't work?
+            button.setPosition(x - button.getWidth() / 2f, position.y - button.getHeight() / 2f); // why
+                                                                                                  // the
+                                                                                                  // fuck
+                                                                                                  // the
+                                                                                                  // Align.center
+                                                                                                  // doesn't
+                                                                                                  // work?
         }
     }
 
     @Override
     public void backClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         save();
         moveOut(backAction);
     }
-/*
-    private void resetClicked() {
-        dialogScreen.setHeight(200);
-        dialogScreen.setText("Reset the positions?");
-        dialogScreen.setButtonCount(2);
-        dialogScreen.setButtonText(0, "Cancel");
-        dialogScreen.setButtonText(1, "OK");
-        savePositions(); // because of the resize
-        engine.moveToScreen("dialog");
-    }
-*/
+
+    /*
+     * private void resetClicked() { dialogScreen.setHeight(200);
+     * dialogScreen.setText("Reset the positions?"); dialogScreen.setButtonCount(2);
+     * dialogScreen.setButtonText(0, "Cancel"); dialogScreen.setButtonText(1, "OK");
+     * savePositions(); // because of the resize engine.moveToScreen("dialog"); }
+     */
     private void switchSidesClicked() {
         sidesSwitched = !sidesSwitched;
         settings.setTouchSidesSwitched(sidesSwitched);
-        movingLabel.addAction(Actions.moveTo(getLabelPositionX(0), getLabelPositionY(0) + 80f, 0.15f, Interpolation.sineOut));
-        jumpingLabel.addAction(Actions.moveTo(getLabelPositionX(1), getLabelPositionY(1) + 80f, 0.15f, Interpolation.sineOut));
+        movingLabel.addAction(
+            Actions.moveTo(
+                getLabelPositionX(0), getLabelPositionY(0) + 80f, 0.15f, Interpolation.sineOut
+            )
+        );
+        jumpingLabel.addAction(
+            Actions.moveTo(
+                getLabelPositionX(1), getLabelPositionY(1) + 80f, 0.15f, Interpolation.sineOut
+            )
+        );
         for (String name : config.getTouchButtonNames()) {
             Vector2 position = buttonPositions.get(name);
             position.x = -position.x;
             Image button = buttonImages.get(name);
-            float x = position.x + (position.x < 0 ? stage.getWidth() : 0) - button.getWidth() / 2f; // why the fuck the Align.center doesn't work?
-            float y = position.y - button.getHeight() / 2f;  // why the fuck the Align.center doesn't work?
+            float x = position.x + (position.x < 0 ? stage.getWidth() : 0) - button.getWidth() / 2f; // why
+                                                                                                     // the
+                                                                                                     // fuck
+                                                                                                     // the
+                                                                                                     // Align.center
+                                                                                                     // doesn't
+                                                                                                     // work?
+            float y = position.y - button.getHeight() / 2f; // why the fuck the Align.center doesn't
+                                                            // work?
             buttonImages.get(name).addAction(Actions.moveTo(x, y, 0.15f, Interpolation.sineOut));
         }
     }
-/*
-    @Override
-    public void dialogButtonClicked(int index) {
-        if (index == 1) {
-            resetPositions();
-            savePositions();
-        }
-        dialogScreen.moveOut();
-    }
 
-    private void resetPositions() {
-        for (String name : config.getTouchButtonNames()) {
-            FadeImage buttonImage = buttonImages.get(name);
-            Vector2 defaultPosition = config.getDefaultTouchPositions().get(name);
-            float x = defaultPosition.x;
-            float y = defaultPosition.y;
-            if (x < 0) {
-                x += stage.getWidth();
-            }
-            buttonImage.setPosition(x, y);
-        }
-    }
-*/
+    /*
+     * @Override public void dialogButtonClicked(int index) { if (index == 1) {
+     * resetPositions(); savePositions(); } dialogScreen.moveOut(); }
+     * 
+     * private void resetPositions() { for (String name :
+     * config.getTouchButtonNames()) { FadeImage buttonImage =
+     * buttonImages.get(name); Vector2 defaultPosition =
+     * config.getDefaultTouchPositions().get(name); float x = defaultPosition.x;
+     * float y = defaultPosition.y; if (x < 0) { x += stage.getWidth(); }
+     * buttonImage.setPosition(x, y); } }
+     */
     private void save() {
         for (String name : config.getTouchButtonNames()) {
             Vector2 position = buttonPositions.get(name);
@@ -278,9 +283,9 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
     @Override
     public void moveIn() {
         moving = true;
-        moveInActor(dragLabel, -stage.getWidth()/2 - 500f, 0.0f);
-        //moveInActor(resetButton, -stage.getWidth()/2 - 500f, 0.10f);
-        moveInActor(switchSidesButton, -stage.getWidth()/2 - 500f, 0.10f);
+        moveInActor(dragLabel, -stage.getWidth() / 2 - 500f, 0.0f);
+        // moveInActor(resetButton, -stage.getWidth()/2 - 500f, 0.10f);
+        moveInActor(switchSidesButton, -stage.getWidth() / 2 - 500f, 0.10f);
         for (FadeImage button : buttonImages.values()) {
             button.getColor().a = 0;
             button.addAction(Actions.fadeIn(0.25f, Interpolation.sineIn));
@@ -295,26 +300,32 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         movingBg.getColor().a = 0;
         movingBg.addAction(Actions.fadeIn(0.25f, Interpolation.sineIn));
 
-        stage.addAction(Actions.sequence(
-            Actions.delay(0.26f),
-            movingFinishedAction
-        ));
+        stage.addAction(
+            Actions.sequence(
+                Actions.delay(0.26f),
+                movingFinishedAction
+            )
+        );
     }
 
     private void moveInActor(Actor actor, float x, float delay) {
         actor.setX(x);
-        actor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(xPositions.get(actor), actor.getY(),0.15f, Interpolation.sineOut)
-        ));
+        actor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(xPositions.get(actor), actor.getY(), 0.15f, Interpolation.sineOut)
+            )
+        );
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
-        moveOutActor(dragLabel, stage.getWidth()/2 + 100f, 0.0f);
-        //moveOutActor(resetButton, stage.getWidth()/2 + 100f, 0.10f);
-        moveOutActor(switchSidesButton, stage.getWidth()/2 + 100f, 0.10f);
+        moveOutActor(dragLabel, stage.getWidth() / 2 + 100f, 0.0f);
+        // moveOutActor(resetButton, stage.getWidth()/2 + 100f, 0.10f);
+        moveOutActor(switchSidesButton, stage.getWidth() / 2 + 100f, 0.10f);
         for (FadeImage button : buttonImages.values()) {
             button.addAction(Actions.fadeOut(0.25f, Interpolation.sineOut));
         }
@@ -323,18 +334,22 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         movingLabel.addAction(Actions.fadeOut(0.25f, Interpolation.sineOut));
         movingBg.addAction(Actions.fadeOut(0.25f, Interpolation.sineOut));
 
-        stage.addAction(Actions.sequence(
-            Actions.delay(0.26f),
-            movingFinishedAction,
-            endAction
-        ));
+        stage.addAction(
+            Actions.sequence(
+                Actions.delay(0.26f),
+                movingFinishedAction,
+                endAction
+            )
+        );
     }
 
     private void moveOutActor(Actor actor, float x, float delay) {
-        actor.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(x, actor.getY(),0.15f, Interpolation.sineIn)
-        ));
+        actor.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(x, actor.getY(), 0.15f, Interpolation.sineIn)
+            )
+        );
     }
 
 }

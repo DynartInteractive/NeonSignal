@@ -37,7 +37,7 @@ public class GameScreen extends Screen {
     public GameScreen(final Engine engine) {
         super(engine);
         clear = false;
-        gameStage = (GameStage)stage;
+        gameStage = (GameStage) stage;
         gameController = engine.getGameController();
         addSideBlackBars(gameStage); // before TouchListener!
         touchListener = engine.getTouchListener();
@@ -122,7 +122,7 @@ public class GameScreen extends Screen {
     }
 
     public void pause() {
-        PauseScreen pauseScreen = (PauseScreen)engine.getScreen("pause");
+        PauseScreen pauseScreen = (PauseScreen) engine.getScreen("pause");
         pauseScreen.resetMenuCursor();
         engine.moveToScreen("pause");
     }
@@ -130,8 +130,8 @@ public class GameScreen extends Screen {
     public Vector2 getStagePositionFromScene(float x, float y) {
         Camera camera = gameScene.getCamera(); //
         float r = viewport.getScreenHeight() / config.getGameVirtualHeight();
-        float h = (float)viewport.getScreenHeight() / 2f;
-        float w = (float)viewport.getScreenWidth() / 2f;
+        float h = (float) viewport.getScreenHeight() / 2f;
+        float w = (float) viewport.getScreenWidth() / 2f;
         screenCoordinates.set((x - camera.position.x) * r + w, (y - camera.position.y) * r + h);
         Vector2 result = gameStage.screenToStageCoordinates(screenCoordinates);
         result.y = config.getStageVirtualHeight() - result.y;
@@ -148,9 +148,10 @@ public class GameScreen extends Screen {
 
     public void prepareForGameOver() {
         if (engine.getAnalyticsManager() != null && currentLevel != null) {
-            net.dynart.neonsignal.components.BodyComponent body =
-                gameScene.getPlayer().getComponent(net.dynart.neonsignal.components.BodyComponent.class);
-            engine.getAnalyticsManager().trackDeath(currentLevel, body.getCenterX(), body.getBottom());
+            net.dynart.neonsignal.components.BodyComponent body = gameScene.getPlayer()
+                .getComponent(net.dynart.neonsignal.components.BodyComponent.class);
+            engine.getAnalyticsManager()
+                .trackDeath(currentLevel, body.getCenterX(), body.getBottom());
         }
         gameOverCountDown = 0.5f;
         gameStage.startGameOver();

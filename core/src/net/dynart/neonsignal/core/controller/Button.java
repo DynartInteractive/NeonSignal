@@ -2,15 +2,9 @@ package net.dynart.neonsignal.core.controller;
 
 public enum Button {
 
-    LEFT("left"),
-    RIGHT("right"),
-    UP("up"),
-    DOWN("down"),
-    A("a"),
-    B("b"),
-    X("x"),
-    Y("y"),
-    MENU("menu");
+    LEFT("left"), RIGHT("right"), UP("up"), DOWN("down"), A("a"), B("b"), X("x"), Y("y"), MENU(
+        "menu"
+    );
 
     private final String name;
 

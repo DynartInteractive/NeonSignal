@@ -1,0 +1,13 @@
+{"sequence":[
+  {"nexus_says":{
+    "lines":[
+      {"text":"Weapon interface detected.","delay":0},
+      {"text":"Authorization: <#00ffff>GRANTED</#ffffff>.","delay":0.6},
+      {"text":"Use force only when required.","delay":1.0}
+    ],
+    "char_delay":0.038,
+    "line_delay":0.6,
+    "hold_time":1.8,
+    "button_label":"Next"
+  }}
+]}

@@ -7,7 +7,6 @@ import net.dynart.neonsignal.screens.GameScreen;
 
 public class HealthComponent extends Component {
 
-
     public static final String INCREASED = "health_increased";
     public static final String DECREASED = "health_decreased";
     public static final String ZERO = "health_zero";
@@ -45,10 +44,8 @@ public class HealthComponent extends Component {
 
     public void increase(float v) {
         /*
-        if (!active) {
-            return;
-        }
-        */
+         * if (!active) { return; }
+         */
         value += v;
         if (value > maxValue) {
             value = maxValue;
@@ -78,7 +75,8 @@ public class HealthComponent extends Component {
         GameStage gameStage = (GameStage) gameScreen.getStage();
         BodyComponent body = entity.getComponent(BodyComponent.class);
 
-        if (entity.hasComponent(PlayerComponent.class) || entity.hasComponent(EnemyComponent.class)) {
+        if (entity.hasComponent(PlayerComponent.class)
+            || entity.hasComponent(EnemyComponent.class)) {
             String text = "-" + (int) (v * 100);
             gameStage.showItemScore(body.getCenterX(), body.getTop() + 8, text, 1, .44f, .44f);
         }
@@ -105,7 +103,5 @@ public class HealthComponent extends Component {
         messageHandler.send(ZERO);
 
     }
-
-
 
 }

@@ -23,9 +23,6 @@ public class EnemyComponent extends Component {
 
     private float damageTime;
 
-
-
-
     public EnemyComponent(String spritePrefix) {
         this.spritePrefix = spritePrefix;
     }
@@ -58,7 +55,8 @@ public class EnemyComponent extends Component {
         if (miniBar != null)
             miniBar.add(entity);
 
-        EntityCollisionComponent entityCollision = entity.getComponent(EntityCollisionComponent.class);
+        EntityCollisionComponent entityCollision = entity
+            .getComponent(EntityCollisionComponent.class);
         if (entityCollision != null) {
             entityCollision.setExcludeComponentClass(PlayerComponent.class);
         }
@@ -93,7 +91,8 @@ public class EnemyComponent extends Component {
     }
 
     private void kill() {
-        PlayerComponent player = engine.getGameScene().getPlayer().getComponent(PlayerComponent.class);
+        PlayerComponent player = engine.getGameScene().getPlayer()
+            .getComponent(PlayerComponent.class);
         player.incKnockoutCount();
 
         entity.remove();

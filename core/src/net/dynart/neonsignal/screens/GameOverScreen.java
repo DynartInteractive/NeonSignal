@@ -27,7 +27,7 @@ public class GameOverScreen extends MenuScreen {
 
     private GameScreen gameScreen;
     private FadeImage bgImage;
-    //private Image titleImage;
+    // private Image titleImage;
     private MenuButton reviveButton;
     private MenuButton replayButton;
     private MenuButton exitButton;
@@ -41,14 +41,14 @@ public class GameOverScreen extends MenuScreen {
     public GameOverScreen(final Engine engine) {
         super(engine);
 
-//        clear = false;
+        // clear = false;
 
-        //Skin sprites = engine.getTextureManager().getSkin("sprites");
-//        titleImage = new Image(sprites.getDrawable("pause_title"));
-//        titleImage.setOrigin(Align.center);
-//        titleImage.setScale(4.5f);
-//        titleImage.setPosition(-titleImage.getWidth()/2f - 0.01f, LOGO_Y);
-        //group.addActor(titleImage);
+        // Skin sprites = engine.getTextureManager().getSkin("sprites");
+        // titleImage = new Image(sprites.getDrawable("pause_title"));
+        // titleImage.setOrigin(Align.center);
+        // titleImage.setScale(4.5f);
+        // titleImage.setPosition(-titleImage.getWidth()/2f - 0.01f, LOGO_Y);
+        // group.addActor(titleImage);
 
         table = new Table();
         table.setBackground(skin.getDrawable("dialog_bg"));
@@ -78,7 +78,7 @@ public class GameOverScreen extends MenuScreen {
             public void clicked(InputEvent event, float x, float y) {
                 reviveClicked();
             }
-        });        
+        });
         replayButton = createButton("Replay");
         replayButton.setPosition(-344, -178);
         replayButton.setHeight(120);
@@ -150,18 +150,13 @@ public class GameOverScreen extends MenuScreen {
     @Override
     public void init() {
         super.init();
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
     }
 
-
-/*
-    @Override
-    public void draw() {
-        gameScreen.updateCamera();
-        gameScreen.draw();
-        super.draw();
-    }
-*/
+    /*
+     * @Override public void draw() { gameScreen.updateCamera(); gameScreen.draw();
+     * super.draw(); }
+     */
     @Override
     public void resize(int width, int height) {
         table.setWidth(stage.getWidth());
@@ -173,62 +168,79 @@ public class GameOverScreen extends MenuScreen {
     }
 
     private void replayClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         fadeOut(replayAction);
     }
 
     private void reviveClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         fadeOut(reviveAction);
     }
 
     private void exitClicked() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         engine.moveToScreen("levels");
     }
 
     @Override
     public void moveIn() {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
-//        titleImage.setPosition(titleImage.getX(), stage.getHeight());
-//        titleImage.addAction(Actions.moveTo(titleImage.getX(), LOGO_Y, 0.2f, Interpolation.pow2Out));
+        // titleImage.setPosition(titleImage.getX(), stage.getHeight());
+        // titleImage.addAction(Actions.moveTo(titleImage.getX(), LOGO_Y, 0.2f,
+        // Interpolation.pow2Out));
         float left = -group.getX() - replayButton.getWidth() - 1f;
         float right = group.getX() + replayButton.getWidth() + 1f;
         moveInButton(reviveButton, left, -344, 0.1f);
         moveInButton(replayButton, left, -344, 0.1f);
         moveInButton(exitButton, right, 5, 0.1f);
-        table.setPosition(tableX, -(stage.getHeight()/2 + table.getHeight()));
+        table.setPosition(tableX, -(stage.getHeight() / 2 + table.getHeight()));
         table.addAction(Actions.moveTo(tableX, tableY, 0.15f));
         stage.addAction(Actions.sequence(Actions.delay(0.31f), movingFinishedAction));
     }
 
     private void moveOut(Action endAction) {
-        if (isAnimating()) { return; }
+        if (isAnimating()) {
+            return;
+        }
         moving = true;
-//        titleImage.addAction(Actions.moveTo(titleImage.getX(), stage.getHeight(), 0.2f, Interpolation.pow2In));
+        // titleImage.addAction(Actions.moveTo(titleImage.getX(), stage.getHeight(),
+        // 0.2f, Interpolation.pow2In));
         float left = -group.getX() - replayButton.getWidth() - 1f;
         float right = group.getX() + replayButton.getWidth() + 1f;
         moveOutButton(reviveButton, left, 0.1f);
         moveOutButton(replayButton, left, 0.1f);
         moveOutButton(exitButton, right, 0.1f);
-        table.addAction(Actions.moveTo(tableX, -(stage.getHeight()/2 + table.getHeight()), 0.15f));
+        table
+            .addAction(Actions.moveTo(tableX, -(stage.getHeight() / 2 + table.getHeight()), 0.15f));
         stage.addAction(Actions.sequence(Actions.delay(0.31f), movingFinishedAction, endAction));
     }
 
     private void moveInButton(MenuButton button, float startPos, float endPos, float delay) {
         button.setX(startPos);
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineOut)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineOut)
+            )
+        );
     }
 
     private void moveOutButton(MenuButton button, float endPos, float delay) {
-        button.addAction(Actions.sequence(
-            Actions.delay(delay),
-            Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
-        ));
+        button.addAction(
+            Actions.sequence(
+                Actions.delay(delay),
+                Actions.moveTo(endPos, button.getY(), 0.20f, Interpolation.sineIn)
+            )
+        );
     }
 
 }

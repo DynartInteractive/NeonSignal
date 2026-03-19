@@ -52,7 +52,7 @@ public class GameSprite extends Sprite {
         super.setRegion(region);
         setSize(region.getRegionWidth(), region.getRegionHeight());
         setOrigin(region.getRegionWidth() / 2f, region.getRegionHeight() / 2f);
-        //setOffset(-region.getRegionWidth() / 2, -region.getRegionHeight() / 2);
+        // setOffset(-region.getRegionWidth() / 2, -region.getRegionHeight() / 2);
     }
 
     public void rotate90() {

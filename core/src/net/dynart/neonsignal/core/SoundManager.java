@@ -14,48 +14,32 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class SoundManager {
 
     /*
-    THIS LOOKS LIKE RESOLVED BY libgdx-oboe
-
-    static class AudioThreadItem {
-        Sound sound;
-        float volume;
-    }
-
-    // This is a workaround of the stutter/lag when we call sound.play() on Android
-    static class AudioThread extends Thread {
-
-        // ConcurrentLinkedQueue: "is an appropriate choice when many threads will share access to a common collection"
-        private Queue<AudioThreadItem> queue = new ConcurrentLinkedQueue<>();
-
-        // volatile because we modify this from the main thread as well
-        private volatile boolean running = true;
-
-        public void run() {
-            try {
-                while (running) {
-                    for (AudioThreadItem item = queue.poll(); item != null; item = queue.poll()) {
-                        item.sound.play(item.volume);
-                    }
-                    Thread.sleep(16); // We don't want exhaust the CPU
-                }
-            } catch (InterruptedException ignored) {}
-        }
-
-        public void play(Sound sound, float volume) { // called from main thread
-            AudioThreadItem item = new AudioThreadItem();
-            item.sound = sound;
-            item.volume = volume;
-            queue.add(item);
-        }
-
-        public void exit() { // called from main thread
-            try {
-                running = false;
-                join();
-            } catch (InterruptedException ignored) {}
-        }
-    }
-    */
+     * THIS LOOKS LIKE RESOLVED BY libgdx-oboe
+     * 
+     * static class AudioThreadItem { Sound sound; float volume; }
+     * 
+     * // This is a workaround of the stutter/lag when we call sound.play() on
+     * Android static class AudioThread extends Thread {
+     * 
+     * // ConcurrentLinkedQueue:
+     * "is an appropriate choice when many threads will share access to a common collection"
+     * private Queue<AudioThreadItem> queue = new ConcurrentLinkedQueue<>();
+     * 
+     * // volatile because we modify this from the main thread as well private
+     * volatile boolean running = true;
+     * 
+     * public void run() { try { while (running) { for (AudioThreadItem item =
+     * queue.poll(); item != null; item = queue.poll()) {
+     * item.sound.play(item.volume); } Thread.sleep(16); // We don't want exhaust
+     * the CPU } } catch (InterruptedException ignored) {} }
+     * 
+     * public void play(Sound sound, float volume) { // called from main thread
+     * AudioThreadItem item = new AudioThreadItem(); item.sound = sound; item.volume
+     * = volume; queue.add(item); }
+     * 
+     * public void exit() { // called from main thread try { running = false;
+     * join(); } catch (InterruptedException ignored) {} } }
+     */
 
     static class Channel {
         private Sound sound;
@@ -73,11 +57,12 @@ public class SoundManager {
     private String lastMusicPath;
     private final AssetManager assetManager;
     private final Map<String, Float> dnpTime = new HashMap<>(); // dnpTime = do not play before time
-    private final Map<String[], Float> dnpaTime = new HashMap<>(); // dnpTime = do not play before time array (for random sound)
+    private final Map<String[], Float> dnpaTime = new HashMap<>(); // dnpTime = do not play before
+                                                                   // time array (for random sound)
     private final Channel[] channels = new Channel[4];
     private int currentChannel;
     private final Map<Long, Sound> instanceToSound = new HashMap<>();
-    //private final AudioThread audioThread;
+    // private final AudioThread audioThread;
 
     public SoundManager(Engine engine) {
         this.engine = engine;
@@ -89,9 +74,8 @@ public class SoundManager {
             channels[i] = new Channel();
         }
         /*
-        audioThread = new AudioThread();
-        audioThread.start();
-        */
+         * audioThread = new AudioThread(); audioThread.start();
+         */
     }
 
     public void load(JsonValue resourcesJson) {
@@ -129,7 +113,7 @@ public class SoundManager {
     public Long play(String name, float volume, float dnpDuration) {
         if (!soundPaths.containsKey(name)) {
             return 0L;
-            //throw new RuntimeException("Sound not found: " + name);
+            // throw new RuntimeException("Sound not found: " + name);
         }
         if (!sounds.containsKey(name)) {
             sounds.put(name, assetManager.get(soundPaths.get(name), Sound.class));
@@ -139,7 +123,7 @@ public class SoundManager {
             if (channels[currentChannel].sound != null) {
                 channels[currentChannel].sound.stop(channels[currentChannel].instance);
             }
-            //audioThread.play(sound, this.volume * volume);
+            // audioThread.play(sound, this.volume * volume);
             float soundVolume = soundVolumes.getOrDefault(name, 1.0f);
             channels[currentChannel].sound = sound;
             channels[currentChannel].instance = sound.play(this.volume * volume * soundVolume);
@@ -149,7 +133,9 @@ public class SoundManager {
             if (currentChannel == channels.length) {
                 currentChannel = 0;
             }
-            return channels[currentChannel == 0 ? channels.length - 1 : currentChannel - 1].instance;
+            return channels[currentChannel == 0
+                ? channels.length - 1
+                : currentChannel - 1].instance;
         }
         return null;
     }
@@ -173,7 +159,6 @@ public class SoundManager {
     public void setVolume(float value) {
         volume = value * value; // exponential sounds natural
     }
-
 
     public void setMusicVolume(float value) {
         musicVolume = value * value; // exponential sounds natural
@@ -219,7 +204,7 @@ public class SoundManager {
         if (music != null) {
             music.dispose();
         }
-        //audioThread.exit();
+        // audioThread.exit();
     }
 
     public void playRandom(String[] all) {
@@ -241,7 +226,7 @@ public class SoundManager {
 
     public String getRandom(String[] all) {
         int lastIndex = all.length - 1;
-        int index = (int)(Math.random() * lastIndex);
+        int index = (int) (Math.random() * lastIndex);
         String tmp = all[index];
         all[index] = all[lastIndex];
         all[lastIndex] = tmp;

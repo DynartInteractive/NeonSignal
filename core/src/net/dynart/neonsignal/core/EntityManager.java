@@ -104,23 +104,25 @@ public class EntityManager {
         Vector2 end = new Vector2(b.x / areaSize, b.y / areaSize);
 
         // Determine the starting and ending area cell coordinates.
-        int cellX = (int)Math.floor(start.x);
-        int cellY = (int)Math.floor(start.y);
-        int endCellX = (int)Math.floor(end.x);
-        int endCellY = (int)Math.floor(end.y);
+        int cellX = (int) Math.floor(start.x);
+        int cellY = (int) Math.floor(start.y);
+        int endCellX = (int) Math.floor(end.x);
+        int endCellY = (int) Math.floor(end.y);
 
         // Compute differences in the area grid space.
         float dx = end.x - start.x;
         float dy = end.y - start.y;
 
-        // tDeltaX and tDeltaY are the parametric distances needed to cross a cell in x and y.
+        // tDeltaX and tDeltaY are the parametric distances needed to cross a cell in x
+        // and y.
         float tDeltaX = (dx == 0) ? Float.MAX_VALUE : Math.abs(1 / dx);
         float tDeltaY = (dy == 0) ? Float.MAX_VALUE : Math.abs(1 / dy);
 
         int stepX = (dx < 0) ? -1 : 1;
         int stepY = (dy < 0) ? -1 : 1;
 
-        // Compute the initial tMax values: distances from the start position to the first vertical/horizontal boundaries.
+        // Compute the initial tMax values: distances from the start position to the
+        // first vertical/horizontal boundaries.
         float nextBoundaryX = (dx < 0) ? start.x - cellX : (cellX + 1 - start.x);
         float nextBoundaryY = (dy < 0) ? start.y - cellY : (cellY + 1 - start.y);
         float tMaxX = (dx == 0) ? Float.MAX_VALUE : nextBoundaryX * tDeltaX;
@@ -129,7 +131,8 @@ public class EntityManager {
         // Add entities from the starting area using the filter list.
         addEntitiesFromArea(cellX, cellY, result, clsList);
 
-        // Traverse the area grid cells until we reach the cell containing the end point.
+        // Traverse the area grid cells until we reach the cell containing the end
+        // point.
         while (cellX != endCellX || cellY != endCellY) {
             if (tMaxX < tMaxY) {
                 cellX += stepX;
@@ -144,8 +147,10 @@ public class EntityManager {
         return result;
     }
 
-    // Helper method that adds entities from an area cell based on the component class filter.
-    private void addEntitiesFromArea(int cellX, int cellY, Set<Entity> result, List<Class> clsList) {
+    // Helper method that adds entities from an area cell based on the component
+    // class filter.
+    private void addEntitiesFromArea(int cellX, int cellY, Set<Entity> result,
+        List<Class> clsList) {
         int areaId = getAreaId(cellX, cellY);
         Map<Class, Set<Entity>> areaEntities = areas.get(areaId);
         if (areaEntities != null) {
@@ -173,16 +178,19 @@ public class EntityManager {
 
         float bestDistSq = Float.MAX_VALUE;
 
-        Set<Entity> entities = getAllBySegment(a, b, List.of(
-            BlockComponent.class,
-            PlatformComponent.class
-        ));
+        Set<Entity> entities = getAllBySegment(
+            a, b, List.of(
+                BlockComponent.class,
+                PlatformComponent.class
+            )
+        );
 
         boolean segmentGoesDownwards = a.y > b.y;
 
         for (Entity entity : entities) {
 
-            if (entity == excludeEntity) continue;
+            if (entity == excludeEntity)
+                continue;
 
             BodyComponent body = entity.getComponent(BodyComponent.class);
 
@@ -193,8 +201,10 @@ public class EntityManager {
             boolean canHaveTopIntersection = fullBlock || segmentGoesDownwards;
 
             // Intersect with top side
-            if (canHaveTopIntersection && Intersector.intersectSegments(a, b, leftTop, rightTop, temp)) {
-                if (out == null) return true;
+            if (canHaveTopIntersection
+                && Intersector.intersectSegments(a, b, leftTop, rightTop, temp)) {
+                if (out == null)
+                    return true;
                 float dSq = a.dst2(temp);
                 if (dSq < bestDistSq) {
                     bestDistSq = dSq;
@@ -202,13 +212,15 @@ public class EntityManager {
                 }
             }
 
-            if (!fullBlock) continue;
+            if (!fullBlock)
+                continue;
 
             leftBottom.set(body.getLeft(), body.getBottom());
 
             // Intersect with left side
             if (Intersector.intersectSegments(a, b, leftTop, leftBottom, temp)) {
-                if (out == null) return true;
+                if (out == null)
+                    return true;
                 float dSq = a.dst2(temp);
                 if (dSq < bestDistSq) {
                     bestDistSq = dSq;
@@ -220,7 +232,8 @@ public class EntityManager {
 
             // Intersect with right side
             if (Intersector.intersectSegments(a, b, rightTop, rightBottom, temp)) {
-                if (out == null) return true;
+                if (out == null)
+                    return true;
                 float dSq = a.dst2(temp);
                 if (dSq < bestDistSq) {
                     bestDistSq = dSq;
@@ -230,7 +243,8 @@ public class EntityManager {
 
             // Intersect with bottom side
             if (Intersector.intersectSegments(a, b, leftBottom, rightBottom, temp)) {
-                if (out == null) return true;
+                if (out == null)
+                    return true;
                 float dSq = a.dst2(temp);
                 if (dSq < bestDistSq) {
                     bestDistSq = dSq;
@@ -300,7 +314,7 @@ public class EntityManager {
         }
     }
 
-    private void addToAreas(AreaPosition pos,  Entity entity) {
+    private void addToAreas(AreaPosition pos, Entity entity) {
         addToArea(pos.getLeft(), pos.getTop(), entity);
         addToArea(pos.getRight(), pos.getTop(), entity);
         addToArea(pos.getLeft(), pos.getBottom(), entity);

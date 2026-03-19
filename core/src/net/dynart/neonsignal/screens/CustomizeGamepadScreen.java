@@ -17,7 +17,10 @@ import net.dynart.neonsignal.core.ui.MenuCursor;
 import net.dynart.neonsignal.core.ui.MenuCursorItem;
 import net.dynart.neonsignal.core.Engine;
 
-public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements ButtonUpListener, AxisMovedListener {
+public class CustomizeGamepadScreen extends CustomizeButtonsScreen
+    implements
+        ButtonUpListener,
+        AxisMovedListener {
 
     private final ControlNameProvider controlNameProvider;
     private GamepadListener gamepadListener;
@@ -117,7 +120,7 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
     }
 
     private void assignButtonOrAxis() {
-        Button button = (Button)menuButtonForSet.getUserObject();
+        Button button = (Button) menuButtonForSet.getUserObject();
         if (buttonCodeForAssign != config.getUnusedButtonCode()) {
             resetAxis(button);
             gameController.setJoyCode(button, buttonCodeForAssign);
@@ -161,7 +164,9 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
         settings.clearJoyMappings();
         Controller activeController = gamepadListener.getActiveController();
         if (activeController != null) {
-            GamepadProfile profile = new GamepadProfile(activeController, config.getUnusedButtonCode());
+            GamepadProfile profile = new GamepadProfile(
+                activeController, config.getUnusedButtonCode()
+            );
             gameController.applyGamepadProfile(profile);
         } else {
             for (Button button : config.getDefaultJoyMapping().keySet()) {
@@ -208,8 +213,12 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen implements Bu
     @Override
     public void dialogButtonClicked(int index) {
         switch (index) {
-            case 0: hideDialog(); break;
-            case 1: assignButtonOrAxis(); break;
+            case 0:
+                hideDialog();
+                break;
+            case 1:
+                assignButtonOrAxis();
+                break;
         }
     }
 

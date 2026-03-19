@@ -52,5 +52,4 @@ public class ButtonComponent extends Component {
         body.setY(startY);
     }
 
-
 }

@@ -29,15 +29,15 @@ public class ReviveComponent extends Component {
 
     public void update(float delta) {
         if (current != entity
-            && (body.overlapOther(PlayerComponent.class) != null)
-        ) {
+            && (body.overlapOther(PlayerComponent.class) != null)) {
             current = entity;
             messageHandler.send(TOUCHED);
             if (engine.getAnalyticsManager() != null) {
                 GameScreen gameScreen = (GameScreen) engine.getScreen("game");
                 if (gameScreen != null && gameScreen.getCurrentLevel() != null) {
                     engine.getAnalyticsManager().trackCheckpoint(
-                        gameScreen.getCurrentLevel(), body.getCenterX(), body.getBottom());
+                        gameScreen.getCurrentLevel(), body.getCenterX(), body.getBottom()
+                    );
                 }
             }
         }

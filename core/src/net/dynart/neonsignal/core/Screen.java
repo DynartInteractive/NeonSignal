@@ -26,8 +26,8 @@ public class Screen {
         this.engine = engine;
         config = engine.getConfig();
         viewport = new ExtendViewport(
-            config.getStageVirtualHeight(), config.getStageVirtualHeight()//,
-            //config.getStageMaxVirtualWidth(), config.getStageVirtualHeight()
+            config.getStageVirtualHeight(), config.getStageVirtualHeight()// ,
+            // config.getStageMaxVirtualWidth(), config.getStageVirtualHeight()
         );
         batch = new SpriteBatch();
         stage = createStage();
@@ -42,9 +42,11 @@ public class Screen {
         return new Stage(viewport, batch);
     }
 
-    public void init() {}
+    public void init() {
+    }
 
-    public void show() {}
+    public void show() {
+    }
 
     public void update(float delta) {
         if (delta > 0.1) {
@@ -56,7 +58,7 @@ public class Screen {
     }
 
     public void clear() {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f,1);
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
     }
 
@@ -82,7 +84,8 @@ public class Screen {
         stage.dispose();
     }
 
-    public void moveIn() {}
+    public void moveIn() {
+    }
 
     public void fadeIn() {
         fade.in();

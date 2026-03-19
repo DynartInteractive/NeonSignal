@@ -2,8 +2,7 @@ package net.dynart.neonsignal.components;
 
 public enum FrogType {
 
-    GREEN("", 0.25f),
-    PURPLE("purple_", 0.34f);
+    GREEN("", 0.25f), PURPLE("purple_", 0.34f);
 
     private final String animPrefix;
     private final float power;

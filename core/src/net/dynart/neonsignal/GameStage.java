@@ -108,11 +108,13 @@ public class GameStage extends Stage {
 
         Label.LabelStyle ls = new Label.LabelStyle();
         ls.font = font;
-        ls.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ls.font.getRegion().getTexture()
+            .setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         Label.LabelStyle ls2 = new Label.LabelStyle();
         ls2.font = font2;
-        ls2.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ls2.font.getRegion().getTexture()
+            .setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         // labels for scores
         labelPool = new Label[8];
@@ -148,7 +150,6 @@ public class GameStage extends Stage {
         whiteImage.setVisible(false);
         addActor(whiteImage);
 
-
         playerImage = new Image(spriteAtlas.findRegion("player_pain"));
         playerImage.setVisible(false);
         playerImage.setAlign(Align.center | Align.bottom);
@@ -163,7 +164,6 @@ public class GameStage extends Stage {
 
         addActor(pauseButton);
 
-
         // health bar
         Group healthBarGroup = new Group();
         healthBarGroup.setY(0);
@@ -172,7 +172,9 @@ public class GameStage extends Stage {
         hpLineImage = new Image(uiPixelSkin.getDrawable("hud_hp_line"));
         hpLineImage.setColor(GOOD_COLOR);
 
-        originalHpLineImageRegion = new TextureRegion(((TextureRegionDrawable)hpLineImage.getDrawable()).getRegion());
+        originalHpLineImageRegion = new TextureRegion(
+            ((TextureRegionDrawable) hpLineImage.getDrawable()).getRegion()
+        );
 
         Image healthBarImage = new Image(uiPixelSkin.getDrawable("hud_hp_bar"));
 
@@ -211,12 +213,12 @@ public class GameStage extends Stage {
             }
         };
 
-
     }
 
     public void resize() {
         float sideBlackBarWidth = screen.getSideBlackBarWidth();
-        boolean showPause = settings.getControllerType() == ControllerType.TOUCH || config.isMobile();
+        boolean showPause = settings.getControllerType() == ControllerType.TOUCH
+            || config.isMobile();
         float scorePadding = showPause ? 142f : 38f;
         pauseButton.setVisible(showPause);
         pauseButton.setY(getHeight() - pauseButton.getHeight() - 20);
@@ -285,20 +287,24 @@ public class GameStage extends Stage {
 
         float h = health * 0.78f + 0.11f; // crop 0.11 from both sides and shift
 
-        TextureRegion region = ((TextureRegionDrawable)hpLineImage.getDrawable()).getRegion();
+        TextureRegion region = ((TextureRegionDrawable) hpLineImage.getDrawable()).getRegion();
         region.setRegion(originalHpLineImageRegion);
-        region.setRegion(region.getRegionX(), region.getRegionY(), (int)((float)region.getRegionWidth() * h), region.getRegionHeight());
-        ((TextureRegionDrawable)hpLineImage.getDrawable()).setRegion(region);
+        region.setRegion(
+            region.getRegionX(), region.getRegionY(), (int) ((float) region.getRegionWidth() * h),
+            region.getRegionHeight()
+        );
+        ((TextureRegionDrawable) hpLineImage.getDrawable()).setRegion(region);
         hpLineImage.setColor(hpLineColor);
         hpLineImage.setWidth(MAX_HP_LINE_WIDTH * h);
     }
 
     @Override
     public void act(float delta) {
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         for (int i = 0; i < labelPool.length; i++) {
-            Vector2 v = gameScreen.getStagePositionFromScene(labelPosition[i].x, labelPosition[i].y);
-            //v.y += labelPool[0].getHeight();
+            Vector2 v = gameScreen
+                .getStagePositionFromScene(labelPosition[i].x, labelPosition[i].y);
+            // v.y += labelPool[0].getHeight();
             labelPool[i].setPosition(v.x - 25, v.y);
             labelShadowPool[i].setPosition(v.x - 25, v.y - 2);
         }
@@ -306,8 +312,9 @@ public class GameStage extends Stage {
         if (playerDieAnimationTime > 0) {
             playerDieAnimationTime += delta;
             playerDieAnimation.getKeyFrame(playerDieAnimationTime);
-            TextureRegionDrawable drawable = (TextureRegionDrawable)playerImage.getDrawable();
-            drawable.setRegion((TextureRegion)playerDieAnimation.getKeyFrame(playerDieAnimationTime));
+            TextureRegionDrawable drawable = (TextureRegionDrawable) playerImage.getDrawable();
+            drawable
+                .setRegion((TextureRegion) playerDieAnimation.getKeyFrame(playerDieAnimationTime));
         }
 
         updateHealthLine();
@@ -331,12 +338,14 @@ public class GameStage extends Stage {
     public void startGameOver() {
         whiteImage.getColor().a = 0;
         whiteImage.setVisible(true);
-        whiteImage.addAction(Actions.sequence(
-            Actions.alpha(1, 0.1f, Interpolation.exp5In),
-            Actions.alpha(0, 0.4f, Interpolation.pow2In)
-        ));
+        whiteImage.addAction(
+            Actions.sequence(
+                Actions.alpha(1, 0.1f, Interpolation.exp5In),
+                Actions.alpha(0, 0.4f, Interpolation.pow2In)
+            )
+        );
         playerImage.setVisible(true);
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         Vector2 pos = gameScreen.getStagePositionFromScene(body.getCenterX(), body.getBottom());
         playerImage.setPosition(pos.x - 128f, pos.y - 16f);
         playerImage.setScale((view.isFlipX() ? -0.66f : 0.66f), 0.66f);

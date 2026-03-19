@@ -34,8 +34,10 @@ public class PlatformComponent extends Component {
         if (entity.hasComponent(ColliderComponent.class)) {
             ColliderComponent collider = entity.getComponent(ColliderComponent.class);
             collider.addListener((otherEntity, direction) -> {
-                if (direction == Direction.UP && otherEntity.hasComponent(MountableComponent.class)) {
-                    MountableComponent mountable = otherEntity.getComponent(MountableComponent.class);
+                if (direction == Direction.UP
+                    && otherEntity.hasComponent(MountableComponent.class)) {
+                    MountableComponent mountable = otherEntity
+                        .getComponent(MountableComponent.class);
                     mount(mountable);
                 }
             });
@@ -44,11 +46,13 @@ public class PlatformComponent extends Component {
 
     @Override
     public void postUpdate(float delta) {
-        for (Entity otherEntity : entityManager.getAllByClassAndArea(MountableComponent.class, entity)) {
+        for (Entity otherEntity : entityManager
+            .getAllByClassAndArea(MountableComponent.class, entity)) {
             BodyComponent otherBody = otherEntity.getComponent(BodyComponent.class);
             MountableComponent mountable = otherEntity.getComponent(MountableComponent.class);
             boolean overlap = body.isOverlap(otherBody);
-            if (overlap && otherBody.getLastBottom() >= body.getLastTop() && mountable.getMustLeaveBody() != body) {
+            if (overlap && otherBody.getLastBottom() >= body.getLastTop()
+                && mountable.getMustLeaveBody() != body) {
                 mount(mountable);
             }
             if (!overlap && mountable.getMustLeaveBody() == body) {

@@ -20,17 +20,23 @@ public class MountableComponent extends Component {
         body = entity.getComponent(BodyComponent.class);
         velocity = entity.getComponent(VelocityComponent.class);
 
-        messageHandler.subscribe(GridCollisionComponent.BOTTOM_COLLISION, (sender, message) -> dismount(null));
-        messageHandler.subscribe(GridCollisionComponent.TOP_COLLISION, (sender, message) -> dismount(platformBody));
+        messageHandler.subscribe(
+            GridCollisionComponent.BOTTOM_COLLISION, (sender, message) -> dismount(null)
+        );
+        messageHandler.subscribe(
+            GridCollisionComponent.TOP_COLLISION, (sender, message) -> dismount(platformBody)
+        );
         messageHandler.subscribe(EntityCollisionComponent.BOTTOM_COLLISION, (sender, message) -> {
-            EntityCollisionComponent collision = entity.getComponent(EntityCollisionComponent.class);
+            EntityCollisionComponent collision = entity
+                .getComponent(EntityCollisionComponent.class);
             Entity otherEntity = collision.getCollidedWith();
             if (otherEntity != platformEntity) {
                 dismount(null);
             }
         });
         messageHandler.subscribe(EntityCollisionComponent.TOP_COLLISION, (sender, message) -> {
-            EntityCollisionComponent collision = entity.getComponent(EntityCollisionComponent.class);
+            EntityCollisionComponent collision = entity
+                .getComponent(EntityCollisionComponent.class);
             Entity otherEntity = collision.getCollidedWith();
             if (otherEntity != platformEntity) {
                 dismount(platformBody);
@@ -69,14 +75,16 @@ public class MountableComponent extends Component {
         float gravity = config.getDefaultGravity();
 
         if (entity.hasComponent(WaterCollisionComponent.class)) {
-            WaterCollisionComponent waterCollision = entity.getComponent(WaterCollisionComponent.class);
+            WaterCollisionComponent waterCollision = entity
+                .getComponent(WaterCollisionComponent.class);
             if (waterCollision.isInWater()) {
-                gravity = config.getDefaultGravity() / 5f; // TODO: don't repeat this, PlayerComponent has a similar code
+                gravity = config.getDefaultGravity() / 5f; // TODO: don't repeat this,
+                                                           // PlayerComponent has a similar code
             }
         }
 
         if (entity.hasComponent(PlayerComponent.class)) {
-            PlayerComponent player =  entity.getComponent(PlayerComponent.class);
+            PlayerComponent player = entity.getComponent(PlayerComponent.class);
             if (!player.isActive()) {
                 gravity = 0;
             }
@@ -102,7 +110,8 @@ public class MountableComponent extends Component {
 
     @Override
     public void postUpdate(float delta) {
-        if (platformBody != null && (platformBody.getRight() < body.getLeft() || platformBody.getLeft() > body.getRight() || velocity.getY() != 0)) {
+        if (platformBody != null && (platformBody.getRight() < body.getLeft()
+            || platformBody.getLeft() > body.getRight() || velocity.getY() != 0)) {
             dismount(null);
         }
     }

@@ -31,7 +31,7 @@ public class ItemComponent extends Component {
     @Override
     public void update(float delta) {
         counter += delta;
-        view.setOffsetY((float)Math.sin(counter * 10f)*2f + 1f);
+        view.setOffsetY((float) Math.sin(counter * 10f) * 2f + 1f);
     }
 
 }

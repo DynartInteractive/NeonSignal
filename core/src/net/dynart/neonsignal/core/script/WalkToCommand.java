@@ -24,7 +24,7 @@ public class WalkToCommand implements Command {
         this.exact = exact;
         entityManager = engine.getGameScene().getEntityManager();
         config = engine.getConfig();
-        cutsceneScreen = (CutsceneScreen)engine.getScreen("cutscene");
+        cutsceneScreen = (CutsceneScreen) engine.getScreen("cutscene");
     }
 
     public boolean act(float delta) {

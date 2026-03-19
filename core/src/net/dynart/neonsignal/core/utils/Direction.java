@@ -5,24 +5,25 @@ import java.util.Map;
 
 public enum Direction {
 
-    RIGHT(1, 0),
-    UP(0, 1),
-    LEFT(-1, 0),
-    DOWN(0, -1);
+    RIGHT(1, 0), UP(0, 1), LEFT(-1, 0), DOWN(0, -1);
 
-    public static final Map<String, Direction> ByName = new HashMap<String, Direction>() {{
-        put("left", LEFT);
-        put("right", RIGHT);
-        put("down", DOWN);
-        put("up", UP);
-    }};
+    public static final Map<String, Direction> ByName = new HashMap<String, Direction>() {
+        {
+            put("left", LEFT);
+            put("right", RIGHT);
+            put("down", DOWN);
+            put("up", UP);
+        }
+    };
 
-    public static final Map<Direction, Direction> Inverse = new HashMap<Direction, Direction>() {{
-        put(RIGHT, LEFT);
-        put(LEFT, RIGHT);
-        put(UP, DOWN);
-        put(DOWN, UP);
-    }};
+    public static final Map<Direction, Direction> Inverse = new HashMap<Direction, Direction>() {
+        {
+            put(RIGHT, LEFT);
+            put(LEFT, RIGHT);
+            put(UP, DOWN);
+            put(DOWN, UP);
+        }
+    };
 
     private int x;
     private int y;

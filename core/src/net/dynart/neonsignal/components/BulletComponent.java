@@ -112,7 +112,8 @@ public class BulletComponent extends Component {
             explosionParticle.setLifeTime(0.20f);
             ViewComponent explosionView = particle.getComponent(ViewComponent.class);
             explosionView.setAnimation(0, "fireball_explosion");
-            explosionBody.setSize(explosionView.getSpriteWidth(0), explosionView.getSpriteHeight(0));
+            explosionBody
+                .setSize(explosionView.getSpriteWidth(0), explosionView.getSpriteHeight(0));
             explosionBody.setAlign(Align.CENTER);
             explosionBody.setX(body.getCenterX());
             explosionBody.setY(body.getCenterY());

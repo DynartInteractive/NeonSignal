@@ -32,7 +32,7 @@ public class MenuBackground extends Actor {
         images = new Image[gridSize * gridSize];
         for (int i = 0; i < images.length; i++) {
             images[i] = new Image(skin.getDrawable("menu_background"));
-            //images[i].setScale(5);
+            // images[i].setScale(5);
             float imageWidth = images[i].getWidth() * images[i].getScaleX() - 0.1f;
             float imageHeight = images[i].getHeight() * images[i].getScaleY() - 0.1f;
             float x = (i % gridSize) * imageWidth;
@@ -44,13 +44,9 @@ public class MenuBackground extends Actor {
 
     private void move() {
         /*
-        float delta = engine.getDeltaTime();
-        float move = delta * 60f;
-        offset -= move;
-        float imageWidth = images[0].getWidth() * images[0].getScaleX();
-        if (offset < -imageWidth) {
-            offset += imageWidth;
-        }
+         * float delta = engine.getDeltaTime(); float move = delta * 60f; offset -=
+         * move; float imageWidth = images[0].getWidth() * images[0].getScaleX(); if
+         * (offset < -imageWidth) { offset += imageWidth; }
          */
     }
 
@@ -60,4 +56,3 @@ public class MenuBackground extends Actor {
         group.draw(batch, parentAlpha);
     }
 }
-

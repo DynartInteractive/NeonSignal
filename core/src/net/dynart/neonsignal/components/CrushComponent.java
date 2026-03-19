@@ -48,7 +48,8 @@ public class CrushComponent extends Component {
         cameraHandler.startQuake(0.5f);
     }
 
-    private void addPart(String regionName, float x, float y, float gravity, float velocityX, float velocityY) {
+    private void addPart(String regionName, float x, float y, float gravity, float velocityX,
+        float velocityY) {
         Entity particle = particlePool.obtain();
         ViewComponent view = particle.getComponent(ViewComponent.class);
         view.setSprite(0, regionName);

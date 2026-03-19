@@ -14,7 +14,6 @@ public class GridCollisionComponent extends Component {
 
     public static final float CORRIGATION = 0.001f;
 
-
     private BodyComponent body;
     private Grid grid;
     private VelocityComponent velocity;
@@ -33,9 +32,12 @@ public class GridCollisionComponent extends Component {
         body = entity.getComponent(BodyComponent.class);
         velocity = entity.getComponent(VelocityComponent.class);
 
-        messageHandler.subscribe(VelocityComponent.Y_ADDED, (sender, message) -> collideVertically());
-        messageHandler.subscribe(VelocityComponent.X_ADDED, (sender, message) -> collideHorizontally());
-        messageHandler.subscribe(PlayerComponent.WANTS_TO_DROP, (sender, message) -> wantsToDrop = true);
+        messageHandler
+            .subscribe(VelocityComponent.Y_ADDED, (sender, message) -> collideVertically());
+        messageHandler
+            .subscribe(VelocityComponent.X_ADDED, (sender, message) -> collideHorizontally());
+        messageHandler
+            .subscribe(PlayerComponent.WANTS_TO_DROP, (sender, message) -> wantsToDrop = true);
     }
 
     private void collideVertically() {
@@ -71,10 +73,12 @@ public class GridCollisionComponent extends Component {
     }
 
     private void collideBottom() {
-        boolean lastGridYIsDifferent = grid.getY(body.getLastGlobalY()) != grid.getY(body.getGlobalY());
+        boolean lastGridYIsDifferent = grid.getY(body.getLastGlobalY()) != grid
+            .getY(body.getGlobalY());
         int gridY = grid.getY(body.getBottom());
         for (int gridX = grid.getX(body.getLeft()); gridX <= grid.getX(body.getRight()); gridX++) {
-            if (isBlock(gridY, gridX) || (lastGridYIsDifferent && !wantsToDrop && isTopBlock(gridY, gridX))) {
+            if (isBlock(gridY, gridX)
+                || (lastGridYIsDifferent && !wantsToDrop && isTopBlock(gridY, gridX))) {
                 body.setBottom(grid.getWorldY(gridY + 1));
                 body.setInAir(false);
                 body.setBottomCollision(true);

@@ -292,7 +292,7 @@ public class GameController {
         }
         anyPointerDown = !pointersDown.isEmpty();
     }
-    
+
     public GamepadType getActiveGamepadType() {
         return activeGamepadType;
     }

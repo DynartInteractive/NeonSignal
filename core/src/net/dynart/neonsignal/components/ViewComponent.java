@@ -123,14 +123,25 @@ public class ViewComponent extends Component {
         return spriteNames.get(index);
     }
 
-    public float getSpriteWidth(int index) { return sprites.get(index).getWidth(); }
-    public float getSpriteHeight(int index) { return sprites.get(index).getHeight(); }
+    public float getSpriteWidth(int index) {
+        return sprites.get(index).getWidth();
+    }
 
-    public float getRotation(int index) { return sprites.get(index).getRotation(); }
-    public void setRotation(int index, float value) { sprites.get(index).setRotation(value); }
+    public float getSpriteHeight(int index) {
+        return sprites.get(index).getHeight();
+    }
+
+    public float getRotation(int index) {
+        return sprites.get(index).getRotation();
+    }
+
+    public void setRotation(int index, float value) {
+        sprites.get(index).setRotation(value);
+    }
 
     public void setAnimation(int index, String animationName) {
-        if (paused) return;
+        if (paused)
+            return;
         if (animationName == null) {
             animations.set(index, null);
         } else {
@@ -170,7 +181,8 @@ public class ViewComponent extends Component {
 
     @Override
     public void preUpdate(float deltaTime) {
-        if (paused) return;
+        if (paused)
+            return;
         for (int i = 0; i < animations.size(); i++) {
             animationTimes.set(i, animationTimes.get(i) + deltaTime);
         }
@@ -224,11 +236,11 @@ public class ViewComponent extends Component {
             return;
         }
         if (repeatX > 1) {
-            for (int j = 0 ; j < repeatX; j++) {
+            for (int j = 0; j < repeatX; j++) {
                 drawSprites(batch, tileWidth * j + getOffsetX(), getOffsetY());
             }
         } else if (repeatY > 1) {
-            for (int j = 0 ; j < repeatY; j++) {
+            for (int j = 0; j < repeatY; j++) {
                 drawSprites(batch, getOffsetX(), tileHeight * j + getOffsetY());
             }
         } else {
@@ -249,11 +261,12 @@ public class ViewComponent extends Component {
 
             // set position to the "exact" virtual pixels
             /*
-            float ratioX = (float)Gdx.graphics.getWidth() / (float)viewport.getWorldWidth();
-            float x = ((int)((body.getGlobalX()) * ratioX)) / ratioX;
-            float ratioY = (float)Gdx.graphics.getHeight() / (float)viewport.getWorldHeight();
-            float y = ((int)((body.getGlobalY()) * ratioY)) / ratioY;
-            */
+             * float ratioX = (float)Gdx.graphics.getWidth() /
+             * (float)viewport.getWorldWidth(); float x = ((int)((body.getGlobalX()) *
+             * ratioX)) / ratioX; float ratioY = (float)Gdx.graphics.getHeight() /
+             * (float)viewport.getWorldHeight(); float y = ((int)((body.getGlobalY()) *
+             * ratioY)) / ratioY;
+             */
             if (!paused) {
                 sprite.setX(body.getGlobalX() + plusX);
                 sprite.setY(body.getGlobalY() + plusY);
@@ -284,8 +297,6 @@ public class ViewComponent extends Component {
         this.offsetY = offsetY;
     }
 
-
-
     public void setOffsetX(float offsetX) {
         this.offsetX = offsetX;
     }
@@ -301,7 +312,7 @@ public class ViewComponent extends Component {
     public boolean isOnVirtualScreen(float borderH, float borderV) {
         return body.getRight() > camera.position.x - config.getGameMaxVirtualWidth() / 2f - borderH
             && body.getLeft() < camera.position.x + config.getGameMaxVirtualWidth() / 2f + borderH
-            && body.getTop() > camera.position.y  - config.getGameVirtualHeight() / 2f - borderV
+            && body.getTop() > camera.position.y - config.getGameVirtualHeight() / 2f - borderV
             && body.getBottom() < camera.position.y + config.getGameVirtualHeight() / 2f + borderV;
     }
 

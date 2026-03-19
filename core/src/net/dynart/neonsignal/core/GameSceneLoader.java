@@ -142,7 +142,7 @@ public class GameSceneLoader {
         }
 
         // count items (tile)
-        TiledMapTileLayer itemLayer = (TiledMapTileLayer)tiledMap.getLayers().get("Items1");
+        TiledMapTileLayer itemLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Items1");
         if (itemLayer != null) {
             for (int j = 0; j < grid.getHeight(); j++) {
                 for (int i = 0; i < grid.getWidth(); i++) {
@@ -196,7 +196,8 @@ public class GameSceneLoader {
     private void loadBackground() {
         MapProperties properties = tiledMap.getProperties();
         gameScene.setBackgroundBackTexture(loadTextureFromProperty("background_back", properties));
-        gameScene.setBackgroundFrontTexture(loadTextureFromProperty("background_front", properties));
+        gameScene
+            .setBackgroundFrontTexture(loadTextureFromProperty("background_front", properties));
     }
 
     private void loadDefaultParameters() {
@@ -267,7 +268,8 @@ public class GameSceneLoader {
             } else {
                 // items: init the two layers for them
                 if (tiledMapLayer.getName().equals("Items1")) {
-                    TiledMapTileLayer tiledMapLayer2 = (TiledMapTileLayer)tiledMap.getLayers().get("Items2");
+                    TiledMapTileLayer tiledMapLayer2 = (TiledMapTileLayer) tiledMap.getLayers()
+                        .get("Items2");
                     if (tiledMapLayer2 == null) {
                         throw new RuntimeException("Items2 layer doesn't exist!");
                     }
@@ -294,9 +296,18 @@ public class GameSceneLoader {
                 }
                 TiledMapTile tile = cell.getTile();
                 MapProperties mapProps = tile.getProperties();
-                grid.set(Grid.Layer.BLOCK, x, y, mapProps.containsKey("block") || mapProps.containsKey("slider"));
-                grid.set(Grid.Layer.TOP_BLOCK, x, y, mapProps.containsKey("top_block") || mapProps.containsKey("top_slider"));
-                grid.set(Grid.Layer.SLIDER, x, y, mapProps.containsKey("slider") || mapProps.containsKey("top_slider"));
+                grid.set(
+                    Grid.Layer.BLOCK, x, y,
+                    mapProps.containsKey("block") || mapProps.containsKey("slider")
+                );
+                grid.set(
+                    Grid.Layer.TOP_BLOCK, x, y,
+                    mapProps.containsKey("top_block") || mapProps.containsKey("top_slider")
+                );
+                grid.set(
+                    Grid.Layer.SLIDER, x, y,
+                    mapProps.containsKey("slider") || mapProps.containsKey("top_slider")
+                );
                 grid.set(Grid.Layer.WATER, x, y, mapProps.containsKey("water"));
                 grid.set(Grid.Layer.SPIKE, x, y, mapProps.containsKey("spike"));
                 grid.set(Grid.Layer.POISON, x, y, mapProps.containsKey("poison"));
@@ -315,9 +326,10 @@ public class GameSceneLoader {
 
     private void loadObject(MapObject mapObject, LoadType loadType) {
         boolean isPolyline = mapObject.getClass() == PolylineMapObject.class;
-        boolean isEntity = mapObject.getClass() == TiledMapTileMapObject.class || mapObject.getClass() == RectangleMapObject.class;
+        boolean isEntity = mapObject.getClass() == TiledMapTileMapObject.class
+            || mapObject.getClass() == RectangleMapObject.class;
         if (loadType == LoadType.FIRST && isPolyline) {
-            loadPath((PolylineMapObject)mapObject);
+            loadPath((PolylineMapObject) mapObject);
         } else if (loadType != LoadType.FIRST && isEntity) {
             loadEntity(mapObject, loadType);
         }

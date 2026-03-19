@@ -48,7 +48,7 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     @Override
     public void create() {
         fpsLogger = new FPSLogger();
-        //Gdx.input.setCursorCatched(true);
+        // Gdx.input.setCursorCatched(true);
 
         config = new NeonSignalEngineConfig();
         config.load(configSection);
@@ -102,8 +102,9 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     private void sleepAtTheBeginning() {
         if (config.isMobile()) {
             try {
-                Thread.sleep(250);   // 1/4 second wait for Android ..
-            } catch (InterruptedException ignored) {}
+                Thread.sleep(250); // 1/4 second wait for Android ..
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 
@@ -122,9 +123,9 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
         } else {
             level = levelManager.get(startWithLevel);
         }
-        GameScreen gameScreen = (GameScreen)engine.getScreen("game");
+        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         gameScreen.loadLevel(level);
-        LoadingScreen loadingScreen = (LoadingScreen)engine.getScreen("loading");
+        LoadingScreen loadingScreen = (LoadingScreen) engine.getScreen("loading");
         loadingScreen.setNextScreen("game");
     }
 
@@ -135,22 +136,22 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
 
     @Override
     public void render() {
-        //fpsLogger.log();
+        // fpsLogger.log();
         engine.render();
     }
 
     @Override
-    public void pause () {
+    public void pause() {
         engine.pause();
     }
 
     @Override
-    public void resume () {
+    public void resume() {
         engine.resume();
     }
 
     @Override
-    public void dispose () {
+    public void dispose() {
         engine.dispose();
     }
 

@@ -126,7 +126,8 @@ public class MenuCursor {
     }
 
     private boolean shouldButtonBePressed() {
-        return (buttonDownFirst && buttonDownTime > 0.5f) || (!buttonDownFirst && buttonDownTime > 0.05f);
+        return (buttonDownFirst && buttonDownTime > 0.5f)
+            || (!buttonDownFirst && buttonDownTime > 0.05f);
     }
 
     private boolean isAnyButtonDown() {
@@ -134,7 +135,6 @@ public class MenuCursor {
             || Math.abs(gameController.getAxisY()) > 0.5f
             || gameController.isADown();
     }
-
 
     private boolean isDownPressed() {
         return (buttonDownTime == 0 || lastAxisY > -0.5f)
@@ -176,9 +176,15 @@ public class MenuCursor {
     private Event convertToEvent(Neighbour neighbour) {
         Event result = Event.LEFT;
         switch (neighbour) {
-            case RIGHT: result = Event.RIGHT; break;
-            case DOWN: result = Event.DOWN; break;
-            case UP: result = Event.UP; break;
+            case RIGHT:
+                result = Event.RIGHT;
+                break;
+            case DOWN:
+                result = Event.DOWN;
+                break;
+            case UP:
+                result = Event.UP;
+                break;
         }
         return result;
     }
@@ -207,7 +213,7 @@ public class MenuCursor {
 
     private void animateActor() {
         if (currentItem.getActor() instanceof MenuButton) {
-            MenuButton menuButton = (MenuButton)currentItem.getActor();
+            MenuButton menuButton = (MenuButton) currentItem.getActor();
             if (isActionButtonDown()) {
                 menuButton.push();
             } else {

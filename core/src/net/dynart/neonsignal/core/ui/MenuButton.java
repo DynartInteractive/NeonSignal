@@ -21,19 +21,22 @@ public class MenuButton extends TextButton {
     private boolean pushed;
 
     public MenuButton(Engine engine, String text) {
-        this(engine, text,
+        this(
+            engine, text,
             engine.getStyles().getDefaultButtonStyle(),
             engine.getStyles().getDefaultButtonPushedStyle()
         );
     }
 
     public MenuButton(Engine engine, String text, MenuButtonStyle style) {
-        this(engine, text, style,
+        this(
+            engine, text, style,
             engine.getStyles().getDefaultButtonPushedStyle()
         );
     }
 
-    public MenuButton(Engine engine, String text, MenuButtonStyle style, MenuButtonStyle pushedStyle) {
+    public MenuButton(Engine engine, String text, MenuButtonStyle style,
+        MenuButtonStyle pushedStyle) {
         super(text, style);
         soundManager = engine.getSoundManager();
         this.style = style;
@@ -51,9 +54,9 @@ public class MenuButton extends TextButton {
         label.setAlignment(Align.left);
         Table table = cell.getTable();
         table.addActor(icon);
-        icon.setY((int)((table.getHeight() - icon.getHeight()) / 2f + 4f));
+        icon.setY((int) ((table.getHeight() - icon.getHeight()) / 2f + 4f));
         if (label.getText().toString().equals("")) {
-            icon.setX((int)((table.getWidth() - icon.getWidth()) / 2f));
+            icon.setX((int) ((table.getWidth() - icon.getWidth()) / 2f));
         } else {
             icon.setX(25f);
             cell.padLeft(icon.getWidth());
@@ -93,4 +96,3 @@ public class MenuButton extends TextButton {
     }
 
 }
-

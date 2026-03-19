@@ -200,7 +200,9 @@ public class BodyComponent extends Component {
         return lastGlobalY;
     }
 
-    public float getLastGlobalX() { return lastGlobalX; }
+    public float getLastGlobalX() {
+        return lastGlobalX;
+    }
 
     public float getCenterX() {
         return (getLeft() + getRight()) / 2f;
@@ -229,7 +231,8 @@ public class BodyComponent extends Component {
     public boolean isOverlap(BodyComponent otherBody) {
         float distanceX = Math.abs(getCenterX() - otherBody.getCenterX());
         float distanceY = Math.abs(getCenterY() - otherBody.getCenterY());
-        return distanceX < halfWidth + otherBody.getHalfWidth() && distanceY < halfHeight + otherBody.getHalfHeight();
+        return distanceX < halfWidth + otherBody.getHalfWidth()
+            && distanceY < halfHeight + otherBody.getHalfHeight();
     }
 
     @Override

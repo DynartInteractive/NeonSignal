@@ -43,7 +43,7 @@ public class CompletedScreen extends MenuScreen {
     public CompletedScreen(final Engine engine) {
         super(engine);
         clear = false;
-        
+
         Label.LabelStyle ls = styles.getDefaultLabelStyle();
 
         knockoutNumberLabel = new Label("0", ls);
@@ -140,7 +140,6 @@ public class CompletedScreen extends MenuScreen {
         addSideBlackBars(stage);
     }
 
-
     @Override
     public void backClicked() {
         engine.moveToScreen("levels");
@@ -149,7 +148,7 @@ public class CompletedScreen extends MenuScreen {
     @Override
     public void init() {
         super.init();
-        gameScreen = (GameScreen)engine.getScreen("game");
+        gameScreen = (GameScreen) engine.getScreen("game");
     }
 
     @Override
@@ -158,7 +157,8 @@ public class CompletedScreen extends MenuScreen {
         GameScene gameScene = gameScreen.getScene();
         PlayerComponent player = gameScene.getPlayer().getComponent(PlayerComponent.class);
         if (engine.getAnalyticsManager() != null && gameScreen.getCurrentLevel() != null) {
-            engine.getAnalyticsManager().trackLevelCompleted(gameScreen.getCurrentLevel(), player, gameScene);
+            engine.getAnalyticsManager()
+                .trackLevelCompleted(gameScreen.getCurrentLevel(), player, gameScene);
         }
 
         knockoutNumberLabel.setText(player.getKnockoutCount());
@@ -170,19 +170,21 @@ public class CompletedScreen extends MenuScreen {
         itemFullLabel.setText(gameScene.getItemCount());
 
         if (gameScene.getEnemyCount() > 0) {
-            int v = (int)((float) player.getKnockoutCount() / (float) gameScene.getEnemyCount() * 100f);
+            int v = (int) ((float) player.getKnockoutCount() / (float) gameScene.getEnemyCount()
+                * 100f);
             knockoutPercentLabel.setText(v + "%");
         } else {
             knockoutPercentLabel.setText("n/a");
         }
         if (gameScene.getSecretCount() > 0) {
-            int v = (int)((float)player.getSecretCount() / (float)gameScene.getSecretCount() * 100f);
+            int v = (int) ((float) player.getSecretCount() / (float) gameScene.getSecretCount()
+                * 100f);
             secretPercentLabel.setText(v + "%");
         } else {
             secretPercentLabel.setText("n/a");
         }
         if (gameScene.getItemCount() > 0) {
-            int v = (int)((float)player.getItemCount() / (float)gameScene.getItemCount() * 100f);
+            int v = (int) ((float) player.getItemCount() / (float) gameScene.getItemCount() * 100f);
             itemPercentLabel.setText(v + "%");
         } else {
             itemPercentLabel.setText("n/a");

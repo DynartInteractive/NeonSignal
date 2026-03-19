@@ -25,7 +25,7 @@ public class SwitchableComponent extends Component {
                 inputs[i] = inputs[i].trim();
             }
         } else {
-            inputs = new String[]{}; // because of a possible exception in switchOn
+            inputs = new String[] {}; // because of a possible exception in switchOn
         }
     }
 
