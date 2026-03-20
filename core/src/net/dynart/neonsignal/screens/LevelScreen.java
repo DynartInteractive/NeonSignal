@@ -509,9 +509,9 @@ public class LevelScreen extends MenuScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        float sideBlackBarWidth = getSideBlackBarWidth();
-        headerTable.setWidth(stage.getWidth() - sideBlackBarWidth * 2);
-        headerTable.setX(-stage.getWidth() / 2f + sideBlackBarWidth);
+        float safeMarginWidth = getSafeMarginWidth();
+        headerTable.setWidth(stage.getWidth() - safeMarginWidth * 2);
+        headerTable.setX(-stage.getWidth() / 2f + safeMarginWidth);
 
         // Align arrows vertically with center of level button area
         updateArrowPositions();
@@ -532,12 +532,12 @@ public class LevelScreen extends MenuScreen {
 
     private float getLeftButtonX() {
         // Group origin is at screen center, so left edge is at -stage.getWidth()/2f
-        return -stage.getWidth() / 2f + 20f + getSideBlackBarWidth();
+        return -stage.getWidth() / 2f + 20f + getSafeMarginWidth();
     }
 
     private float getRightButtonX() {
         // Group origin is at screen center, so right edge is at +stage.getWidth()/2f
-        return stage.getWidth() / 2f - slideRightButton.getWidth() - 20f - getSideBlackBarWidth();
+        return stage.getWidth() / 2f - slideRightButton.getWidth() - 20f - getSafeMarginWidth();
     }
 
     @Override

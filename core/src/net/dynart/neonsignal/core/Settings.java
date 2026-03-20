@@ -93,7 +93,7 @@ public class Settings {
     public Vector2 getTouchPosition(String name, Screen screen) {
         Vector2 defaultPosition = config.getDefaultTouchPositions().get(name);
         touchPosition.x = preferences
-            .getFloat("button_" + name + "_x", defaultPosition.x - screen.getSideBlackBarWidth());
+            .getFloat("button_" + name + "_x", defaultPosition.x - screen.getSafeMarginWidth());
         touchPosition.y = preferences.getFloat("button_" + name + "_y", defaultPosition.y);
         return touchPosition;
     }

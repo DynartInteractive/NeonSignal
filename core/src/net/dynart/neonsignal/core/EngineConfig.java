@@ -29,8 +29,8 @@ public class EngineConfig {
 
     protected String name = "NeonSignal";
     protected String section = "";
-    protected float gameVirtualHeight = 180;
-    protected float gameMaxVirtualWidth = 373;
+    protected float gameVirtualHeight = 1080;
+    protected float gameMaxVirtualWidth = 2520;
     protected float stageVirtualHeight = 720;
     protected float stageMaxVirtualWidth = 1680;
     protected float maxVelocity;

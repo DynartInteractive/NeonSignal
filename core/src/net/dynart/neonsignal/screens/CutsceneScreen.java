@@ -349,18 +349,18 @@ public class CutsceneScreen extends MenuScreen {
     }
 
     private void adjustSkipButton() {
-        skipButton.setX(stage.getWidth() - skipButton.getWidth() - getSideBlackBarWidth() - 20);
+        skipButton.setX(stage.getWidth() - skipButton.getWidth() - getSafeMarginWidth() - 20);
         skipButton.setY(stage.getHeight() - skipButton.getHeight() - 20);
     }
 
     /*
      * private float getCharacterImageX(boolean left) { return left ?
-     * getSideBlackBarWidth() - 50 + characterImage.getWidth() : stage.getWidth() -
-     * getSideBlackBarWidth() - characterImage.getWidth() + 50; }
+     * getSafeMarginWidth() - 50 + characterImage.getWidth() : stage.getWidth() -
+     * getSafeMarginWidth() - characterImage.getWidth() + 50; }
      * 
      * private float getTextBubbleX(boolean left) { return left ?
-     * getSideBlackBarWidth() + 100 + textBubbleBg.getWidth() : stage.getWidth() -
-     * getSideBlackBarWidth() - textBubbleBg.getWidth() - 100; }
+     * getSafeMarginWidth() + 100 + textBubbleBg.getWidth() : stage.getWidth() -
+     * getSafeMarginWidth() - textBubbleBg.getWidth() - 100; }
      */
     @Override
     public void draw() {

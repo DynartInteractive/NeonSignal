@@ -71,7 +71,7 @@ public class Screen {
 
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-        float w = getSideBlackBarWidth(false);
+        float w = getAspectRatioBlackBarWidth();
         for (int i = 0; i < 2; i++) {
             sideBlackBar[i].setWidth(w);
             sideBlackBar[i].setHeight(viewport.getWorldHeight());
@@ -96,17 +96,38 @@ public class Screen {
         fade.out();
     }
 
-    public float getSideBlackBarWidth() {
-        return getSideBlackBarWidth(false);
+    public float getSafeMarginWidth() {
+        return getSafeMarginWidth(false);
     }
 
-    public float getSideBlackBarWidth(boolean convertToGameScene) {
+    public float getSafeMarginWidth(boolean convertToGameScene) {
+        float w = getAspectRatioBlackBarWidth();
+        // Ensure content stays within safe area (notches, rounded corners)
+        float pixelsPerUnit = Gdx.graphics.getWidth() / viewport.getWorldWidth();
+        float safeInset = Math.max(Gdx.graphics.getSafeInsetLeft(), Gdx.graphics.getSafeInsetRight());
+        float safeInsetWorld = safeInset / pixelsPerUnit;
+        w = Math.max(w, safeInsetWorld);
+        if (convertToGameScene) {
+            float r2 = config.getStageVirtualHeight() / config.getGameVirtualHeight();
+            return w / r2 - 1;
+        }
+        return w;
+    }
+
+    public float getBlackBarWidth(boolean convertToGameScene) {
+        float w = getAspectRatioBlackBarWidth();
+        if (convertToGameScene) {
+            float r2 = config.getStageVirtualHeight() / config.getGameVirtualHeight();
+            return w / r2 - 1;
+        }
+        return w;
+    }
+
+    private float getAspectRatioBlackBarWidth() {
         float maxR = config.getStageMaxVirtualWidth() / config.getStageVirtualHeight();
         float r = viewport.getWorldWidth() / config.getStageVirtualHeight();
         if (r > maxR) {
-            float w = (viewport.getWorldWidth() - config.getStageMaxVirtualWidth()) / 2f;
-            float r2 = config.getStageVirtualHeight() / config.getGameVirtualHeight();
-            return convertToGameScene ? (w / r2 - 1) : w;
+            return (viewport.getWorldWidth() - config.getStageMaxVirtualWidth()) / 2f;
         }
         return 0;
     }

@@ -170,7 +170,7 @@ public class CameraHandler {
         // don't go outside of the grid
         Screen screen = engine.getScreen("game"); // doesn't matter which screen
         float[] l = useNew ? newLimit : limit;
-        float viewHalfWidth = (viewport.getWorldWidth() / 2f) - screen.getSideBlackBarWidth(true);
+        float viewHalfWidth = (viewport.getWorldWidth() / 2f) - screen.getBlackBarWidth(true);
         float maxWidth = grid.getWorldX(grid.getWidth());
         float min = l[LEFT] != -1 ? l[LEFT] + viewHalfWidth : viewHalfWidth;
         float max = (l[RIGHT] != -1 ? l[RIGHT] : maxWidth) - viewHalfWidth;

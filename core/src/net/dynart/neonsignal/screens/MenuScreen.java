@@ -96,8 +96,8 @@ abstract class MenuScreen extends Screen implements DialogListener {
         versionLabel.setX(5);
         versionLabel.setY(stage.getHeight() - versionLabel.getHeight() - 5f);
 
-        float sideBlackBarWidth = getSideBlackBarWidth();
-        backButton.setX(stage.getWidth() / 2f - 130 - sideBlackBarWidth);
+        float safeMarginWidth = getSafeMarginWidth();
+        backButton.setX(stage.getWidth() / 2f - 130 - safeMarginWidth);
 
         group.setX(stage.getWidth() / 2f);
         group.setY(stage.getHeight() / 2f);

@@ -184,7 +184,7 @@ public class GameStage extends Stage {
         // health
         hpGroup = new Group();
         hpGroup.setY(config.getStageVirtualHeight() - 74);
-        hpGroup.setX(screen.getSideBlackBarWidth() + 96);
+        hpGroup.setX(screen.getSafeMarginWidth() + 96);
 
         hpGroup.addActor(healthBarGroup);
 
@@ -216,16 +216,16 @@ public class GameStage extends Stage {
     }
 
     public void resize() {
-        float sideBlackBarWidth = screen.getSideBlackBarWidth();
+        float safeMarginWidth = screen.getSafeMarginWidth();
         boolean showPause = settings.getControllerType() == ControllerType.TOUCH
             || config.isMobile();
         float scorePadding = showPause ? 142f : 38f;
         pauseButton.setVisible(showPause);
         pauseButton.setY(getHeight() - pauseButton.getHeight() - 20);
-        pauseButton.setX(getWidth() - pauseButton.getWidth() - 20 - sideBlackBarWidth);
+        pauseButton.setX(getWidth() - pauseButton.getWidth() - 20 - safeMarginWidth);
         whiteImage.setWidth(getWidth());
         whiteImage.setHeight(getHeight());
-        hpGroup.setX(35 + sideBlackBarWidth);
+        hpGroup.setX(35 + safeMarginWidth);
         scoreLabel.setX(getWidth() - scorePadding - scoreLabel.getWidth());
         scoreLabel.setY(getHeight() - scoreLabel.getHeight() - 30);
     }
