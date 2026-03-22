@@ -79,7 +79,7 @@ RoboVM's `launchIOSDevice` task uses the legacy `DeveloperDiskImage.dmg` approac
    Or use `ios-deploy`:
    ```bash
    brew install ios-deploy
-   ios-deploy --bundle build/robovm/IOSDevice-arm64/NeonSignal.app
+   ios-deploy --bundle ios/build/robovm/NeonSignal.app
    ```
 
 3. On first install, trust the developer on your iPhone:

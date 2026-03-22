@@ -488,8 +488,8 @@ public class LevelScreen extends MenuScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         float safeMarginWidth = getSafeMarginWidth();
-        headerTable.setWidth(stage.getWidth() - safeMarginWidth * 2);
-        headerTable.setX(-stage.getWidth() / 2f + safeMarginWidth);
+        headerTable.setWidth(stage.getWidth());
+        headerTable.setX(-stage.getWidth() / 2f);
 
         // Align arrows vertically with center of level button area
         updateArrowPositions();
