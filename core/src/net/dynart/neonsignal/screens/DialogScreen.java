@@ -128,12 +128,8 @@ public class DialogScreen extends Screen {
     private void setUpCursor() {
         menuCursor = new MenuCursor(engine);
         MenuCursorItem item;
-        MenuCursor.Listener selectListener = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                listener.dialogButtonClicked((Integer) item.getData());
-            }
-        };
+        MenuCursor.Listener selectListener = i -> listener
+            .dialogButtonClicked((Integer) i.getData());
         for (int i = 0; i < buttons.length; i++) {
             item = menuCursor.addItem(buttons[i]);
             if (firstMenuCursorItem == null) {

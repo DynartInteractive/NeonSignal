@@ -127,21 +127,13 @@ public abstract class CustomizeButtonsScreen extends MenuScreen {
     }
 
     private void setUpMenuCursor() {
-        MenuCursor.Listener selectListener = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuButtonClicked((MenuButton) item.getActor());
-            }
-        };
+        MenuCursor.Listener selectListener = i -> menuButtonClicked((MenuButton) i.getActor());
 
         backButtonItem = menuCursor.addItem(backButton);
-        backButtonItem.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                Button[] buttonOrder = config.getButtonOrder();
-                menuCursor.setCurrentItem(menuButtonMap.get(buttonOrder[0]));
-                backClicked();
-            }
+        backButtonItem.setListener(MenuCursor.Event.ENTER, i -> {
+            Button[] buttonOrder = config.getButtonOrder();
+            menuCursor.setCurrentItem(menuButtonMap.get(buttonOrder[0]));
+            backClicked();
         });
 
         Button[] buttonOrder = config.getButtonOrder();

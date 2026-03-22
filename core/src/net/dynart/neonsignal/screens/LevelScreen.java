@@ -123,45 +123,26 @@ public class LevelScreen extends MenuScreen {
 
     private void setUpCursor() {
         MenuCursorItem item = menuCursor.addItem(backButton);
-        item.setListener(MenuCursor.Event.DOWN, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuCursor.setCurrentItem(lastSelectedLevelButton);
-            }
+        item.setListener(
+            MenuCursor.Event.DOWN, i -> menuCursor.setCurrentItem(lastSelectedLevelButton)
+        );
+        item.setListener(MenuCursor.Event.ENTER, i -> {
+            menuCursor.setCurrentItem(levelButtons.get(getLevelHash(0, 0)));
+            backClicked();
         });
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuCursor.setCurrentItem(levelButtons.get(getLevelHash(0, 0)));
-                backClicked();
+        levelSelectListener = i -> {
+            if (isAnimating()) {
+                return;
             }
-        });
-        levelSelectListener = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                if (isAnimating()) {
-                    return;
-                }
-                MenuCursorItemLevelData data = (MenuCursorItemLevelData) item.getData();
-                Level level = data.getLevel();
-                if (user.isLevelUnlocked(level)) {
-                    levelToStart = level;
-                    fadeOut(startLevelAction);
-                }
+            MenuCursorItemLevelData data = (MenuCursorItemLevelData) i.getData();
+            Level level = data.getLevel();
+            if (user.isLevelUnlocked(level)) {
+                levelToStart = level;
+                fadeOut(startLevelAction);
             }
         };
-        goToNextWorldListener = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveCursorTo(item, 1);
-            }
-        };
-        goToPrevWorldListener = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveCursorTo(item, -1);
-            }
-        };
+        goToNextWorldListener = i -> moveCursorTo(i, 1);
+        goToPrevWorldListener = i -> moveCursorTo(i, -1);
         for (int worldIndex = 0; worldIndex < worlds.size(); worldIndex++) {
             World world = worlds.get(worldIndex);
             List<Level> levels = world.getLevels();
@@ -253,12 +234,9 @@ public class LevelScreen extends MenuScreen {
             item.setNeighbour(MenuCursor.Neighbour.UP, levelButtons.get(neighbourHash));
         } else {
             // On the first row, go to back button
-            item.setListener(MenuCursor.Event.UP, new MenuCursor.Listener() {
-                @Override
-                public void handle(MenuCursorItem item) {
-                    lastSelectedLevelButton = levelButton;
-                    menuCursor.setCurrentItem(backButton);
-                }
+            item.setListener(MenuCursor.Event.UP, i -> {
+                lastSelectedLevelButton = levelButton;
+                menuCursor.setCurrentItem(backButton);
             });
         }
     }

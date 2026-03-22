@@ -104,7 +104,8 @@ public class Screen {
         float w = getAspectRatioBlackBarWidth();
         // Ensure content stays within safe area (notches, rounded corners)
         float pixelsPerUnit = Gdx.graphics.getWidth() / viewport.getWorldWidth();
-        float safeInset = Math.max(Gdx.graphics.getSafeInsetLeft(), Gdx.graphics.getSafeInsetRight());
+        float safeInset = Math
+            .max(Gdx.graphics.getSafeInsetLeft(), Gdx.graphics.getSafeInsetRight());
         float safeInsetWorld = safeInset / pixelsPerUnit;
         w = Math.max(w, safeInsetWorld);
         if (convertToGameScene) {

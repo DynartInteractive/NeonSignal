@@ -1,0 +1,17 @@
+{
+    "files": [
+    ],
+    "settings": {
+        "backgroundColor": "#ff00ff",
+        "exportDirectory": "",
+        "forcePot": true,
+        "padding": 1,
+        "removePadding": false,
+        "reorder": false,
+        "tileHeight": 48,
+        "tileWidth": 48,
+        "transparent": true,
+        "watchFile": false
+    },
+    "version": 1
+}

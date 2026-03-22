@@ -143,52 +143,31 @@ public class MainMenuScreen extends MenuScreen {
     }
 
     private void setUpCursor() {
-        MenuCursor.Listener goToBackButton = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                wentToBackButtonFrom = item;
-                menuCursor.setCurrentItem(backButton);
-            }
+        MenuCursor.Listener goToBackButton = i -> {
+            wentToBackButtonFrom = i;
+            menuCursor.setCurrentItem(backButton);
         };
-
-        MenuCursor.Listener backFromBackButton = new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuCursor.setCurrentItem(wentToBackButtonFrom);
-            }
-        };
+        MenuCursor.Listener backFromBackButton = i -> menuCursor
+            .setCurrentItem(wentToBackButtonFrom);
 
         MenuCursorItem item;
         item = menuCursor.addItem(backButton);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, playButton);
         item.setListener(MenuCursor.Event.DOWN, backFromBackButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuCursor.setCurrentItem(playButton);
-                backClicked();
-            }
+        item.setListener(MenuCursor.Event.ENTER, i -> {
+            menuCursor.setCurrentItem(playButton);
+            backClicked();
         });
 
         item = menuCursor.addItem(playButton);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, settingsButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
         item.setListener(MenuCursor.Event.UP, goToBackButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveOut(playAction);
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> moveOut(playAction));
         wentToBackButtonFrom = item;
 
         item = menuCursor.addItem(settingsButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveOut(settingsAction);
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> moveOut(settingsAction));
 
         item.setNeighbour(MenuCursor.Neighbour.UP, playButton);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, creditsButton);
@@ -199,12 +178,10 @@ public class MainMenuScreen extends MenuScreen {
 
         item = menuCursor.addItem(privacyPolicyButton);
         item.setNeighbour(MenuCursor.Neighbour.UP, creditsButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                Gdx.net.openURI("https://dynart.net/privacy-policy?app=Cool%20Fox");
-            }
-        });
+        item.setListener(
+            MenuCursor.Event.ENTER,
+            i -> Gdx.net.openURI("https://dynart.net/privacy-policy?app=Cool%20Fox")
+        );
 
     }
 

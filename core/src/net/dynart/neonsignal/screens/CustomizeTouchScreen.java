@@ -149,21 +149,11 @@ public class CustomizeTouchScreen extends MenuScreen implements DialogListener {
         item = menuCursor.addItem(switchSidesButton);
         item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                switchSidesClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> switchSidesClicked());
         item = menuCursor.addItem(backButton);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, switchSidesButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, switchSidesButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                backClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> backClicked());
     }
 
     @Override

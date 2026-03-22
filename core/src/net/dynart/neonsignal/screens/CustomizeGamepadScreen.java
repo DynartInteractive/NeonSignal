@@ -51,12 +51,7 @@ public class CustomizeGamepadScreen extends CustomizeButtonsScreen
         super.init();
         MenuCursorItem resetItem = menuCursor.addItem(resetButton);
         resetItem.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
-        resetItem.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                resetToAutoDetected();
-            }
-        });
+        resetItem.setListener(MenuCursor.Event.ENTER, i -> resetToAutoDetected());
         backButtonItem.setNeighbour(MenuCursor.Neighbour.LEFT, resetButton);
     }
 

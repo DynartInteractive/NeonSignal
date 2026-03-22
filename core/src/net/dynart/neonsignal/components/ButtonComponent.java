@@ -25,18 +25,8 @@ public class ButtonComponent extends Component {
         view = entity.getComponent(ViewComponent.class);
         sw = entity.getComponent(SwitchComponent.class);
         startY = body.getY();
-        messageHandler.subscribe(PlatformComponent.MOUNTED, new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                switchOn();
-            }
-        });
-        messageHandler.subscribe(SwitchComponent.OFF, new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                switchOff();
-            }
-        });
+        messageHandler.subscribe(PlatformComponent.MOUNTED, (sender, message) -> switchOn());
+        messageHandler.subscribe(SwitchComponent.OFF, (sender, message) -> switchOff());
     }
 
     public void switchOn() {

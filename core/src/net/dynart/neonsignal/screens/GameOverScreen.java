@@ -103,20 +103,10 @@ public class GameOverScreen extends MenuScreen {
         MenuCursorItem item;
         item = menuCursor.addItem(replayButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, exitButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                replayClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> replayClicked());
         item = menuCursor.addItem(exitButton);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, replayButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                exitClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> exitClicked());
     }
 
     private MenuButton createButton(String name) {

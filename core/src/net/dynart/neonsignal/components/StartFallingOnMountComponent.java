@@ -12,12 +12,7 @@ public class StartFallingOnMountComponent extends Component {
     public void postConstruct(final Entity entity) {
         super.postConstruct(entity);
         falling = entity.getComponent(FallingComponent.class);
-        messageHandler.subscribe(PlatformComponent.MOUNTED, new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                falling.start();
-            }
-        });
+        messageHandler.subscribe(PlatformComponent.MOUNTED, (sender, message) -> falling.start());
         setActive(false);
     }
 

@@ -199,19 +199,8 @@ public class GameStage extends Stage {
             }
         });
 
-        healthChangedListener = new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                updateHealth();
-            }
-        };
-
-        playerScoreChangedListener = new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                updateScore();
-            }
-        };
+        healthChangedListener = (sender, message) -> updateHealth();
+        playerScoreChangedListener = (sender, message) -> updateScore();
 
     }
 
@@ -219,15 +208,15 @@ public class GameStage extends Stage {
         float safeMarginWidth = screen.getSafeMarginWidth();
         boolean showPause = settings.getControllerType() == ControllerType.TOUCH
             || config.isMobile();
-        float scorePadding = showPause ? 142f : 38f;
+        float scorePadding = showPause ? 160f : 60f;
         pauseButton.setVisible(showPause);
         pauseButton.setY(getHeight() - pauseButton.getHeight() - 20);
         pauseButton.setX(getWidth() - pauseButton.getWidth() - 20 - safeMarginWidth);
         whiteImage.setWidth(getWidth());
         whiteImage.setHeight(getHeight());
         hpGroup.setX(35 + safeMarginWidth);
-        scoreLabel.setX(getWidth() - scorePadding - scoreLabel.getWidth());
-        scoreLabel.setY(getHeight() - scoreLabel.getHeight() - 30);
+        scoreLabel.setX(getWidth() - scorePadding - scoreLabel.getWidth() - safeMarginWidth);
+        scoreLabel.setY(getHeight() - scoreLabel.getHeight() - 52);
     }
 
     private void updateScore() {

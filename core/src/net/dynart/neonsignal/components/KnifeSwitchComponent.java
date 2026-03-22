@@ -25,23 +25,17 @@ public class KnifeSwitchComponent extends Component {
         body = entity.getComponent(BodyComponent.class);
         view = entity.getComponent(ViewComponent.class);
         sw = entity.getComponent(SwitchComponent.class);
-        messageHandler.subscribe(SwitchComponent.ON, new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                view.setAnimationTime(0, 0);
-                view.setAnimation(0, "switch_blue_on");
-                switchTime = 0.14f;
-                engine.getSoundManager().play("switch");
-            }
+        messageHandler.subscribe(SwitchComponent.ON, (sender, message) -> {
+            view.setAnimationTime(0, 0);
+            view.setAnimation(0, "switch_blue_on");
+            switchTime = 0.14f;
+            engine.getSoundManager().play("switch");
         });
-        messageHandler.subscribe(SwitchComponent.OFF, new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                view.setAnimationTime(0, 0);
-                view.setAnimation(0, "switch_blue_off");
-                switchTime = 0.14f;
-                engine.getSoundManager().play("switch");
-            }
+        messageHandler.subscribe(SwitchComponent.OFF, (sender, message) -> {
+            view.setAnimationTime(0, 0);
+            view.setAnimation(0, "switch_blue_off");
+            switchTime = 0.14f;
+            engine.getSoundManager().play("switch");
         });
     }
 

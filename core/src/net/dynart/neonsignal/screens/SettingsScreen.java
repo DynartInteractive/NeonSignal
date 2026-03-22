@@ -236,12 +236,9 @@ public class SettingsScreen extends MenuScreen {
     private void setUpCursor() {
         MenuCursorItem item;
         item = menuCursor.addItem(backButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                menuCursor.setCurrentItem(soundSlider);
-                backClicked();
-            }
+        item.setListener(MenuCursor.Event.ENTER, i -> {
+            menuCursor.setCurrentItem(soundSlider);
+            backClicked();
         });
         item.setNeighbour(MenuCursor.Neighbour.DOWN, soundSlider);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, soundSlider);
@@ -249,77 +246,35 @@ public class SettingsScreen extends MenuScreen {
         item.setNeighbour(MenuCursor.Neighbour.DOWN, musicSlider);
         item.setNeighbour(MenuCursor.Neighbour.UP, backButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, backButton);
-        item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                soundSlider.setValue(soundSlider.getValue() - 0.05f);
-            }
-        });
-        item.setListener(MenuCursor.Event.RIGHT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                soundSlider.setValue(soundSlider.getValue() + 0.05f);
-            }
-        });
+        item.setListener(
+            MenuCursor.Event.LEFT, i -> soundSlider.setValue(soundSlider.getValue() - 0.05f)
+        );
+        item.setListener(
+            MenuCursor.Event.RIGHT, i -> soundSlider.setValue(soundSlider.getValue() + 0.05f)
+        );
 
         item = menuCursor.addItem(musicSlider);
         item.setNeighbour(MenuCursor.Neighbour.UP, soundSlider);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, controlGroup);
-        item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                musicSlider.setValue(musicSlider.getValue() - 0.05f);
-            }
-        });
-        item.setListener(MenuCursor.Event.RIGHT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                musicSlider.setValue(musicSlider.getValue() + 0.05f);
-            }
-        });
+        item.setListener(
+            MenuCursor.Event.LEFT, i -> musicSlider.setValue(musicSlider.getValue() - 0.05f)
+        );
+        item.setListener(
+            MenuCursor.Event.RIGHT, i -> musicSlider.setValue(musicSlider.getValue() + 0.05f)
+        );
 
         item = menuCursor.addItem(controlGroup);
         item.setNeighbour(MenuCursor.Neighbour.UP, musicSlider);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, analyticsValueLabel);
-        item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                leftClicked();
-            }
-        });
-        item.setListener(MenuCursor.Event.RIGHT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                rightClicked();
-            }
-        });
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveOut(customizeAction);
-            }
-        });
+        item.setListener(MenuCursor.Event.LEFT, i -> leftClicked());
+        item.setListener(MenuCursor.Event.RIGHT, i -> rightClicked());
+        item.setListener(MenuCursor.Event.ENTER, i -> moveOut(customizeAction));
 
         item = menuCursor.addItem(analyticsValueLabel);
         item.setNeighbour(MenuCursor.Neighbour.UP, controlGroup);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                toggleAnalytics();
-            }
-        });
-        item.setListener(MenuCursor.Event.LEFT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                toggleAnalytics();
-            }
-        });
-        item.setListener(MenuCursor.Event.RIGHT, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                toggleAnalytics();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> toggleAnalytics());
+        item.setListener(MenuCursor.Event.LEFT, i -> toggleAnalytics());
+        item.setListener(MenuCursor.Event.RIGHT, i -> toggleAnalytics());
     }
 
     private void toggleAnalytics() {

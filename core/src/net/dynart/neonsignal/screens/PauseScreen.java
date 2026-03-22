@@ -134,39 +134,19 @@ public class PauseScreen extends MenuScreen {
         item = menuCursor.addItem(continueButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, settingsButton);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, replayButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                moveOut(continueAction);
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> moveOut(continueAction));
         item = menuCursor.addItem(settingsButton);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, continueButton);
         item.setNeighbour(MenuCursor.Neighbour.DOWN, exitButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                settingsClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> settingsClicked());
         item = menuCursor.addItem(replayButton);
         item.setNeighbour(MenuCursor.Neighbour.RIGHT, exitButton);
         item.setNeighbour(MenuCursor.Neighbour.UP, continueButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                replayClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> replayClicked());
         item = menuCursor.addItem(exitButton);
         item.setNeighbour(MenuCursor.Neighbour.LEFT, replayButton);
         item.setNeighbour(MenuCursor.Neighbour.UP, settingsButton);
-        item.setListener(MenuCursor.Event.ENTER, new MenuCursor.Listener() {
-            @Override
-            public void handle(MenuCursorItem item) {
-                exitClicked();
-            }
-        });
+        item.setListener(MenuCursor.Event.ENTER, i -> exitClicked());
     }
 
     private void createActions() {

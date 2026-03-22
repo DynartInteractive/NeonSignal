@@ -40,12 +40,7 @@ public class BulletComponent extends Component {
         body = entity.getComponent(BodyComponent.class);
         velocity = entity.getComponent(VelocityComponent.class);
 
-        MessageListener collisionListener = new MessageListener() {
-            @Override
-            public void receive(Entity sender, String message) {
-                collided();
-            }
-        };
+        MessageListener collisionListener = (sender, message) -> collided();
 
         messageHandler.subscribe(GridCollisionComponent.LEFT_COLLISION, collisionListener);
         messageHandler.subscribe(GridCollisionComponent.RIGHT_COLLISION, collisionListener);
