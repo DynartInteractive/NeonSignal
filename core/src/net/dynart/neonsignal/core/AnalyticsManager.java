@@ -64,7 +64,9 @@ public class AnalyticsManager {
                 break;
         }
 
-        fetchGeoData();
+        if (Gdx.app.getType() != com.badlogic.gdx.Application.ApplicationType.iOS) {
+            fetchGeoData();
+        }
     }
 
     private void fetchGeoData() {
@@ -174,7 +176,8 @@ public class AnalyticsManager {
     }
 
     private void send(String eventName, Map<String, Object> params) {
-        if (!enabled || measurementId.isEmpty() || apiSecret.isEmpty()) {
+        if (!enabled || measurementId.isEmpty() || apiSecret.isEmpty()
+            || Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.iOS) {
             return;
         }
         long now = System.currentTimeMillis();

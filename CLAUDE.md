@@ -184,6 +184,18 @@ Unified input handling via `GameController` (`core/src/info/dynart/neonsignal/co
 - Touch controls with customizable button positions
 - Native library: libgdx-oboe for low-latency audio
 
+### iOS (RoboVM) — API Compatibility
+
+RoboVM has an incomplete JDK runtime. The following Java APIs are **not available** and must be avoided in `core/` code (or guarded by platform check):
+
+- `java.nio.file.*` (e.g., `Paths`, `Path`) — use `Gdx.files` instead
+- `java.net.URL` for HTTPS — RoboVM lacks Android's `okhttp` handler; `Gdx.net` HTTP requests will crash
+- `Map.getOrDefault()`, `Map.computeIfAbsent()`, `Map.putIfAbsent()` and other Java 8 default methods on interfaces
+- `List.of()`, `Set.of()`, `Map.of()` (Java 9+) — use `Arrays.asList()` or `new ArrayList<>()` instead
+- `String.isBlank()`, `String.strip()` (Java 11+)
+
+When adding new code to `core/`, keep these constraints in mind to maintain iOS compatibility.
+
 ## Documentation
 
 The `docs/` directory is a git submodule containing Neon Signal engine documentation. Use `git submodule update --init` to initialize it after cloning.

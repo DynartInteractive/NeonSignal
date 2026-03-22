@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.11.1'
-        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.23'
+        classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.24'
         classpath "com.google.code.findbugs:jsr305:3.0.2" // because of @NotNull, @Null
         classpath 'com.diffplug.spotless:spotless-plugin-gradle:6.25.0'
     }
@@ -20,7 +20,7 @@ allprojects {
     ext {
         appName = "NeonSignal"
         gdxVersion = '1.13.5'
-        roboVMVersion = '2.3.23'
+        roboVMVersion = '2.3.24'
         gdxControllersVersion = '2.2.4'
     }
     repositories {
@@ -87,7 +87,6 @@ project(":android") {
         //implementation "com.pias-education:libgdx-oboe:0.3.2"
     }
 }
-/*
 project(":ios") {
     apply plugin: "java-library"
     apply plugin: "robovm"
@@ -95,12 +94,11 @@ project(":ios") {
         implementation project(":core")
         api "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
         api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
-        api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-backend-robovm-metalangle:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-ios:$gdxControllersVersion"
     }
 }
-*/
 project(":core") {
     apply plugin: "java-library"
     apply plugin: "com.diffplug.spotless"

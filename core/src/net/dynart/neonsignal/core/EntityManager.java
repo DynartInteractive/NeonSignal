@@ -179,7 +179,7 @@ public class EntityManager {
         float bestDistSq = Float.MAX_VALUE;
 
         Set<Entity> entities = getAllBySegment(
-            a, b, List.of(
+            a, b, java.util.Arrays.asList(
                 BlockComponent.class,
                 PlatformComponent.class
             )

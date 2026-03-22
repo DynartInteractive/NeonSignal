@@ -24,7 +24,6 @@ import net.dynart.neonsignal.core.script.ScriptLoader;
 import net.dynart.neonsignal.core.ui.Styles;
 import net.dynart.neonsignal.core.utils.JsonUtil;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +88,7 @@ public class Engine implements LoadingFinishedListener {
     public void create() {
 
         Gdx.app.log(LOG_TAG, "Starting NeonSignal Engine");
-        Gdx.app.log(LOG_TAG, "Working directory: " + Paths.get(".").toAbsolutePath().normalize());
+        Gdx.app.log(LOG_TAG, "Working directory: " + Gdx.files.local(".").file().getAbsolutePath());
 
         // create load manager
         assetManager = new AssetManager();
@@ -283,6 +282,9 @@ public class Engine implements LoadingFinishedListener {
         setUpGameController();
         setUpGameScene();
         analyticsManager = new AnalyticsManager(config, user, settings);
+        if (Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.iOS) {
+            analyticsManager.setEnabled(false);
+        }
     }
 
     private void setUpGraphicResources() {

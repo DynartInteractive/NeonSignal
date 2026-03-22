@@ -124,7 +124,8 @@ public class SoundManager {
                 channels[currentChannel].sound.stop(channels[currentChannel].instance);
             }
             // audioThread.play(sound, this.volume * volume);
-            float soundVolume = soundVolumes.getOrDefault(name, 1.0f);
+            Float sv = soundVolumes.get(name);
+            float soundVolume = sv != null ? sv : 1.0f;
             channels[currentChannel].sound = sound;
             channels[currentChannel].instance = sound.play(this.volume * volume * soundVolume);
             instanceToSound.put(channels[currentChannel].instance, sound);
