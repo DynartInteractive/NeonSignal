@@ -116,3 +116,6 @@ Thumbs.db
 /ios/IOSLauncher.app.dSYM
 
 _raw-big/*
+
+## Claude Code
+.claude/settings.local.json
