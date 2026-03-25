@@ -21,6 +21,7 @@ import net.dynart.neonsignal.core.Grid;
 import net.dynart.neonsignal.core.ParticlePool;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.core.SoundManager;
+import net.dynart.neonsignal.core.User;
 import net.dynart.neonsignal.core.controller.GameController;
 import net.dynart.neonsignal.core.listeners.MessageListener;
 import net.dynart.neonsignal.core.utils.Align;
@@ -122,8 +123,10 @@ public class PlayerComponent extends Component {
     private float gravityBeforeDash;
 
     private static final float DASH_VELOCITY = 2100f;
-    private static final float DASH_DURATION = 0.3f;
-    private static final float DASH_COOLDOWN = 3.0f;
+    private static final float DASH_MIN_DURATION = 0.1f;
+    private static final float DASH_MAX_DURATION = 0.3f;
+    private static final float DASH_MIN_COOLDOWN = 1.0f;
+    private static final float DASH_MAX_COOLDOWN = 3.0f;
 
     private final Set<PlayerAbility> abilities = new HashSet<>();
 
@@ -264,11 +267,17 @@ public class PlayerComponent extends Component {
     }
 
     public float getDashCooldown() {
-        return DASH_COOLDOWN;
+        int level = engine.getUser().getDashCooldownLevel();
+        int maxLevel = User.MAX_DASH_COOLDOWN_LEVEL;
+        return DASH_MAX_COOLDOWN
+            - (DASH_MAX_COOLDOWN - DASH_MIN_COOLDOWN) * (level - 1) / (maxLevel - 1);
     }
 
     public float getDashDuration() {
-        return DASH_DURATION;
+        int level = engine.getUser().getDashLongevityLevel();
+        int maxLevel = User.MAX_DASH_LONGEVITY_LEVEL;
+        return DASH_MIN_DURATION
+            + (DASH_MAX_DURATION - DASH_MIN_DURATION) * (level - 1) / (maxLevel - 1);
     }
 
     public void cancelDash() {
@@ -633,7 +642,7 @@ public class PlayerComponent extends Component {
         if (hasAbility(PlayerAbility.DASH) && bDown && !lastBDown
             && dashTime <= 0 && dashCooldownTime <= 0 && !headUnderWater) {
             // Start dash
-            dashTime = DASH_DURATION;
+            dashTime = getDashDuration();
             dashDirection = flipX ? -1 : 1;
 
             // Disable gravity and increase max velocity during dash
@@ -642,7 +651,7 @@ public class PlayerComponent extends Component {
             velocity.setY(0);
             velocity.setMaxX(DASH_VELOCITY);
 
-            dashCooldownTime = DASH_COOLDOWN;
+            dashCooldownTime = getDashCooldown();
             soundManager.play("dash");
             addDashDust();
         }

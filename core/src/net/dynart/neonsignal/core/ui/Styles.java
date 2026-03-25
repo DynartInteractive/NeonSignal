@@ -59,6 +59,9 @@ public class Styles {
         defaultSliderStyle.background = skin.getDrawable("slider_bg");
 
         defaultCheckboxStyle = new CheckBox.CheckBoxStyle();
+        defaultCheckboxStyle.checkboxOff = skin.getDrawable("checkbox_unchecked");
+        defaultCheckboxStyle.checkboxOn = skin.getDrawable("checkbox_checked");
+        defaultCheckboxStyle.font = fontManager.get("default");
 
     }
 

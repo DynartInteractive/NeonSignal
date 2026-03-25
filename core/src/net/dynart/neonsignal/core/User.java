@@ -40,6 +40,29 @@ public class User {
         preferences.putInteger(key, num);
     }
 
+    public static final int MAX_DASH_COOLDOWN_LEVEL = 5;
+    public static final int MAX_DASH_LONGEVITY_LEVEL = 3;
+
+    public int getDashCooldownLevel() {
+        return preferences.getInteger("dash_cooldown_level", 1);
+    }
+
+    public void setDashCooldownLevel(int level) {
+        preferences.putInteger(
+            "dash_cooldown_level", Math.max(1, Math.min(level, MAX_DASH_COOLDOWN_LEVEL))
+        );
+    }
+
+    public int getDashLongevityLevel() {
+        return preferences.getInteger("dash_longevity_level", 1);
+    }
+
+    public void setDashLongevityLevel(int level) {
+        preferences.putInteger(
+            "dash_longevity_level", Math.max(1, Math.min(level, MAX_DASH_LONGEVITY_LEVEL))
+        );
+    }
+
     public Preferences getPreferences() {
         return preferences;
     }

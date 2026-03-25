@@ -205,6 +205,14 @@ public class ScriptLoader {
         );
     }
 
+    public Command createUpgradeDashCooldown(JsonValue value) {
+        return new UpgradeDashCooldownCommand(engine);
+    }
+
+    public Command createUpgradeDashLongevity(JsonValue value) {
+        return new UpgradeDashLongevityCommand(engine);
+    }
+
     public Command createNexusSays(JsonValue value) {
         List<NexusLine> lines = new ArrayList<>();
 
