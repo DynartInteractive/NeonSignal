@@ -294,9 +294,7 @@ public class SettingsScreen extends MenuScreen {
         settings.setControllerType(controllerType);
         boolean analyticsEnabled = analyticsCheckbox.isChecked();
         settings.setAnalyticsEnabled(analyticsEnabled);
-        if (engine.getAnalyticsManager() != null) {
-            engine.getAnalyticsManager().setEnabled(analyticsEnabled);
-        }
+        engine.getAnalyticsManager().setEnabled(analyticsEnabled);
         settings.save();
         menuCursor.adjustInUse();
         if (backToMenu) {

@@ -23,6 +23,10 @@
 
 -dontwarn com.badlogic.gdx.backends.android.AndroidFragmentApplication
 
+# Firebase Analytics
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
 # Required if using Gdx-Controllers extension
 -keep class com.badlogic.gdx.controllers.android.AndroidControllers
 

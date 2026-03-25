@@ -19,7 +19,8 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useAccelerometer = false;
 		config.useCompass = false;
 
-		NeonSignal app = new NeonSignal("android", false, null, false);
+		NeonSignal app = new NeonSignal("android", false, null, false,
+			(config1, user, settings) -> new FirebaseAnalyticsManager(this, settings));
 
 		initialize(app, config);
 	}

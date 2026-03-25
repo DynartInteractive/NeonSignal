@@ -26,6 +26,8 @@ import net.dynart.neonsignal.screens.LevelScreen;
 import net.dynart.neonsignal.core.Engine;
 import net.dynart.neonsignal.core.EngineConfig;
 import net.dynart.neonsignal.core.Level;
+import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
+import net.dynart.neonsignal.core.analytics.MeasurementProtocolAnalyticsManager;
 
 public class NeonSignal extends ApplicationAdapter implements LoadingFinishedListener {
 
@@ -33,16 +35,26 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     private final String startWithLevel;
     private final boolean debug;
     private final boolean gaDebug;
+    private final AnalyticsManagerFactory analyticsManagerFactory;
 
     private FPSLogger fpsLogger;
     private EngineConfig config;
     private Engine engine;
 
     public NeonSignal(String configSection, boolean debug, String startWithLevel, boolean gaDebug) {
+        this(
+            configSection, debug, startWithLevel, gaDebug, MeasurementProtocolAnalyticsManager::new
+        );
+    }
+
+    public NeonSignal(
+        String configSection, boolean debug, String startWithLevel, boolean gaDebug,
+        AnalyticsManagerFactory analyticsManagerFactory) {
         this.configSection = configSection;
         this.startWithLevel = startWithLevel;
         this.debug = debug;
         this.gaDebug = gaDebug;
+        this.analyticsManagerFactory = analyticsManagerFactory;
     }
 
     @Override
@@ -58,6 +70,7 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
         config.setScriptLoader(new NeonSignalScriptLoader());
 
         engine = new Engine(config, debug);
+        engine.setAnalyticsManagerFactory(analyticsManagerFactory);
         engine.create();
 
         addLoadingScreen();

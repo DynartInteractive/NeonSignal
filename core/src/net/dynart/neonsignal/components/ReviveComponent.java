@@ -32,13 +32,11 @@ public class ReviveComponent extends Component {
             && (body.overlapOther(PlayerComponent.class) != null)) {
             current = entity;
             messageHandler.send(TOUCHED);
-            if (engine.getAnalyticsManager() != null) {
-                GameScreen gameScreen = (GameScreen) engine.getScreen("game");
-                if (gameScreen != null && gameScreen.getCurrentLevel() != null) {
-                    engine.getAnalyticsManager().trackCheckpoint(
-                        gameScreen.getCurrentLevel(), body.getCenterX(), body.getBottom()
-                    );
-                }
+            GameScreen gameScreen = (GameScreen) engine.getScreen("game");
+            if (gameScreen != null && gameScreen.getCurrentLevel() != null) {
+                engine.getAnalyticsManager().trackCheckpoint(
+                    gameScreen.getCurrentLevel(), body.getCenterX(), body.getBottom()
+                );
             }
         }
     }

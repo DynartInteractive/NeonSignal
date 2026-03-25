@@ -13,7 +13,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
 		config.useAccelerometer = false;
 		config.useCompass = false;
 
-		NeonSignal app = new NeonSignal("ios", false, null, false);
+		NeonSignal app = new NeonSignal("ios", false, null, false, IOSAnalyticsManager::new);
 		return new IOSApplication(app, config);
 	}
 

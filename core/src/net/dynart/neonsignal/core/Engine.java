@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import net.dynart.neonsignal.core.analytics.AnalyticsManager;
+import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
+import net.dynart.neonsignal.core.analytics.NoOpAnalyticsManager;
 import net.dynart.neonsignal.core.controller.ControlNameProvider;
 import net.dynart.neonsignal.core.controller.GameController;
 import net.dynart.neonsignal.core.controller.GamepadListener;
@@ -68,7 +71,8 @@ public class Engine implements LoadingFinishedListener {
     private boolean resetDeltaTime;
     private TutorialTextProvider tutorialTextProvider;
     private ControlNameProvider controlNameProvider;
-    private AnalyticsManager analyticsManager;
+    private AnalyticsManager analyticsManager = new NoOpAnalyticsManager();
+    private AnalyticsManagerFactory analyticsManagerFactory;
 
     public Engine(EngineConfig engineConfig, boolean debug) {
         instance = this;
@@ -225,6 +229,10 @@ public class Engine implements LoadingFinishedListener {
         return analyticsManager;
     }
 
+    public void setAnalyticsManagerFactory(AnalyticsManagerFactory factory) {
+        this.analyticsManagerFactory = factory;
+    }
+
     public Screen getCurrentScreen() {
         return screen;
     }
@@ -281,9 +289,8 @@ public class Engine implements LoadingFinishedListener {
         setUpGraphicResources();
         setUpGameController();
         setUpGameScene();
-        analyticsManager = new AnalyticsManager(config, user, settings);
-        if (Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.iOS) {
-            analyticsManager.setEnabled(false);
+        if (analyticsManagerFactory != null) {
+            analyticsManager = analyticsManagerFactory.create(config, user, settings);
         }
     }
 
@@ -436,12 +443,10 @@ public class Engine implements LoadingFinishedListener {
         if (moveInNextScreen) {
             screen.moveIn();
         }
-        if (analyticsManager != null) {
-            for (Map.Entry<String, Screen> entry : screens.entrySet()) {
-                if (entry.getValue() == screen) {
-                    analyticsManager.trackScreen(entry.getKey());
-                    break;
-                }
+        for (Map.Entry<String, Screen> entry : screens.entrySet()) {
+            if (entry.getValue() == screen) {
+                analyticsManager.trackScreen(entry.getKey());
+                break;
             }
         }
         nextScreen = null;
