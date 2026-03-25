@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -24,19 +23,21 @@ import net.dynart.neonsignal.components.BodyComponent;
 import net.dynart.neonsignal.components.HealthComponent;
 import net.dynart.neonsignal.components.PlayerComponent;
 import net.dynart.neonsignal.components.ViewComponent;
-import net.dynart.neonsignal.core.SpriteAnimationManager;
-import net.dynart.neonsignal.core.controller.ControllerType;
-import net.dynart.neonsignal.core.TextureManager;
+import net.dynart.neonsignal.core.Engine;
+import net.dynart.neonsignal.core.EngineConfig;
 import net.dynart.neonsignal.core.Entity;
 import net.dynart.neonsignal.core.FontManager;
 import net.dynart.neonsignal.core.MessageHandler;
+import net.dynart.neonsignal.core.PlayerAbility;
+import net.dynart.neonsignal.core.Settings;
+import net.dynart.neonsignal.core.SpriteAnimationManager;
+import net.dynart.neonsignal.core.TextureManager;
+import net.dynart.neonsignal.core.controller.ControllerType;
 import net.dynart.neonsignal.core.listeners.MessageListener;
 import net.dynart.neonsignal.core.ui.FadeImage;
+import net.dynart.neonsignal.core.ui.HudBar;
 import net.dynart.neonsignal.core.ui.MenuButton;
 import net.dynart.neonsignal.screens.GameScreen;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.Settings;
 
 public class GameStage extends Stage {
 
@@ -61,18 +62,20 @@ public class GameStage extends Stage {
     private final Label scoreLabel;
 
     // health
-    private final Group hpGroup;
-    private static final float MAX_HP_LINE_WIDTH = 256;
     private static final Color DANGER_COLOR = new Color(1, 0, 0.45f, 1);
     private static final Color WARNING_COLOR = new Color(1, 0.88f, 0, 1);
     private static final Color GOOD_COLOR = new Color(0.5f, 0.88f, 0, 1);
     private final MessageListener healthChangedListener;
-    private final Image hpLineImage;
-    private final TextureRegion originalHpLineImageRegion;
+    private final HudBar hpBar;
     private final Color hpLineColor = new Color(GOOD_COLOR);
     private float health = 1;
     private float targetHealthSign = 0;
     private float targetHealth = 1;
+
+    // dash cooldown
+    private static final Color COOLDOWN_COLOR = new Color(0.2f, 1f, 1f, 1); // #33FFFF
+    private final HudBar cooldownBar;
+    private boolean wasDashOnCooldown = false;
 
     // game over
     private final FadeImage whiteImage;
@@ -165,30 +168,19 @@ public class GameStage extends Stage {
         addActor(pauseButton);
 
         // health bar
-        Group healthBarGroup = new Group();
-        healthBarGroup.setY(0);
-        healthBarGroup.setX(0);
+        hpBar = new HudBar(uiPixelSkin, GOOD_COLOR, 1f);
+        hpBar.setY(config.getStageVirtualHeight() - 74);
+        hpBar.setX(screen.getSafeMarginWidth() + 96);
 
-        hpLineImage = new Image(uiPixelSkin.getDrawable("hud_hp_line"));
-        hpLineImage.setColor(GOOD_COLOR);
+        addActor(hpBar);
 
-        originalHpLineImageRegion = new TextureRegion(
-            ((TextureRegionDrawable) hpLineImage.getDrawable()).getRegion()
-        );
+        // dash cooldown bar
+        cooldownBar = new HudBar(uiPixelSkin, COOLDOWN_COLOR, 0.75f);
+        cooldownBar.setY(config.getStageVirtualHeight() - 114);
+        cooldownBar.setX(screen.getSafeMarginWidth() + 96);
+        cooldownBar.setVisible(false);
 
-        Image healthBarImage = new Image(uiPixelSkin.getDrawable("hud_hp_bar"));
-
-        healthBarGroup.addActor(healthBarImage);
-        healthBarGroup.addActor(hpLineImage);
-
-        // health
-        hpGroup = new Group();
-        hpGroup.setY(config.getStageVirtualHeight() - 74);
-        hpGroup.setX(screen.getSafeMarginWidth() + 96);
-
-        hpGroup.addActor(healthBarGroup);
-
-        addActor(hpGroup);
+        addActor(cooldownBar);
 
         // events
 
@@ -214,7 +206,8 @@ public class GameStage extends Stage {
         pauseButton.setX(getWidth() - pauseButton.getWidth() - 20 - safeMarginWidth);
         whiteImage.setWidth(getWidth());
         whiteImage.setHeight(getHeight());
-        hpGroup.setX(35 + safeMarginWidth);
+        hpBar.setX(35 + safeMarginWidth);
+        cooldownBar.setX(35 + safeMarginWidth);
         scoreLabel.setX(getWidth() - scorePadding - scoreLabel.getWidth() - safeMarginWidth);
         scoreLabel.setY(getHeight() - scoreLabel.getHeight() - 52);
     }
@@ -274,17 +267,31 @@ public class GameStage extends Stage {
             hpLineColor.lerp(GOOD_COLOR, (health - 0.5f) * 2f);
         }
 
-        float h = health * 0.78f + 0.11f; // crop 0.11 from both sides and shift
+        hpBar.setBarColor(hpLineColor);
+        hpBar.setFill(health);
+    }
 
-        TextureRegion region = ((TextureRegionDrawable) hpLineImage.getDrawable()).getRegion();
-        region.setRegion(originalHpLineImageRegion);
-        region.setRegion(
-            region.getRegionX(), region.getRegionY(), (int) ((float) region.getRegionWidth() * h),
-            region.getRegionHeight()
-        );
-        ((TextureRegionDrawable) hpLineImage.getDrawable()).setRegion(region);
-        hpLineImage.setColor(hpLineColor);
-        hpLineImage.setWidth(MAX_HP_LINE_WIDTH * h);
+    private void updateCooldownLine() {
+        if (player == null)
+            return;
+
+        boolean hasDash = player.hasAbility(PlayerAbility.DASH);
+        cooldownBar.setVisible(hasDash);
+        if (!hasDash)
+            return;
+
+        float cooldownTime = player.getDashCooldownTime();
+        float fill = cooldownTime > 0
+            ? 1f - cooldownTime / player.getDashCooldown()
+            : 1f;
+
+        boolean onCooldown = cooldownTime > 0;
+        if (wasDashOnCooldown && !onCooldown) {
+            engine.getSoundManager().play("cooldown");
+        }
+        wasDashOnCooldown = onCooldown;
+
+        cooldownBar.setFill(fill);
     }
 
     @Override
@@ -307,6 +314,7 @@ public class GameStage extends Stage {
         }
 
         updateHealthLine();
+        updateCooldownLine();
     }
 
     public void setPlayer(Entity player) {

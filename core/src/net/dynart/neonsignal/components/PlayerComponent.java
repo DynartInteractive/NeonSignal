@@ -123,7 +123,7 @@ public class PlayerComponent extends Component {
 
     private static final float DASH_VELOCITY = 2100f;
     private static final float DASH_DURATION = 0.3f;
-    private static final float DASH_COOLDOWN = 0.4f;
+    private static final float DASH_COOLDOWN = 3.0f;
 
     private final Set<PlayerAbility> abilities = new HashSet<>();
 
@@ -253,6 +253,22 @@ public class PlayerComponent extends Component {
 
     public boolean isDashing() {
         return dashTime > 0;
+    }
+
+    public float getDashCooldownTime() {
+        return dashCooldownTime;
+    }
+
+    public float getDashTime() {
+        return dashTime;
+    }
+
+    public float getDashCooldown() {
+        return DASH_COOLDOWN;
+    }
+
+    public float getDashDuration() {
+        return DASH_DURATION;
     }
 
     public void cancelDash() {
@@ -626,6 +642,7 @@ public class PlayerComponent extends Component {
             velocity.setY(0);
             velocity.setMaxX(DASH_VELOCITY);
 
+            dashCooldownTime = DASH_COOLDOWN;
             soundManager.play("dash");
             addDashDust();
         }
@@ -638,9 +655,6 @@ public class PlayerComponent extends Component {
             velocity.setAcceleration(0);
 
             if (dashTime <= 0) {
-                // Dash ended, start cooldown
-                dashCooldownTime = DASH_COOLDOWN;
-
                 // Restore gravity and max velocity
                 velocity.setGravity(gravityBeforeDash);
                 velocity.setMaxX(config.getPlayerMaxRunningVelocity());
@@ -771,7 +785,6 @@ public class PlayerComponent extends Component {
                     velocity.setGravity(gravityBeforeDash);
                     velocity.setMaxX(config.getPlayerMaxRunningVelocity());
                     dashTime = 0;
-                    dashCooldownTime = DASH_COOLDOWN;
                 }
                 float vy = headUnderWater
                     ? config.getPlayerJumpVelocity() / 2.8f
