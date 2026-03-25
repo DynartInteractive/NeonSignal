@@ -1,5 +1,3 @@
-apply plugin: 'com.google.gms.google-services'
-
 android {
     compileSdk 36
     namespace "net.dynart.neonsignal"
@@ -95,3 +93,5 @@ java {
 }
 
 eclipse.project.name = appName + "-android"
+
+apply plugin: 'com.google.gms.google-services'
