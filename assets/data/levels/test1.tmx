@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="33">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="36">
  <properties>
   <property name="background_back" value="bg1_back"/>
   <property name="background_front" value=""/>
@@ -123,6 +123,30 @@
     <property name="right" value="t3"/>
     <property name="top" value="t2"/>
     <property name="type" value="camera_limit_trigger"/>
+   </properties>
+  </object>
+  <object id="33" name="cooldown_upgrade" x="624" y="816" width="48" height="48">
+   <properties>
+    <property name="cutscene" type="bool" value="true"/>
+    <property name="once" type="bool" value="true"/>
+    <property name="path" value="data/scripts/upgrade-dash-cooldown.json"/>
+    <property name="type" value="action"/>
+   </properties>
+  </object>
+  <object id="34" name="longevity_upgrade" x="1488" y="816" width="48" height="48">
+   <properties>
+    <property name="cutscene" type="bool" value="true"/>
+    <property name="once" type="bool" value="true"/>
+    <property name="path" value="data/scripts/upgrade-dash-longevity.json"/>
+    <property name="type" value="action"/>
+   </properties>
+  </object>
+  <object id="35" name="cooldown_upgrade" x="768" y="816" width="48" height="48">
+   <properties>
+    <property name="cutscene" type="bool" value="true"/>
+    <property name="once" type="bool" value="true"/>
+    <property name="path" value="data/scripts/upgrade-dash-cooldown.json"/>
+    <property name="type" value="action"/>
    </properties>
   </object>
  </objectgroup>

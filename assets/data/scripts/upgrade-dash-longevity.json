@@ -1,0 +1,4 @@
+{"sequence": [
+    {"upgrade_dash_longevity": {}},
+    {"nexus_says": {"lines": [{"text": "Your dash longevity was upgraded."}], "button_label": "OK"}}
+]}

@@ -1,0 +1,4 @@
+{"sequence": [
+    {"upgrade_dash_cooldown": {}},
+    {"nexus_says": {"lines": [{"text": "Your cooldown was upgraded."}], "button_label": "OK"}}
+]}

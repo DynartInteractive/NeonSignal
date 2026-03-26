@@ -68,6 +68,10 @@ public class GameScene {
     private int itemCount;
     private int enemyCount;
 
+    // dash upgrade levels (reset each level load)
+    private int dashCooldownLevel = 1;
+    private int dashLongevityLevel = 1;
+
     public GameScene(Engine engine) {
         this.engine = engine;
         config = engine.getConfig();
@@ -167,6 +171,25 @@ public class GameScene {
 
     public int getSecretCount() {
         return secretCount;
+    }
+
+    public static final int MAX_DASH_COOLDOWN_LEVEL = 3;
+    public static final int MAX_DASH_LONGEVITY_LEVEL = 2;
+
+    public int getDashCooldownLevel() {
+        return dashCooldownLevel;
+    }
+
+    public void setDashCooldownLevel(int level) {
+        dashCooldownLevel = Math.max(1, Math.min(level, MAX_DASH_COOLDOWN_LEVEL));
+    }
+
+    public int getDashLongevityLevel() {
+        return dashLongevityLevel;
+    }
+
+    public void setDashLongevityLevel(int level) {
+        dashLongevityLevel = Math.max(1, Math.min(level, MAX_DASH_LONGEVITY_LEVEL));
     }
 
     public void clear() {

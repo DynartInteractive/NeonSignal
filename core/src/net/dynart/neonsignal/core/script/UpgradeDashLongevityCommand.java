@@ -1,7 +1,7 @@
 package net.dynart.neonsignal.core.script;
 
 import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.User;
+import net.dynart.neonsignal.core.GameScene;
 
 public class UpgradeDashLongevityCommand implements Command {
 
@@ -13,11 +13,10 @@ public class UpgradeDashLongevityCommand implements Command {
 
     @Override
     public boolean act(float delta) {
-        User user = engine.getUser();
-        int level = user.getDashLongevityLevel();
-        if (level < User.MAX_DASH_LONGEVITY_LEVEL) {
-            user.setDashLongevityLevel(level + 1);
-            user.save();
+        GameScene gameScene = engine.getGameScene();
+        int level = gameScene.getDashLongevityLevel();
+        if (level < GameScene.MAX_DASH_LONGEVITY_LEVEL) {
+            gameScene.setDashLongevityLevel(level + 1);
         }
         return true;
     }
