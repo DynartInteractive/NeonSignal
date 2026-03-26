@@ -40,6 +40,14 @@ public class User {
         preferences.putInteger(key, num);
     }
 
+    public String getCurrentLevel() {
+        return preferences.getString("current_level", "");
+    }
+
+    public void setCurrentLevel(String levelName) {
+        preferences.putString("current_level", levelName);
+    }
+
     public Preferences getPreferences() {
         return preferences;
     }

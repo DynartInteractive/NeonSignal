@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="36">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="120" height="23" tilewidth="48" tileheight="48" infinite="0" nextlayerid="8" nextobjectid="41">
  <properties>
   <property name="background_back" value="bg1_back"/>
   <property name="background_front" value=""/>
@@ -148,6 +148,12 @@
     <property name="path" value="data/scripts/upgrade-dash-cooldown.json"/>
     <property name="type" value="action"/>
    </properties>
+  </object>
+  <object id="40" x="480" y="912">
+   <properties>
+    <property name="type" value="slope"/>
+   </properties>
+   <polyline points="0,0 144,-48 288,-144 384,-288"/>
   </object>
  </objectgroup>
  <layer id="6" name="Front" width="120" height="23">

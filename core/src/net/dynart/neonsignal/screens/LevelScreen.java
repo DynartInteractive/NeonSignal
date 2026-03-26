@@ -29,6 +29,7 @@ import net.dynart.neonsignal.ui.LevelButton;
 public class LevelScreen extends MenuScreen {
 
     private static final float WORLD_WIDTH = 900f;
+    private static final float HEADER_TABLE_Y = 170;
 
     private final User user;
     private final GameScreen gameScreen;
@@ -79,7 +80,7 @@ public class LevelScreen extends MenuScreen {
             }
         };
 
-        moveTo(0);
+        moveToStoredLevel();
     }
 
     @Override
@@ -97,6 +98,7 @@ public class LevelScreen extends MenuScreen {
         headerTable.setHeight(110);
         group.addActor(headerTable);
         headerTable.toBack();
+        headerTable.setY(HEADER_TABLE_Y);
     }
 
     private String getLevelHash(int worldIndex, int levelIndex) {
@@ -377,10 +379,30 @@ public class LevelScreen extends MenuScreen {
         return levelButton;
     }
 
+    private void moveToStoredLevel() {
+        String storedLevelName = user.getCurrentLevel();
+        if (!storedLevelName.isEmpty()) {
+            for (int worldIndex = 0; worldIndex < worlds.size(); worldIndex++) {
+                List<Level> levels = worlds.get(worldIndex).getLevels();
+                for (int levelIndex = 0; levelIndex < levels.size(); levelIndex++) {
+                    if (levels.get(levelIndex).getName().equals(storedLevelName)) {
+                        moveTo(worldIndex);
+                        menuCursor
+                            .setCurrentItem(levelButtons.get(getLevelHash(worldIndex, levelIndex)));
+                        return;
+                    }
+                }
+            }
+        }
+        moveTo(0);
+    }
+
     private void startLevel() {
         if (isAnimating()) {
             return;
         }
+        user.setCurrentLevel(levelToStart.getName());
+        user.save();
         gameScreen.loadLevel(levelToStart);
         gameScreen.fadeIn();
         engine.moveToScreen("game");
@@ -526,7 +548,9 @@ public class LevelScreen extends MenuScreen {
         moving = true;
         headerTable.setY(450);
         headerTable
-            .addAction(Actions.moveTo(headerTable.getX(), 170, 0.15f, Interpolation.sineOut));
+            .addAction(
+                Actions.moveTo(headerTable.getX(), HEADER_TABLE_Y, 0.15f, Interpolation.sineOut)
+            );
         worldGroup.setY(-450);
         worldGroup.addAction(Actions.moveTo(worldGroup.getX(), 0, 0.15f, Interpolation.sineOut));
         slideLeftButton.setX(getLeftButtonX() - 100f);
