@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -37,14 +36,12 @@ import net.dynart.lisa.core.listeners.MessageListener;
 import net.dynart.lisa.core.ui.FadeImage;
 import net.dynart.lisa.core.ui.HudBar;
 import net.dynart.lisa.core.ui.MenuButton;
-import net.dynart.neonsignal.screens.GameScreen;
+import net.dynart.lisa.screens.GameScreen;
 
-public class GameStage extends Stage {
+public class GameStage extends net.dynart.lisa.screens.GameStage {
 
-    private final Engine engine;
     private final EngineConfig config;
     private final Settings settings;
-    private final GameScreen screen;
 
     private HealthComponent healthComponent;
     private PlayerComponent player;
@@ -85,16 +82,13 @@ public class GameStage extends Stage {
     private float playerDieAnimationTime = 0;
 
     public GameStage(Viewport viewport, Engine engine, final GameScreen screen) {
-        super(viewport);
-        this.engine = engine;
+        super(viewport, engine, screen);
 
         config = engine.getConfig();
         settings = engine.getSettings();
 
         SpriteAnimationManager sam = engine.getSpriteAnimationManager();
         playerDieAnimation = sam.get("player_die");
-
-        this.screen = screen;
 
         FontManager fontManager = engine.getFontManager();
         BitmapFont font = fontManager.get("default");
@@ -170,14 +164,14 @@ public class GameStage extends Stage {
         // health bar
         hpBar = new HudBar(uiPixelSkin, GOOD_COLOR, 1f);
         hpBar.setY(config.getStageVirtualHeight() - 74);
-        hpBar.setX(screen.getSafeMarginWidth() + 96);
+        hpBar.setX(gameScreen.getSafeMarginWidth() + 96);
 
         addActor(hpBar);
 
         // dash cooldown bar
         cooldownBar = new HudBar(uiPixelSkin, COOLDOWN_COLOR, 0.75f);
         cooldownBar.setY(config.getStageVirtualHeight() - 114);
-        cooldownBar.setX(screen.getSafeMarginWidth() + 96);
+        cooldownBar.setX(gameScreen.getSafeMarginWidth() + 96);
         cooldownBar.setVisible(false);
 
         addActor(cooldownBar);
@@ -187,7 +181,7 @@ public class GameStage extends Stage {
         pauseButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                screen.pause();
+                gameScreen.pause();
             }
         });
 
@@ -196,8 +190,9 @@ public class GameStage extends Stage {
 
     }
 
+    @Override
     public void resize() {
-        float safeMarginWidth = screen.getSafeMarginWidth();
+        float safeMarginWidth = gameScreen.getSafeMarginWidth();
         boolean showPause = settings.getControllerType() == ControllerType.TOUCH
             || config.isMobile();
         float scorePadding = showPause ? 160f : 60f;
@@ -317,6 +312,7 @@ public class GameStage extends Stage {
         updateCooldownLine();
     }
 
+    @Override
     public void setPlayer(Entity player) {
         playerImage.setVisible(false);
         playerDieAnimationTime = 0;
@@ -332,6 +328,7 @@ public class GameStage extends Stage {
         messageHandler.subscribe(HealthComponent.INCREASED, healthChangedListener);
     }
 
+    @Override
     public void startGameOver() {
         whiteImage.getColor().a = 0;
         whiteImage.setVisible(true);
@@ -342,13 +339,13 @@ public class GameStage extends Stage {
             )
         );
         playerImage.setVisible(true);
-        GameScreen gameScreen = (GameScreen) engine.getScreen("game");
         Vector2 pos = gameScreen.getStagePositionFromScene(body.getCenterX(), body.getBottom());
         playerImage.setPosition(pos.x - 128f, pos.y - 16f);
         playerImage.setScale((view.isFlipX() ? -0.66f : 0.66f), 0.66f);
         playerDieAnimationTime = 0.0001f;
     }
 
+    @Override
     public void revive() {
         playerImage.setVisible(false);
     }

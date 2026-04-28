@@ -14,7 +14,6 @@ import net.dynart.neonsignal.core.script.MoveCameraToCommand;
 import net.dynart.neonsignal.core.script.NexusSaysCommand;
 import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
 import net.dynart.neonsignal.core.script.PlayMusicCommand;
-import net.dynart.neonsignal.core.script.SayCommand;
 import net.dynart.neonsignal.core.script.SetAnimationCommand;
 import net.dynart.neonsignal.core.script.SetCameraLimitCommand;
 import net.dynart.neonsignal.core.script.SetCameraTargetCommand;
@@ -79,17 +78,6 @@ public class NeonSignalScriptLoader extends ScriptLoader {
             engine,
             value.getString("target"),
             value.getFloat("speed", 256) // TODO: default camera speed
-        );
-    }
-
-    public Command createSay(JsonValue value) {
-        return new SayCommand(
-            engine,
-            value.getString("name", "neonsignal"),
-            value.getString("text"),
-            value.getBoolean("start", false),
-            value.getBoolean("finish", false),
-            value.getBoolean("left", false)
         );
     }
 

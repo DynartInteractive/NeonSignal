@@ -6,13 +6,12 @@ import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
-import net.dynart.neonsignal.NeonSignalEngineConfig;
-import net.dynart.neonsignal.VersionUtil;
-import net.dynart.neonsignal.components.PlayerComponent;
-import net.dynart.lisa.core.GameScene;
-import net.dynart.lisa.core.Level;
 import net.dynart.lisa.core.Settings;
 import net.dynart.lisa.core.User;
+import net.dynart.lisa.core.analytics.AnalyticsManager;
+import net.dynart.lisa.core.analytics.AnalyticsSettings;
+import net.dynart.neonsignal.NeonSignalEngineConfig;
+import net.dynart.neonsignal.VersionUtil;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -116,73 +115,30 @@ public class MeasurementProtocolAnalyticsManager implements AnalyticsManager {
     }
 
     @Override
-    public void trackScreen(String screenName) {
-        Gdx.app.log(LOG_TAG, "screen_view: screen=" + screenName);
-        Map<String, Object> params = new HashMap<>();
-        params.put("screen_name", screenName);
-        send("screen_view", params);
+    public void track(String eventName, Map<String, Object> params) {
+        // Bookkeeping for level attempts: reset on level_start, increment on
+        // player_death.
+        if ("level_start".equals(eventName)) {
+            Object levelName = params.get("level_name");
+            if (levelName != null) {
+                attemptCounts.put(levelName.toString(), 0);
+            }
+        } else if ("player_death".equals(eventName)) {
+            Object levelName = params.get("level_name");
+            if (levelName != null) {
+                String key = levelName.toString();
+                int attempt = attemptCounts.containsKey(key) ? attemptCounts.get(key) + 1 : 1;
+                attemptCounts.put(key, attempt);
+                params.put("attempt_number", attempt);
+            }
+        }
+        Gdx.app.log(LOG_TAG, eventName + ": " + params);
+        send(eventName, params);
     }
 
     @Override
-    public void trackLevelStart(Level level) {
-        String levelName = level.getName();
-        attemptCounts.put(levelName, 0);
-        Gdx.app.log(LOG_TAG, "level_start: level=" + levelName);
-        Map<String, Object> params = new HashMap<>();
-        params.put("level_name", levelName);
-        send("level_start", params);
-    }
-
-    @Override
-    public void trackDeath(Level level, float x, float y) {
-        String levelName = level.getName();
-        int attempt = attemptCounts.containsKey(levelName) ? attemptCounts.get(levelName) + 1 : 1;
-        attemptCounts.put(levelName, attempt);
-        Gdx.app.log(
-            LOG_TAG,
-            "player_death: level=" + levelName + " x=" + (int) x + " y=" + (int) y + " attempt="
-                + attempt
-        );
-        Map<String, Object> params = new HashMap<>();
-        params.put("level_name", levelName);
-        params.put("death_x", (int) x);
-        params.put("death_y", (int) y);
-        params.put("attempt_number", attempt);
-        send("player_death", params);
-    }
-
-    @Override
-    public void trackCheckpoint(Level level, float x, float y) {
-        Gdx.app.log(
-            LOG_TAG,
-            "checkpoint_reached: level=" + level.getName() + " x=" + (int) x + " y=" + (int) y
-        );
-        Map<String, Object> params = new HashMap<>();
-        params.put("level_name", level.getName());
-        params.put("checkpoint_x", (int) x);
-        params.put("checkpoint_y", (int) y);
-        send("checkpoint_reached", params);
-    }
-
-    @Override
-    public void trackLevelCompleted(Level level, PlayerComponent player, GameScene scene) {
-        Gdx.app.log(
-            LOG_TAG, "level_completed: level=" + level.getName()
-                + " enemies=" + player.getKnockoutCount() + "/" + scene.getEnemyCount()
-                + " secrets=" + player.getSecretCount() + "/" + scene.getSecretCount()
-                + " items=" + player.getItemCount() + "/" + scene.getItemCount()
-                + " score=" + player.getScore()
-        );
-        Map<String, Object> params = new HashMap<>();
-        params.put("level_name", level.getName());
-        params.put("enemies_defeated", player.getKnockoutCount());
-        params.put("total_enemies", scene.getEnemyCount());
-        params.put("secrets_found", player.getSecretCount());
-        params.put("total_secrets", scene.getSecretCount());
-        params.put("items_collected", player.getItemCount());
-        params.put("total_items", scene.getItemCount());
-        params.put("score", player.getScore());
-        send("level_completed", params);
+    public void dispose() {
+        // no-op
     }
 
     protected void send(String eventName, Map<String, Object> params) {

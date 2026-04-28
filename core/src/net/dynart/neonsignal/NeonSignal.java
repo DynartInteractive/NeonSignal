@@ -22,19 +22,20 @@ import net.dynart.lisa.core.PlayerInitializer;
 import net.dynart.lisa.core.ScreenFadeOutHandler;
 import net.dynart.lisa.core.TouchAbilityProvider;
 import net.dynart.lisa.core.listeners.LoadingFinishedListener;
+import net.dynart.lisa.core.analytics.AnalyticsManager;
 import net.dynart.neonsignal.components.PlayerComponent;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
 import net.dynart.neonsignal.core.analytics.MeasurementProtocolAnalyticsManager;
 import net.dynart.neonsignal.screens.CompletedScreen;
 import net.dynart.neonsignal.screens.CutsceneScreen;
-import net.dynart.neonsignal.screens.GameFadeInScreen;
-import net.dynart.neonsignal.screens.GameOverScreen;
+import net.dynart.lisa.screens.GameFadeInScreen;
+import net.dynart.lisa.screens.GameOverScreen;
 import net.dynart.neonsignal.screens.GameScreen;
 import net.dynart.neonsignal.screens.LevelScreen;
 import net.dynart.neonsignal.screens.MainMenuScreen;
-import net.dynart.neonsignal.screens.PauseScreen;
-import net.dynart.neonsignal.screens.SettingsScreen;
+import net.dynart.lisa.screens.PauseScreen;
+import net.dynart.lisa.screens.SettingsScreen;
 import net.dynart.neonsignal.ui.MenuBackground;
 import net.dynart.lisa.screens.CustomizeGamepadScreen;
 import net.dynart.lisa.screens.CustomizeKeyboardScreen;
@@ -53,7 +54,7 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
 
     private FPSLogger fpsLogger;
     private NeonSignalEngineConfig config;
-    private NeonSignalEngine engine;
+    private Engine engine;
 
     public NeonSignal(String configSection, boolean debug, String startWithLevel, boolean gaDebug) {
         this(
@@ -83,9 +84,13 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
         config.setDefaultFadeRenderer(new NeonSignalFadeRenderer());
         config.setScriptLoader(new NeonSignalScriptLoader());
 
-        engine = new NeonSignalEngine(config, debug);
-        engine.setAnalyticsManagerFactory(analyticsManagerFactory);
+        engine = new Engine(config, debug);
         engine.create();
+        if (analyticsManagerFactory != null) {
+            AnalyticsManager am = analyticsManagerFactory
+                .create(config, engine.getUser(), engine.getSettings());
+            engine.setAnalyticsManager(am);
+        }
 
         addLoadingScreen();
     }
@@ -228,6 +233,20 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
             @Override
             public void onSwitchOverlap(Entity player, Entity switchEntity) {
                 player.getComponent(PlayerComponent.class).setOnSwitch(switchEntity);
+            }
+
+            @Override
+            public void onCheckpoint(Entity player, float x, float y) {
+                GameScreen gs = (GameScreen) engine.getScreen("game");
+                Level level = gs.getCurrentLevel();
+                if (level == null) {
+                    return;
+                }
+                java.util.Map<String, Object> params = new java.util.HashMap<>();
+                params.put("level_name", level.getName());
+                params.put("checkpoint_x", (int) x);
+                params.put("checkpoint_y", (int) y);
+                engine.getAnalyticsManager().track("checkpoint_reached", params);
             }
         });
         engine.setPlayerInitializer((player, props) -> {

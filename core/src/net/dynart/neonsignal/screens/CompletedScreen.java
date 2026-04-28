@@ -5,10 +5,13 @@ import com.badlogic.gdx.utils.Align;
 
 import net.dynart.neonsignal.components.PlayerComponent;
 import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Level;
 import net.dynart.lisa.core.ui.FadeImage;
 import net.dynart.lisa.core.Engine;
 import net.dynart.lisa.screens.MenuScreen;
-import net.dynart.neonsignal.NeonSignalEngine;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CompletedScreen extends MenuScreen {
 
@@ -158,9 +161,18 @@ public class CompletedScreen extends MenuScreen {
         super.show();
         GameScene gameScene = gameScreen.getScene();
         PlayerComponent player = gameScene.getPlayer().getComponent(PlayerComponent.class);
-        if (gameScreen.getCurrentLevel() != null) {
-            ((NeonSignalEngine) engine).getAnalyticsManager()
-                .trackLevelCompleted(gameScreen.getCurrentLevel(), player, gameScene);
+        Level currentLevel = gameScreen.getCurrentLevel();
+        if (currentLevel != null) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("level_name", currentLevel.getName());
+            params.put("enemies_defeated", player.getKnockoutCount());
+            params.put("total_enemies", gameScene.getEnemyCount());
+            params.put("secrets_found", player.getSecretCount());
+            params.put("total_secrets", gameScene.getSecretCount());
+            params.put("items_collected", player.getItemCount());
+            params.put("total_items", gameScene.getItemCount());
+            params.put("score", player.getScore());
+            engine.getAnalyticsManager().track("level_completed", params);
         }
 
         knockoutNumberLabel.setText(player.getKnockoutCount());

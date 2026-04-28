@@ -5,12 +5,11 @@ import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import net.dynart.lisa.core.GameScene;
-import net.dynart.lisa.core.Level;
 import net.dynart.lisa.core.Settings;
-import net.dynart.neonsignal.components.PlayerComponent;
-import net.dynart.neonsignal.core.analytics.AnalyticsManager;
-import net.dynart.neonsignal.core.analytics.AnalyticsSettings;
+import net.dynart.lisa.core.analytics.AnalyticsManager;
+import net.dynart.lisa.core.analytics.AnalyticsSettings;
+
+import java.util.Map;
 
 public class FirebaseAnalyticsManager implements AnalyticsManager {
 
@@ -30,53 +29,35 @@ public class FirebaseAnalyticsManager implements AnalyticsManager {
     }
 
     @Override
-    public void trackScreen(String screenName) {
+    public void track(String eventName, Map<String, Object> params) {
         if (!enabled) return;
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, screenName);
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle);
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                Object value = entry.getValue();
+                if (value == null) {
+                    continue;
+                }
+                if (value instanceof Integer) {
+                    bundle.putInt(entry.getKey(), (Integer) value);
+                } else if (value instanceof Long) {
+                    bundle.putLong(entry.getKey(), (Long) value);
+                } else if (value instanceof Float) {
+                    bundle.putFloat(entry.getKey(), (Float) value);
+                } else if (value instanceof Double) {
+                    bundle.putDouble(entry.getKey(), (Double) value);
+                } else if (value instanceof Boolean) {
+                    bundle.putBoolean(entry.getKey(), (Boolean) value);
+                } else {
+                    bundle.putString(entry.getKey(), value.toString());
+                }
+            }
+        }
+        firebaseAnalytics.logEvent(eventName, bundle);
     }
 
     @Override
-    public void trackLevelStart(Level level) {
-        if (!enabled) return;
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.LEVEL_NAME, level.getName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_START, bundle);
-    }
-
-    @Override
-    public void trackDeath(Level level, float x, float y) {
-        if (!enabled) return;
-        Bundle bundle = new Bundle();
-        bundle.putString("level_name", level.getName());
-        bundle.putInt("death_x", (int) x);
-        bundle.putInt("death_y", (int) y);
-        firebaseAnalytics.logEvent("player_death", bundle);
-    }
-
-    @Override
-    public void trackCheckpoint(Level level, float x, float y) {
-        if (!enabled) return;
-        Bundle bundle = new Bundle();
-        bundle.putString("level_name", level.getName());
-        bundle.putInt("checkpoint_x", (int) x);
-        bundle.putInt("checkpoint_y", (int) y);
-        firebaseAnalytics.logEvent("checkpoint_reached", bundle);
-    }
-
-    @Override
-    public void trackLevelCompleted(Level level, PlayerComponent player, GameScene scene) {
-        if (!enabled) return;
-        Bundle bundle = new Bundle();
-        bundle.putString("level_name", level.getName());
-        bundle.putInt("enemies_defeated", player.getKnockoutCount());
-        bundle.putInt("total_enemies", scene.getEnemyCount());
-        bundle.putInt("secrets_found", player.getSecretCount());
-        bundle.putInt("total_secrets", scene.getSecretCount());
-        bundle.putInt("items_collected", player.getItemCount());
-        bundle.putInt("total_items", scene.getItemCount());
-        bundle.putInt("score", player.getScore());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_END, bundle);
+    public void dispose() {
+        // no-op
     }
 }

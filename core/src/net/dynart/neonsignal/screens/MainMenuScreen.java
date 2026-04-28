@@ -77,8 +77,6 @@ public class MainMenuScreen extends MenuScreen {
         settingsAction = new Action() {
             @Override
             public boolean act(float delta) {
-                SettingsScreen settingsScreen = (SettingsScreen) engine.getScreen("settings");
-                settingsScreen.setBackToMenu(true);
                 engine.moveToScreen("settings");
                 return true;
             }

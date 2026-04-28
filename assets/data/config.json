@@ -4,6 +4,7 @@
         "analytics_api_secret": "46Tv0-P5QAetF38S9e4YLA",
         "name": "NeonSignal",
         "mobile": true,
+        "pause_table_background": "header_bg",
         "game_virtual_height": 1080,
         "game_max_virtual_width": 2520,
         "stage_virtual_height": 720,
