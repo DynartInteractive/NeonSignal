@@ -24,7 +24,6 @@ import net.dynart.lisa.components.SplashComponent;
 import net.dynart.lisa.components.StartFallingInDistanceComponent;
 import net.dynart.lisa.components.SwitchableComponent;
 import net.dynart.lisa.components.TramComponent;
-import net.dynart.neonsignal.components.UfoComponent;
 import net.dynart.lisa.components.ViewComponent;
 import net.dynart.lisa.components.WalkerComponent;
 import net.dynart.lisa.components.HealthComponent;
@@ -531,68 +530,6 @@ public class NeonSignalEntityFactory extends EntityFactory {
             new BlockComponent()
         );
         return bigRock;
-    }
-
-    public Entity createUfo(Parameters parameters) {
-        parameters.set("active", true);
-
-        Entity alien1 = new Entity(engine);
-        ViewComponent alien1View = createAnimation("alien1");
-        alien1.addComponents(
-            createBody(21, 32, -7, 8),
-            alien1View
-        );
-        Entity alien2 = new Entity(engine);
-        ViewComponent alien2View = createAnimation("alien2");
-        alien2.addComponents(
-            createBody(21, 32, 7, 8),
-            alien2View
-        );
-        Entity hostage = new Entity(engine);
-        ViewComponent hostageView = createSprite("foxgirl");
-        hostageView.flipX(true);
-        hostageView.setVisible(false);
-        hostage.addComponents(
-            createBody(21, 32, 0, 8),
-            hostageView
-        );
-
-        ViewComponent view = createAnimation("ufo");
-        view.setLayer(200);
-
-        Entity ufo = new Entity(engine);
-        ufo.addComponents(
-            createBody(parameters),
-            createAnimation("ufo"),
-            new VelocityComponent(),
-            new UfoComponent(),
-            new BlockComponent(),
-            new MovableComponent(
-                parameters.get("path"),
-                parameters.getFloat("speed", 60.0f),
-                parameters.getBoolean("slowing", true),
-                parameters.getInteger("start_index", 0),
-                parameters.get("move_type", MovableComponent.FORWARD_CONTINUOUS),
-                parameters.getFloat("wait_time", 0),
-                false,
-                parameters.getBoolean("start", false)
-            ),
-            new SwitchableComponent(parameters.get("inputs"))
-        );
-
-        hostage.setParent(ufo);
-        entityManager.addToLists(hostage);
-        hostage.postConstruct();
-
-        alien1.setParent(ufo);
-        entityManager.addToLists(alien1);
-        alien1.postConstruct();
-
-        alien2.setParent(ufo);
-        entityManager.addToLists(alien2);
-        alien2.postConstruct();
-
-        return ufo;
     }
 
 }

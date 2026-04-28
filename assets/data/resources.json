@@ -46,67 +46,16 @@
         "main": {"path": "data/music/main.mp3"}
     },
     "levels": {
-        "first": {"path": "data/levels/test1.tmx"},
-        "beach2": {"path": "data/levels/world1/test2.tmx"},
-        "beach3": {"path": "data/levels/world1/cika4.tmx"},
-        "beach4": {"path": "data/levels/world1/cika5.tmx"},
-        "beach5": {"path": "data/levels/world1/cika3.tmx"},
-        "industrial1": {"path": "data/levels/world2/test1.tmx"},
-        "industrial2": {"path": "data/levels/world1/test3.tmx"},
-        "industrial3": {"path": "data/levels/world3/test6.tmx"},
-        "industrial4": {"path": "data/levels/world3/test6.tmx"},
-        "industrial5": {"path": "data/levels/world3/test6.tmx"},
-        "industrial6": {"path": "data/levels/test1.tmx"},
-        "industrial7": {"path": "data/levels/world3/test6.tmx"},
-        "mountain1": {"path": "data/levels/world3/test6.tmx"},
-        "mountain2": {"path": "data/levels/world3/test6.tmx"},
-        "mountain3": {"path": "data/levels/world3/test6.tmx"},
-        "mountain4": {"path": "data/levels/world3/test6.tmx"},
-        "mountain5": {"path": "data/levels/world3/test6.tmx"},
-        "mountain6": {"path": "data/levels/world3/test6.tmx"},
-        "mountain7": {"path": "data/levels/world3/test6.tmx"},
-        "mountain8": {"path": "data/levels/world3/test6.tmx"},
-        "mountain9": {"path": "data/levels/world3/test6.tmx"},
-        "base1": {"path": "data/levels/world3/test6.tmx"},
-        "base2": {"path": "data/levels/world3/test6.tmx"},
-        "base3": {"path": "data/levels/world3/test6.tmx"},
-        "base4": {"path": "data/levels/world3/test6.tmx"},
-        "base5": {"path": "data/levels/world3/test6.tmx"},
-        "base6": {"path": "data/levels/world3/test6.tmx"},
-        "base7": {"path": "data/levels/world3/test6.tmx"},
-        "base8": {"path": "data/levels/world3/test6.tmx"},
-        "base9": {"path": "data/levels/world3/test6.tmx"},
-        "base10": {"path": "data/levels/world3/test6.tmx"}
+        "first": {"path": "data/levels/test1.tmx"}
     },
     "worlds": {
-        "order": ["beach", "industrial", "mountain", "base"],
+        "order": ["beach"],
         "beach": {
             "title": "Beach",
             "levels": [
-                "first", "beach2", "beach3", "beach4", "beach5"
+                "first"
             ]
-        },
-        "industrial": {
-            "title": "Industrial Zone",
-            "levels": [
-                "industrial1", "industrial2", "industrial3", "industrial4", 
-                "industrial5", "industrial6", "industrial7"
-            ]
-        },
-        "mountain": {
-            "title": "Mountain",
-            "levels": [
-                "mountain1", "mountain2", "mountain3", "mountain4", "mountain5",
-                "mountain6", "mountain7", "mountain8", "mountain9"
-            ]
-        },
-        "base": {
-            "title": "Alien Base",
-            "levels": [
-                "base1", "base2", "base3", "base4", "base5",
-                "base6", "base7", "base8", "base9", "base10"
-            ]
-        }        
+        }
     },
     "fonts": {
         "default": {"path": "data/fonts/orbitron.fnt"},

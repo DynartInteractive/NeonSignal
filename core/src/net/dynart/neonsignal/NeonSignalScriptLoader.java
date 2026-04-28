@@ -9,21 +9,21 @@ import net.dynart.lisa.core.script.Command;
 import net.dynart.lisa.core.script.ScriptLoader;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.core.script.AddPlayerAbilityCommand;
-import net.dynart.neonsignal.core.script.DelayCommand;
-import net.dynart.neonsignal.core.script.MoveCameraToCommand;
+import net.dynart.lisa.core.script.DelayCommand;
+import net.dynart.lisa.core.script.MoveCameraToCommand;
 import net.dynart.neonsignal.core.script.NexusSaysCommand;
 import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
-import net.dynart.neonsignal.core.script.PlayMusicCommand;
-import net.dynart.neonsignal.core.script.SetAnimationCommand;
-import net.dynart.neonsignal.core.script.SetCameraLimitCommand;
-import net.dynart.neonsignal.core.script.SetCameraTargetCommand;
-import net.dynart.neonsignal.core.script.SetMovementActive;
-import net.dynart.neonsignal.core.script.SetParentCommand;
-import net.dynart.neonsignal.core.script.SetVisibleCommand;
-import net.dynart.neonsignal.core.script.TriggerCommand;
+import net.dynart.lisa.core.script.PlayMusicCommand;
+import net.dynart.lisa.core.script.SetAnimationCommand;
+import net.dynart.lisa.core.script.SetCameraLimitCommand;
+import net.dynart.lisa.core.script.SetCameraTargetCommand;
+import net.dynart.lisa.core.script.SetMovementActive;
+import net.dynart.lisa.core.script.SetParentCommand;
+import net.dynart.lisa.core.script.SetVisibleCommand;
+import net.dynart.lisa.core.script.TriggerCommand;
 import net.dynart.neonsignal.core.script.UpgradeDashCooldownCommand;
 import net.dynart.neonsignal.core.script.UpgradeDashLongevityCommand;
-import net.dynart.neonsignal.core.script.WalkToCommand;
+import net.dynart.lisa.core.script.WalkToCommand;
 
 @SuppressWarnings("unused") // the methods called by reflection
 public class NeonSignalScriptLoader extends ScriptLoader {
