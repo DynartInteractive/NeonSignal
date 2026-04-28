@@ -1,7 +1,8 @@
 package net.dynart.neonsignal.components;
 
-import net.dynart.neonsignal.core.Component;
-import net.dynart.neonsignal.core.Entity;
+import net.dynart.lisa.components.ViewComponent;
+import net.dynart.lisa.core.Component;
+import net.dynart.lisa.core.Entity;
 
 public class UfoComponent extends Component {
 

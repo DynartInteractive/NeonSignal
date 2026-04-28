@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import net.dynart.neonsignal.core.TextureManager;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.TextureManager;
+import net.dynart.lisa.core.Engine;
 
 public class MenuBackground extends Actor {
 

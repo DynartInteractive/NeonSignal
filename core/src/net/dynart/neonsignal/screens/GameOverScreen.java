@@ -8,12 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import net.dynart.neonsignal.core.ui.FadeImage;
-import net.dynart.neonsignal.core.ui.FadeToAction;
-import net.dynart.neonsignal.core.ui.MenuButton;
-import net.dynart.neonsignal.core.ui.MenuCursor;
-import net.dynart.neonsignal.core.ui.MenuCursorItem;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.ui.FadeImage;
+import net.dynart.lisa.core.ui.FadeToAction;
+import net.dynart.lisa.core.ui.MenuButton;
+import net.dynart.lisa.core.ui.MenuCursor;
+import net.dynart.lisa.core.ui.MenuCursorItem;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.screens.MenuScreen;
 
 public class GameOverScreen extends MenuScreen {
 

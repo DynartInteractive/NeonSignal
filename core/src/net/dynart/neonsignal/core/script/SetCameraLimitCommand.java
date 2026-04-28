@@ -1,9 +1,10 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.components.CameraLimitTriggerComponent;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.Entity;
-import net.dynart.neonsignal.core.EntityManager;
+import net.dynart.lisa.components.CameraLimitTriggerComponent;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.script.Command;
 
 public class SetCameraLimitCommand implements Command {
 

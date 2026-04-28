@@ -3,9 +3,10 @@ package net.dynart.neonsignal.core.script;
 import com.badlogic.gdx.Gdx;
 
 import net.dynart.neonsignal.components.PlayerComponent;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.Engine;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.screens.GameScreen;
+import net.dynart.lisa.core.script.Command;
 
 public class AddPlayerAbilityCommand implements Command {
 

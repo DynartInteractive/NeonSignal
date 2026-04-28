@@ -5,13 +5,12 @@ import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import net.dynart.neonsignal.core.analytics.AnalyticsManager;
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.Level;
-import net.dynart.neonsignal.core.Settings;
-import net.dynart.neonsignal.core.User;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Level;
+import net.dynart.lisa.core.Settings;
 import net.dynart.neonsignal.components.PlayerComponent;
+import net.dynart.neonsignal.core.analytics.AnalyticsManager;
+import net.dynart.neonsignal.core.analytics.AnalyticsSettings;
 
 public class FirebaseAnalyticsManager implements AnalyticsManager {
 
@@ -20,7 +19,7 @@ public class FirebaseAnalyticsManager implements AnalyticsManager {
 
     public FirebaseAnalyticsManager(Context context, Settings settings) {
         this.firebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        this.enabled = settings.isAnalyticsEnabled();
+        this.enabled = AnalyticsSettings.isAnalyticsEnabled(settings);
         firebaseAnalytics.setAnalyticsCollectionEnabled(enabled);
     }
 

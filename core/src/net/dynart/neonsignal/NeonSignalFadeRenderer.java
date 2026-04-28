@@ -10,11 +10,11 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import net.dynart.neonsignal.core.Fade;
-import net.dynart.neonsignal.core.FadeRenderer;
-import net.dynart.neonsignal.core.Screen;
-import net.dynart.neonsignal.core.Stencil;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.Fade;
+import net.dynart.lisa.core.FadeRenderer;
+import net.dynart.lisa.core.Screen;
+import net.dynart.lisa.core.Stencil;
+import net.dynart.lisa.core.Engine;
 
 public class NeonSignalFadeRenderer implements FadeRenderer {
 

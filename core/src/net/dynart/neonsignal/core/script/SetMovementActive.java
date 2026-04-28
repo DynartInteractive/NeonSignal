@@ -1,9 +1,11 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.components.MovableComponent;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.Entity;
-import net.dynart.neonsignal.core.EntityManager;
+import net.dynart.lisa.components.MovableComponent;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.script.Command;
+import net.dynart.lisa.core.script.SkippableCommand;
 
 public class SetMovementActive implements Command, SkippableCommand {
     private final boolean active;

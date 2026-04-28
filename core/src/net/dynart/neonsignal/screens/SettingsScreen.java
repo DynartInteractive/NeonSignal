@@ -16,22 +16,25 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import net.dynart.neonsignal.core.controller.ControllerType;
-import net.dynart.neonsignal.core.controller.ControllerTypeMap;
-import net.dynart.neonsignal.core.SoundManager;
-import net.dynart.neonsignal.core.ui.FadeToAction;
-import net.dynart.neonsignal.core.ui.MenuButton;
-import net.dynart.neonsignal.core.ui.MenuCursor;
-import net.dynart.neonsignal.core.ui.MenuCursorItem;
-import net.dynart.neonsignal.core.utils.StringUtil;
+import net.dynart.lisa.core.controller.ControllerType;
+import net.dynart.lisa.core.controller.ControllerTypeMap;
+import net.dynart.lisa.core.SoundManager;
+import net.dynart.neonsignal.NeonSignalEngine;
+import net.dynart.neonsignal.core.analytics.AnalyticsSettings;
+import net.dynart.lisa.core.ui.FadeToAction;
+import net.dynart.lisa.core.ui.MenuButton;
+import net.dynart.lisa.core.ui.MenuCursor;
+import net.dynart.lisa.core.ui.MenuCursorItem;
+import net.dynart.lisa.core.utils.StringUtil;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.Settings;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.Settings;
+import net.dynart.lisa.screens.MenuScreen;
 
 public class SettingsScreen extends MenuScreen {
 
@@ -180,7 +183,7 @@ public class SettingsScreen extends MenuScreen {
 
         // analytics toggle
         analyticsCheckbox = new CheckBox("Send analytics", styles.getDefaultCheckboxStyle());
-        analyticsCheckbox.setChecked(settings.isAnalyticsEnabled());
+        analyticsCheckbox.setChecked(AnalyticsSettings.isAnalyticsEnabled(settings));
         analyticsCheckbox.getLabelCell().padBottom(14).padLeft(14);
         analyticsCheckbox.pack();
         analyticsCheckbox.setX(SECOND_COLUMN_X);
@@ -220,7 +223,7 @@ public class SettingsScreen extends MenuScreen {
     public void show() {
         super.show();
         originalControllerType = settings.getControllerType();
-        analyticsCheckbox.setChecked(settings.isAnalyticsEnabled());
+        analyticsCheckbox.setChecked(AnalyticsSettings.isAnalyticsEnabled(settings));
     }
 
     void setBackToMenu(boolean value) {
@@ -293,8 +296,8 @@ public class SettingsScreen extends MenuScreen {
         settings.setMusicVolume(musicSlider.getValue());
         settings.setControllerType(controllerType);
         boolean analyticsEnabled = analyticsCheckbox.isChecked();
-        settings.setAnalyticsEnabled(analyticsEnabled);
-        engine.getAnalyticsManager().setEnabled(analyticsEnabled);
+        AnalyticsSettings.setAnalyticsEnabled(settings, analyticsEnabled);
+        ((NeonSignalEngine) engine).getAnalyticsManager().setEnabled(analyticsEnabled);
         settings.save();
         menuCursor.adjustInUse();
         if (backToMenu) {

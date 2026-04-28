@@ -1,12 +1,13 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.core.Entity;
-import net.dynart.neonsignal.core.EntityManager;
-import net.dynart.neonsignal.components.BodyComponent;
-import net.dynart.neonsignal.components.VelocityComponent;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.EngineConfig;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.components.BodyComponent;
+import net.dynart.lisa.components.VelocityComponent;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.EngineConfig;
 import net.dynart.neonsignal.screens.CutsceneScreen;
+import net.dynart.lisa.core.script.Command;
 
 public class WalkToCommand implements Command {
 

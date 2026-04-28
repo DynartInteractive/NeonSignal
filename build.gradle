@@ -20,7 +20,7 @@ allprojects {
     version = '0.1.0'
     ext {
         appName = "NeonSignal"
-        gdxVersion = '1.13.5'
+        gdxVersion = '1.14.0'
         roboVMVersion = '2.3.24'
         gdxControllersVersion = '2.2.4'
     }
@@ -111,6 +111,7 @@ project(":core") {
         }
     }
     dependencies {
+        api "net.dynart.lisa:core"
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
     }

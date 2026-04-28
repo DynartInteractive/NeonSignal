@@ -5,29 +5,43 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 
-import net.dynart.neonsignal.core.LevelManager;
-import net.dynart.neonsignal.core.listeners.LoadingFinishedListener;
-
-import net.dynart.neonsignal.screens.CutsceneScreen;
+import net.dynart.lisa.components.BodyComponent;
+import net.dynart.lisa.components.EnemyComponent;
+import net.dynart.lisa.components.HealthComponent;
+import net.dynart.lisa.components.VelocityComponent;
+import net.dynart.lisa.core.ActionHandler;
+import net.dynart.lisa.core.DamageHandler;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.ExitHandler;
+import net.dynart.lisa.core.Level;
+import net.dynart.lisa.core.LevelManager;
+import net.dynart.lisa.core.PlayerEventHandler;
+import net.dynart.lisa.core.PlayerInitializer;
+import net.dynart.lisa.core.ScreenFadeOutHandler;
+import net.dynart.lisa.core.TouchAbilityProvider;
+import net.dynart.lisa.core.listeners.LoadingFinishedListener;
+import net.dynart.neonsignal.components.PlayerComponent;
+import net.dynart.neonsignal.core.PlayerAbility;
+import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
+import net.dynart.neonsignal.core.analytics.MeasurementProtocolAnalyticsManager;
 import net.dynart.neonsignal.screens.CompletedScreen;
-import net.dynart.neonsignal.screens.CustomizeGamepadScreen;
-import net.dynart.neonsignal.screens.CustomizeKeyboardScreen;
-import net.dynart.neonsignal.screens.CustomizeTouchScreen;
-import net.dynart.neonsignal.screens.DialogScreen;
+import net.dynart.neonsignal.screens.CutsceneScreen;
 import net.dynart.neonsignal.screens.GameFadeInScreen;
 import net.dynart.neonsignal.screens.GameOverScreen;
 import net.dynart.neonsignal.screens.GameScreen;
-import net.dynart.neonsignal.screens.LoadingScreen;
-import net.dynart.neonsignal.screens.LogoScreen;
+import net.dynart.neonsignal.screens.LevelScreen;
 import net.dynart.neonsignal.screens.MainMenuScreen;
 import net.dynart.neonsignal.screens.PauseScreen;
 import net.dynart.neonsignal.screens.SettingsScreen;
-import net.dynart.neonsignal.screens.LevelScreen;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.Level;
-import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
-import net.dynart.neonsignal.core.analytics.MeasurementProtocolAnalyticsManager;
+import net.dynart.neonsignal.ui.MenuBackground;
+import net.dynart.lisa.screens.CustomizeGamepadScreen;
+import net.dynart.lisa.screens.CustomizeKeyboardScreen;
+import net.dynart.lisa.screens.CustomizeTouchScreen;
+import net.dynart.lisa.screens.DialogScreen;
+import net.dynart.lisa.screens.LoadingScreen;
+import net.dynart.lisa.screens.LogoScreen;
 
 public class NeonSignal extends ApplicationAdapter implements LoadingFinishedListener {
 
@@ -38,8 +52,8 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
     private final AnalyticsManagerFactory analyticsManagerFactory;
 
     private FPSLogger fpsLogger;
-    private EngineConfig config;
-    private Engine engine;
+    private NeonSignalEngineConfig config;
+    private NeonSignalEngine engine;
 
     public NeonSignal(String configSection, boolean debug, String startWithLevel, boolean gaDebug) {
         this(
@@ -69,14 +83,14 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
         config.setDefaultFadeRenderer(new NeonSignalFadeRenderer());
         config.setScriptLoader(new NeonSignalScriptLoader());
 
-        engine = new Engine(config, debug);
+        engine = new NeonSignalEngine(config, debug);
         engine.setAnalyticsManagerFactory(analyticsManagerFactory);
         engine.create();
 
         addLoadingScreen();
     }
 
-    public EngineConfig getConfig() {
+    public NeonSignalEngineConfig getConfig() {
         return config;
     }
 
@@ -92,7 +106,143 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
 
     @Override
     public void loadingFinished() {
+        engine.setMenuBackgroundFactory(() -> new MenuBackground(engine));
+        EntityManager entityManager = engine.getGameScene().getEntityManager();
+        entityManager.setOnAnimationStarted(() -> {
+            for (Entity e : entityManager.getAllByClass(PlayerComponent.class)) {
+                VelocityComponent velocity = e.getComponent(VelocityComponent.class);
+                velocity.setX(0);
+                velocity.setY(0);
+                velocity.setAcceleration(0);
+            }
+        });
+        engine.setTouchAbilityProvider(new TouchAbilityProvider() {
+            @Override
+            public boolean hasButtonAbility(String buttonName) {
+                PlayerComponent player = getPlayer();
+                if (player == null)
+                    return false;
+                switch (buttonName) {
+                    case "joy_bottom":
+                    case "joy_top":
+                        return player.hasAbility(PlayerAbility.MOVE);
+                    case "a":
+                        return player.hasAbility(PlayerAbility.JUMPING);
+                    case "b":
+                        return player.hasAbility(PlayerAbility.DASHING);
+                    case "x":
+                        return player.hasAbility(PlayerAbility.FIRING);
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public boolean hasMoveAbility() {
+                PlayerComponent player = getPlayer();
+                return player == null || player.hasAbility(PlayerAbility.MOVE);
+            }
+
+            private PlayerComponent getPlayer() {
+                Entity entity = engine.getGameScene().getPlayer();
+                return entity != null ? entity.getComponent(PlayerComponent.class) : null;
+            }
+        });
+
         GameScreen gameScreen = new GameScreen(engine);
+
+        // register handlers
+        engine.setActionHandler((path, cutscene) -> {
+            if (cutscene) {
+                CutsceneScreen cs = (CutsceneScreen) engine.getScreen("cutscene");
+                cs.load(path);
+                engine.moveToScreen("cutscene");
+            } else {
+                GameScreen gs = (GameScreen) engine.getScreen("game");
+                gs.runScript(path);
+            }
+        });
+        engine.setExitHandler(left -> engine.moveToScreen("completed"));
+        engine.setScreenFadeOutHandler(action -> {
+            GameScreen gs = (GameScreen) engine.getScreen("game");
+            gs.fadeOut(action);
+        });
+        engine.setDamageHandler(new DamageHandler() {
+            @Override
+            public void onDamage(Entity victim, Entity attacker, float amount) {
+                Entity playerEntity = engine.getGameScene().getPlayer();
+                GameScreen gs = (GameScreen) engine.getScreen("game");
+                GameStage gameStage = (GameStage) gs.getStage();
+                BodyComponent body = victim.getComponent(BodyComponent.class);
+                if (body == null)
+                    return;
+                if (victim == playerEntity || victim.hasComponent(EnemyComponent.class)) {
+                    String text = "-" + (int) (amount * 100);
+                    gameStage
+                        .showItemScore(body.getCenterX(), body.getTop() + 8, text, 1, .44f, .44f);
+                }
+            }
+
+            @Override
+            public void onKill(Entity victim, Entity attacker) {
+                if (!victim.hasComponent(EnemyComponent.class))
+                    return;
+                Entity playerEntity = engine.getGameScene().getPlayer();
+                if (playerEntity == null)
+                    return;
+                PlayerComponent playerComp = playerEntity.getComponent(PlayerComponent.class);
+                int point = 100;
+                playerComp.addPoint(point);
+                playerComp.incKnockoutCount();
+                BodyComponent body = victim.getComponent(BodyComponent.class);
+                if (body != null) {
+                    GameScreen gs = (GameScreen) engine.getScreen("game");
+                    GameStage gameStage = (GameStage) gs.getStage();
+                    gameStage.showItemScore(
+                        body.getCenterX(), body.getTop() + 16, "+" + point, 1, 0.8f, 0.1f
+                    );
+                }
+            }
+        });
+        engine.setPlayerEventHandler(new PlayerEventHandler() {
+            @Override
+            public void onSecretFound(Entity player) {
+                player.getComponent(PlayerComponent.class).incSecretCount();
+            }
+
+            @Override
+            public void onEnemyKilled(Entity player, Entity enemy) {
+                player.getComponent(PlayerComponent.class).incKnockoutCount();
+            }
+
+            @Override
+            public void onOxygenUsed(Entity player) {
+                player.getComponent(PlayerComponent.class).incOxygen();
+            }
+
+            @Override
+            public void onPushed(Entity player, Entity pusher) {
+                player.getComponent(PlayerComponent.class).setPushedBy(pusher);
+            }
+
+            @Override
+            public void onSwitchOverlap(Entity player, Entity switchEntity) {
+                player.getComponent(PlayerComponent.class).setOnSwitch(switchEntity);
+            }
+        });
+        engine.setPlayerInitializer((player, props) -> {
+            PlayerComponent pc = player.getComponent(PlayerComponent.class);
+            if (props.containsKey("player_abilities")) {
+                for (String abilityString : props.get("player_abilities").toString().split(",")) {
+                    pc.addAbility(PlayerAbility.valueOf(abilityString.trim().toUpperCase()));
+                }
+            } else {
+                for (PlayerAbility ability : PlayerAbility.values()) {
+                    pc.addAbility(ability);
+                }
+            }
+        });
+
         engine.addScreen("logo", new LogoScreen(engine));
         engine.addScreen("dialog", new DialogScreen(engine));
         engine.addScreen("game_fade_in", new GameFadeInScreen(engine));

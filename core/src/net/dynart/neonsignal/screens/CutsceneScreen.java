@@ -12,26 +12,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-import net.dynart.neonsignal.core.controller.GameController;
-import net.dynart.neonsignal.core.script.SkippableCommand;
-import net.dynart.neonsignal.core.script.ScriptLoader;
-import net.dynart.neonsignal.core.EntityManager;
-import net.dynart.neonsignal.core.FontManager;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.SoundManager;
-import net.dynart.neonsignal.core.TextureManager;
-import net.dynart.neonsignal.core.script.Command;
-import net.dynart.neonsignal.core.script.SequenceCommand;
+import net.dynart.lisa.core.controller.GameController;
+import net.dynart.lisa.core.script.SkippableCommand;
+import net.dynart.lisa.core.script.ScriptLoader;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.FontManager;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.SoundManager;
+import net.dynart.lisa.core.TextureManager;
+import net.dynart.lisa.core.script.Command;
+import net.dynart.lisa.core.script.SequenceCommand;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.ui.FadeImage;
-import net.dynart.neonsignal.core.ui.MenuButton;
-import net.dynart.neonsignal.core.ui.MenuCursor;
-import net.dynart.neonsignal.core.ui.MenuCursorItem;
-import net.dynart.neonsignal.core.ui.TypewriterAction;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.ui.FadeImage;
+import net.dynart.lisa.core.ui.MenuButton;
+import net.dynart.lisa.core.ui.MenuCursor;
+import net.dynart.lisa.core.ui.MenuCursorItem;
+import net.dynart.lisa.core.ui.TypewriterAction;
+import net.dynart.lisa.screens.MenuScreen;
 import net.dynart.neonsignal.core.script.NexusSaysCommand.NexusLine;
 
 public class CutsceneScreen extends MenuScreen {

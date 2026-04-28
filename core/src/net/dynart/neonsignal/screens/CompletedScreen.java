@@ -4,9 +4,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 
 import net.dynart.neonsignal.components.PlayerComponent;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.ui.FadeImage;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.ui.FadeImage;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.screens.MenuScreen;
+import net.dynart.neonsignal.NeonSignalEngine;
 
 public class CompletedScreen extends MenuScreen {
 
@@ -157,7 +159,7 @@ public class CompletedScreen extends MenuScreen {
         GameScene gameScene = gameScreen.getScene();
         PlayerComponent player = gameScene.getPlayer().getComponent(PlayerComponent.class);
         if (gameScreen.getCurrentLevel() != null) {
-            engine.getAnalyticsManager()
+            ((NeonSignalEngine) engine).getAnalyticsManager()
                 .trackLevelCompleted(gameScreen.getCurrentLevel(), player, gameScene);
         }
 

@@ -6,13 +6,13 @@ import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
+import net.dynart.neonsignal.NeonSignalEngineConfig;
 import net.dynart.neonsignal.VersionUtil;
 import net.dynart.neonsignal.components.PlayerComponent;
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.Level;
-import net.dynart.neonsignal.core.Settings;
-import net.dynart.neonsignal.core.User;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Level;
+import net.dynart.lisa.core.Settings;
+import net.dynart.lisa.core.User;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -39,8 +39,9 @@ public class MeasurementProtocolAnalyticsManager implements AnalyticsManager {
     private volatile String geoRegionCode = null;
     private volatile String geoCity = null;
 
-    public MeasurementProtocolAnalyticsManager(EngineConfig config, User user, Settings settings) {
-        this.enabled = settings.isAnalyticsEnabled();
+    public MeasurementProtocolAnalyticsManager(
+        NeonSignalEngineConfig config, User user, Settings settings) {
+        this.enabled = AnalyticsSettings.isAnalyticsEnabled(settings);
         this.measurementId = config.getAnalyticsMeasurementId();
         this.apiSecret = config.getAnalyticsApiSecret();
         this.gaDebug = config.isGaDebug();

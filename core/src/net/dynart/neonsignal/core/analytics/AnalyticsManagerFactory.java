@@ -1,9 +1,9 @@
 package net.dynart.neonsignal.core.analytics;
 
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.Settings;
-import net.dynart.neonsignal.core.User;
+import net.dynart.lisa.core.Settings;
+import net.dynart.lisa.core.User;
+import net.dynart.neonsignal.NeonSignalEngineConfig;
 
 public interface AnalyticsManagerFactory {
-    AnalyticsManager create(EngineConfig config, User user, Settings settings);
+    AnalyticsManager create(NeonSignalEngineConfig config, User user, Settings settings);
 }

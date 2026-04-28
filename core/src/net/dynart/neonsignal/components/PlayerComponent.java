@@ -10,22 +10,33 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import net.dynart.lisa.components.BodyComponent;
+import net.dynart.lisa.components.EntityCollisionComponent;
+import net.dynart.lisa.components.GridCollisionComponent;
+import net.dynart.lisa.components.HealthComponent;
+import net.dynart.lisa.components.ItemComponent;
+import net.dynart.lisa.components.KnifeSwitchComponent;
+import net.dynart.lisa.components.MiniBarComponent;
+import net.dynart.lisa.components.MountableComponent;
+import net.dynart.lisa.components.ParticleComponent;
+import net.dynart.lisa.components.VelocityComponent;
+import net.dynart.lisa.components.ViewComponent;
+import net.dynart.lisa.components.WaterCollisionComponent;
+import net.dynart.lisa.core.BulletFactory;
+import net.dynart.lisa.core.BulletOptions;
+import net.dynart.lisa.core.Component;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Grid;
+import net.dynart.lisa.core.ParticlePool;
+import net.dynart.lisa.core.SoundManager;
+import net.dynart.lisa.core.controller.GameController;
+import net.dynart.lisa.core.listeners.MessageListener;
+import net.dynart.lisa.core.utils.Align;
+import net.dynart.lisa.core.utils.Direction;
 import net.dynart.neonsignal.GameStage;
-import net.dynart.neonsignal.core.BulletOptions;
-import net.dynart.neonsignal.core.EntityManager;
-import net.dynart.neonsignal.core.BulletFactory;
-import net.dynart.neonsignal.core.Component;
-import net.dynart.neonsignal.core.Entity;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.Grid;
-import net.dynart.neonsignal.core.ParticlePool;
 import net.dynart.neonsignal.core.PlayerAbility;
-import net.dynart.neonsignal.core.SoundManager;
-
-import net.dynart.neonsignal.core.controller.GameController;
-import net.dynart.neonsignal.core.listeners.MessageListener;
-import net.dynart.neonsignal.core.utils.Align;
-import net.dynart.neonsignal.core.utils.Direction;
 import net.dynart.neonsignal.screens.GameScreen;
 
 public class PlayerComponent extends Component {
@@ -127,6 +138,12 @@ public class PlayerComponent extends Component {
     private static final float DASH_MAX_DURATION = 0.35f;
     private static final float DASH_MIN_COOLDOWN = 1.0f;
     private static final float DASH_MAX_COOLDOWN = 3.0f;
+
+    public static final int MAX_DASH_COOLDOWN_LEVEL = 3;
+    public static final int MAX_DASH_LONGEVITY_LEVEL = 2;
+
+    private int dashCooldownLevel = 1;
+    private int dashLongevityLevel = 1;
 
     private final Set<PlayerAbility> abilities = new HashSet<>();
 
@@ -267,19 +284,31 @@ public class PlayerComponent extends Component {
     }
 
     public float getDashCooldown() {
-        GameScene gameScene = engine.getGameScene();
-        int level = gameScene.getDashCooldownLevel();
-        int maxLevel = GameScene.MAX_DASH_COOLDOWN_LEVEL;
+        int maxLevel = MAX_DASH_COOLDOWN_LEVEL;
         return DASH_MAX_COOLDOWN
-            - (DASH_MAX_COOLDOWN - DASH_MIN_COOLDOWN) * (level - 1) / (maxLevel - 1);
+            - (DASH_MAX_COOLDOWN - DASH_MIN_COOLDOWN) * (dashCooldownLevel - 1) / (maxLevel - 1);
     }
 
     public float getDashDuration() {
-        GameScene gameScene = engine.getGameScene();
-        int level = gameScene.getDashLongevityLevel();
-        int maxLevel = GameScene.MAX_DASH_LONGEVITY_LEVEL;
+        int maxLevel = MAX_DASH_LONGEVITY_LEVEL;
         return DASH_MIN_DURATION
-            + (DASH_MAX_DURATION - DASH_MIN_DURATION) * (level - 1) / (maxLevel - 1);
+            + (DASH_MAX_DURATION - DASH_MIN_DURATION) * (dashLongevityLevel - 1) / (maxLevel - 1);
+    }
+
+    public int getDashCooldownLevel() {
+        return dashCooldownLevel;
+    }
+
+    public void setDashCooldownLevel(int level) {
+        dashCooldownLevel = Math.max(1, Math.min(level, MAX_DASH_COOLDOWN_LEVEL));
+    }
+
+    public int getDashLongevityLevel() {
+        return dashLongevityLevel;
+    }
+
+    public void setDashLongevityLevel(int level) {
+        dashLongevityLevel = Math.max(1, Math.min(level, MAX_DASH_LONGEVITY_LEVEL));
     }
 
     public void cancelDash() {
@@ -1093,7 +1122,7 @@ public class PlayerComponent extends Component {
         bo.sparkEffect = "bullet_sparks";
         bo.hitSounds = bulletHitSounds;
 
-        // bo.sprite = "player_bullet1";
+        bo.sprite = "player_bullet1";
 
         soundManager.playRandom(bulletFireSounds);
 

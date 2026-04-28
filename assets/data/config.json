@@ -28,6 +28,7 @@
         "default_gravity": -4500.0,
         "default_sound_volume": 1.0,
         "default_music_volume": 0.5,
+        "default_music": "main",
         "audio_max_distance": 960.0,
         "default_controller_type": "touch",
         "unused_button_code": -999,

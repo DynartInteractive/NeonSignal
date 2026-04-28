@@ -1,7 +1,7 @@
 package net.dynart.neonsignal.screens;
 
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.Screen;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.Screen;
 
 public class GameFadeInScreen extends Screen {
 

@@ -1,7 +1,8 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.EntityManager;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.script.Command;
 
 public class SetParentCommand implements Command {
 

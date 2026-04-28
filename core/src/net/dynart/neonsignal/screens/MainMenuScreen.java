@@ -10,11 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
-import net.dynart.neonsignal.core.SoundManager;
-import net.dynart.neonsignal.core.ui.MenuButton;
-import net.dynart.neonsignal.core.ui.MenuCursor;
-import net.dynart.neonsignal.core.ui.MenuCursorItem;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.SoundManager;
+import net.dynart.lisa.core.ui.MenuButton;
+import net.dynart.lisa.core.ui.MenuCursor;
+import net.dynart.lisa.core.ui.MenuCursorItem;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.screens.MenuScreen;
 
 public class MainMenuScreen extends MenuScreen {
 

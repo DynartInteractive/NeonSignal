@@ -6,18 +6,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import net.dynart.neonsignal.core.Level;
-import net.dynart.neonsignal.core.controller.GameController;
-import net.dynart.neonsignal.core.controller.TouchListener;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.Screen;
-import net.dynart.neonsignal.core.script.ScriptLoader;
-import net.dynart.neonsignal.core.script.SequenceCommand;
+import net.dynart.lisa.core.Level;
+import net.dynart.lisa.core.controller.GameController;
+import net.dynart.lisa.core.controller.TouchListener;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Screen;
+import net.dynart.lisa.core.script.ScriptLoader;
+import net.dynart.lisa.core.script.SequenceCommand;
 
 import net.dynart.neonsignal.GameStage;
-import net.dynart.neonsignal.core.Engine;
-import net.dynart.neonsignal.core.GameSceneLoader;
-import net.dynart.neonsignal.core.ui.FadeToAction;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.GameSceneLoader;
+import net.dynart.lisa.core.ui.FadeToAction;
+import net.dynart.neonsignal.NeonSignalEngine;
 
 public class GameScreen extends Screen {
 
@@ -63,7 +64,7 @@ public class GameScreen extends Screen {
         gameSceneLoader.loadLevel(currentLevel.getPath());
         gameStage.setPlayer(gameScene.getPlayer());
         engine.resetDeltaTime();
-        engine.getAnalyticsManager().trackLevelStart(currentLevel);
+        ((NeonSignalEngine) engine).getAnalyticsManager().trackLevelStart(currentLevel);
     }
 
     @Override
@@ -146,9 +147,9 @@ public class GameScreen extends Screen {
 
     public void prepareForGameOver() {
         if (currentLevel != null) {
-            net.dynart.neonsignal.components.BodyComponent body = gameScene.getPlayer()
-                .getComponent(net.dynart.neonsignal.components.BodyComponent.class);
-            engine.getAnalyticsManager()
+            net.dynart.lisa.components.BodyComponent body = gameScene.getPlayer()
+                .getComponent(net.dynart.lisa.components.BodyComponent.class);
+            ((NeonSignalEngine) engine).getAnalyticsManager()
                 .trackDeath(currentLevel, body.getCenterX(), body.getBottom());
         }
         gameOverCountDown = 0.5f;

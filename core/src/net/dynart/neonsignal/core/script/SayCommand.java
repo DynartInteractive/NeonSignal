@@ -1,7 +1,7 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.core.script.Command;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.script.Command;
+import net.dynart.lisa.core.Engine;
 import net.dynart.neonsignal.screens.CutsceneScreen;
 
 public class SayCommand implements Command {

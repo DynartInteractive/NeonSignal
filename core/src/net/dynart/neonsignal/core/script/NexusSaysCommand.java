@@ -1,9 +1,11 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.Engine;
 import net.dynart.neonsignal.screens.CutsceneScreen;
 
 import java.util.List;
+import net.dynart.lisa.core.script.Command;
+import net.dynart.lisa.core.script.SkippableCommand;
 
 /**
  * Script command that displays multi-line text with typewriter animation.

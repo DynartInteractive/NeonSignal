@@ -1,10 +1,11 @@
 package net.dynart.neonsignal.core.script;
 
-import net.dynart.neonsignal.core.CameraHandler;
-import net.dynart.neonsignal.core.Entity;
-import net.dynart.neonsignal.core.EntityManager;
-import net.dynart.neonsignal.core.Screen;
-import net.dynart.neonsignal.core.Engine;
+import net.dynart.lisa.core.CameraHandler;
+import net.dynart.lisa.core.Entity;
+import net.dynart.lisa.core.EntityManager;
+import net.dynart.lisa.core.Screen;
+import net.dynart.lisa.core.Engine;
+import net.dynart.lisa.core.script.Command;
 
 public class MoveCameraToCommand implements Command {
 

@@ -2,13 +2,13 @@ package net.dynart.neonsignal;
 
 import com.badlogic.gdx.Gdx;
 
-import net.dynart.neonsignal.core.analytics.AnalyticsManager;
-import net.dynart.neonsignal.core.EngineConfig;
-import net.dynart.neonsignal.core.GameScene;
-import net.dynart.neonsignal.core.Level;
-import net.dynart.neonsignal.core.Settings;
-import net.dynart.neonsignal.core.User;
+import net.dynart.lisa.core.GameScene;
+import net.dynart.lisa.core.Level;
+import net.dynart.lisa.core.Settings;
+import net.dynart.lisa.core.User;
 import net.dynart.neonsignal.components.PlayerComponent;
+import net.dynart.neonsignal.core.analytics.AnalyticsManager;
+import net.dynart.neonsignal.core.analytics.AnalyticsSettings;
 
 import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.foundation.NSMutableURLRequest;
@@ -42,8 +42,8 @@ public class IOSAnalyticsManager implements AnalyticsManager {
     private volatile String geoRegionCode = null;
     private volatile String geoCity = null;
 
-    public IOSAnalyticsManager(EngineConfig config, User user, Settings settings) {
-        this.enabled = settings.isAnalyticsEnabled();
+    public IOSAnalyticsManager(NeonSignalEngineConfig config, User user, Settings settings) {
+        this.enabled = AnalyticsSettings.isAnalyticsEnabled(settings);
         this.measurementId = config.getAnalyticsMeasurementId();
         this.apiSecret = config.getAnalyticsApiSecret();
         this.gaDebug = config.isGaDebug();
