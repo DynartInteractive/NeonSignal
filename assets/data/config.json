@@ -5,6 +5,8 @@
         "name": "NeonSignal",
         "mobile": true,
         "pause_table_background": "header_bg",
+        "back_button_width": 100,
+        "back_button_height": 100,
         "game_virtual_height": 1080,
         "game_max_virtual_width": 2520,
         "stage_virtual_height": 720,

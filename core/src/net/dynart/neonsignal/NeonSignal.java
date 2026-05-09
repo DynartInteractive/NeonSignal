@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.utils.Align;
 
 import net.dynart.lisa.components.BodyComponent;
 import net.dynart.lisa.components.EnemyComponent;
@@ -23,6 +24,7 @@ import net.dynart.lisa.core.ScreenFadeOutHandler;
 import net.dynart.lisa.core.TouchAbilityProvider;
 import net.dynart.lisa.core.listeners.LoadingFinishedListener;
 import net.dynart.lisa.core.analytics.AnalyticsManager;
+import net.dynart.lisa.core.ui.MenuButtonStyle;
 import net.dynart.neonsignal.components.PlayerComponent;
 import net.dynart.neonsignal.core.PlayerAbility;
 import net.dynart.neonsignal.core.analytics.AnalyticsManagerFactory;
@@ -101,6 +103,23 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
 
     private void addLoadingScreen() {
         engine.createStyles(); // needs to be done before loading screen
+        for (MenuButtonStyle s : new MenuButtonStyle[] {
+                engine.getStyles().getDefaultButtonStyle(),
+                engine.getStyles().getDefaultButtonPushedStyle(),
+                engine.getStyles().getSecondaryButtonStyle()}) {
+            s.iconOffsetY = 0f;
+            s.iconGap = 6f;
+            s.paddingLeft = 30f;
+
+            // disable the press animation
+            s.unpressedOffsetY = 0;
+            s.pressedOffsetY = 0;
+            s.checkedOffsetY = 0;
+            s.unpressedOffsetX = 0;
+            s.pressedOffsetX = 0;
+            s.checkedOffsetX = 0;
+        }
+
         LoadingScreen loadingScreen = new LoadingScreen(engine);
         loadingScreen.setFinishedListener(this);
         loadingScreen.setNextScreen("logo");
