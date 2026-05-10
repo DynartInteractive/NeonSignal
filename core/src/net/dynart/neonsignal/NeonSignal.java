@@ -109,7 +109,8 @@ public class NeonSignal extends ApplicationAdapter implements LoadingFinishedLis
                 engine.getStyles().getSecondaryButtonStyle()}) {
             s.iconOffsetY = 0f;
             s.iconGap = 6f;
-            s.paddingLeft = 30f;
+            s.paddingLeft = 15f;
+            s.paddingTop = 0f;
 
             // disable the press animation
             s.unpressedOffsetY = 0;
