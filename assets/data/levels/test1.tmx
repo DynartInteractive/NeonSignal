@@ -43,7 +43,7 @@
     <property name="type" value="camera_limit_trigger"/>
    </properties>
   </object>
-  <object id="8" name="t2" x="96" y="0" width="48" height="48">
+  <object id="8" name="t2" x="96" y="-48" width="48" height="48">
    <properties>
     <property name="type" value="target"/>
    </properties>
@@ -210,7 +210,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="1" name="Blocks" width="120" height="23">
+ <layer id="1" name="Blocks" width="120" height="23" visible="0">
   <properties>
    <property name="block" value=""/>
   </properties>
