@@ -68,6 +68,7 @@ public class PlayerComponent extends Component {
     private MiniBarComponent miniBar;
     private BodyComponent body;
     private WaterCollisionComponent waterCollision;
+    private MountableComponent mountable;
     private EntityManager entityManager;
     private SoundManager soundManager;
     private Grid grid;
@@ -222,6 +223,7 @@ public class PlayerComponent extends Component {
         miniBar = entity.getComponent(MiniBarComponent.class);
         health = entity.getComponent(HealthComponent.class);
         waterCollision = entity.getComponent(WaterCollisionComponent.class);
+        mountable = entity.getComponent(MountableComponent.class);
 
         miniBar.add(entity);
 
@@ -673,6 +675,9 @@ public class PlayerComponent extends Component {
         if (hasAbility(PlayerAbility.DASH) && bDown && !lastBDown
             && dashTime <= 0 && dashCooldownTime <= 0 && !headUnderWater) {
             // Start dash
+            if (mountable != null && mountable.isMountedOnSlope()) {
+                mountable.unmountByTrigger();
+            }
             dashTime = getDashDuration();
             dashDirection = flipX ? -1 : 1;
 
@@ -820,23 +825,30 @@ public class PlayerComponent extends Component {
             int maxJumpCount = hasAbility(PlayerAbility.DOUBLE_JUMP) ? 2 : 1;
             if (gameController.isADown() && jumpReleased
                 && (jumpCounter < maxJumpCount || headUnderWater)) {
-                // Cancel dash if jumping during dash (restore gravity first)
-                if (dashTime > 0) {
-                    velocity.setGravity(gravityBeforeDash);
-                    velocity.setMaxX(config.getPlayerMaxRunningVelocity());
-                    dashTime = 0;
+                // On a slope: try to unmount. If the head is in a grid block, the unmount
+                // refuses and the jump is physically blocked — skip the rest.
+                boolean blockedBySlopeCeiling = mountable != null
+                    && mountable.isMountedOnSlope()
+                    && !mountable.unmountByTrigger();
+                if (!blockedBySlopeCeiling) {
+                    // Cancel dash if jumping during dash (restore gravity first)
+                    if (dashTime > 0) {
+                        velocity.setGravity(gravityBeforeDash);
+                        velocity.setMaxX(config.getPlayerMaxRunningVelocity());
+                        dashTime = 0;
+                    }
+                    float vy = headUnderWater
+                        ? config.getPlayerJumpVelocity() / 2.8f
+                        : config.getPlayerJumpVelocity();
+                    velocity.setY(vy);
+                    jumpCounter++;
+                    jumpReleased = false;
+                    if (headUnderWater) {
+                        soundManager.playRandom(swimSounds);
+                    }
+                    // soundManager.play("jump");
+                    addDust();
                 }
-                float vy = headUnderWater
-                    ? config.getPlayerJumpVelocity() / 2.8f
-                    : config.getPlayerJumpVelocity();
-                velocity.setY(vy);
-                jumpCounter++;
-                jumpReleased = false;
-                if (headUnderWater) {
-                    soundManager.playRandom(swimSounds);
-                }
-                // soundManager.play("jump");
-                addDust();
             }
         }
 
